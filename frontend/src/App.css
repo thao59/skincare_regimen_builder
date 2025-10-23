@@ -1,0 +1,56 @@
+body
+{
+  background-color: #F8F6F4;
+  color: #2C2C2C;
+  font-family: 'Georgia', serif !important;
+}
+
+.title
+{
+  color: #C9A962;
+  font-weight: 600;
+  letter-spacing: 1px;
+}
+
+.question
+{
+  margin-bottom: 0;
+  font-weight: 700;
+}
+
+.note 
+{
+  margin-top: 0;
+  font-size: 0.8rem;
+}
+
+p 
+{
+  color: #6B5D52;
+}
+
+.App {
+  text-align: center;
+}
+
+label 
+{
+  text-align: left;
+  width: 250px;
+  
+}
+
+.labels_container 
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.button_container 
+{
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}
