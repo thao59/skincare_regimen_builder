@@ -1,5 +1,5 @@
 
-function Navbar({onPageChange, resetStage}){
+function Navbar({onPageChange, resetStage, handleLogout}){
 
     return (
         <div>
@@ -12,13 +12,13 @@ function Navbar({onPageChange, resetStage}){
                     <div className="collapse navbar-collapse" id="navbarNav">
                         <ul className="navbar-nav">
                             <li className="nav-item">
-                                <a className="nav-link" onClick={() => {onPageChange("login"); resetStage(0)}} aria-current="page" href="#">Login</a>
+                                {localStorage.getItem("access") === null && <a className="nav-link" onClick={() => {onPageChange("login"); resetStage(0)}}  aria-current="page" href="#">Login</a>}
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" onClick ={() => {onPageChange("signup"); resetStage(0)}} href="#">Signup</a>
+                                {localStorage.getItem("access") === null && <a className="nav-link" onClick ={() => {onPageChange("signup"); resetStage(0)}} href="#">Signup</a>}
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">Signout</a>
+                                {localStorage.getItem("access") !== null && <a className="nav-link" href="#" onClick={handleLogout}>Signout</a>}
                             </li>
                         </ul>
                     </div>

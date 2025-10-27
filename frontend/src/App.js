@@ -7,26 +7,10 @@ import Signup from "./Signup";
 import Home from "./Home";
 
 function App() {
-  const[account, setAccount] = useState("");
-  
-  const handlePage = (site) => {
-      if (site === "login" || site === "signup" || site === "home")
-      {
-        setAccount(site); 
-      }
-      else 
-      {
-        setAccount("");
-      }
-  }
-
-  console.log("site: ", account);
-  
-
   //track stages (next) 
   const[stage, setStage] = useState(0);
 
-  //once button is clicked change to the next stage 
+  //once button is clicked change to the next page. Set default as 1 (if no arg passed, auto increase by 1. If 0 is passed as an arg set page to 0)
   const changeStage = (count = 1) => {
     if (count === 1)
     {
@@ -38,14 +22,29 @@ function App() {
     }
     
   }
-  console.log(stage);
 
+  //allow user to go back to previous page
   const changePreviousStage = () => {
     setStage(stage - 1);
   }
 
+  
+  const[account, setAccount] = useState("");
+  
+  const handlePage = (site) => {
+      if (site === "login" || site === "signup" || site === "home")
+      {
+        setAccount(site); 
+        changeStage(0);
+      }
+      else 
+      {
+        setAccount("");
+      }
+  }
+
   //save user's information 
-  const[userData, setUserData] = useState({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: null, no_products: 0})
+  const[userData, setUserData] = useState({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0})
 
   const handleName = (userName) => {
     if(userName)
@@ -175,34 +174,61 @@ function App() {
   }
 
   const handleAge = (userAge) => {
-    if (userAge)
-    {
       //filter out age 18 and above 
-        setUserData({...userData, age: userAge});
-        console.log("user's age: ", userData.age);
-      
-    }
-    else 
-    {
-      setUserData({...userData, age: 0});
-    }
+      setUserData({...userData, age: userAge});
+      console.log("user's age: ", userData.age); 
   }
 
-  const handleAdvancedUser = (bool) => {
-    setUserData({...userData, advanced_user: bool}); 
+  const handleAdvancedUser = (statement) => {
+    setUserData({...userData, advanced_user: statement}); 
   }
 
   const handleNoProducts = (no) => {
     setUserData({...userData, no_products: no}); 
-    
   }
-  
+
+  console.log("refresh token: ", localStorage.getItem("refresh"));
+  console.log("access token :", localStorage.getItem("access"));
+
+  //delete all saved info, set page to 0, navigate back to home page after logging out
+  const handleLogout = () => {
+    changeStage(0);
+    localStorage.removeItem("refresh");
+    localStorage.removeItem("access"); 
+    handlePage("home");
+    setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
+  }
+
+  //fetch user data to Django 
+  const sendData = async() => {
+    if (userData.routine === "no_routine" || userData.active_use === true || userData.no_products !== 0 )
+    {
+      const response = await fetch("http://localhost:8000/processdata/", {
+        method: "POST", 
+        headers: {
+          "Content-Type": "application/json",
+           "Authorization" : `Bearer ${localStorage.getItem("access")}`}, 
+        body: JSON.stringify(userData), 
+      }); 
+
+      const data = await response.json(); 
+      if (response.ok)
+      {
+        console.log(data.message, response.status)
+      }
+      else
+      {
+        console.log(data.error);
+      }
+    }
+  }
+
    return (
     <div className="App">
-        <Navbar onPageChange={handlePage} resetStage={changeStage}/>
+        <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout}/>
         {account === "login" && <Login resetSite={handlePage}/>}
         {account === "signup" && <Signup resetSite={handlePage}/>}
-        {account === "home" && stage !== 1 && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
+        {account === "home" && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
         {stage === 1 && (
           <div className="labels_container">
             <h1 className="title"> My Skincare Routine Tracker</h1>
@@ -218,7 +244,7 @@ function App() {
             <input type="text" onChange={(field) => handleAge(field.target.value)} value={userData.age > 0 ? userData.age : ""}/>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button className="button_next" onClick ={() => changeStage()} disabled={userData.age < 12}>&#8594;</button>
+              <button className="button_next" onClick ={() => changeStage()} disabled={userData.age < 12 || userData.age > 100 || isNaN(userData.age) }>&#8594;</button>
             </div>
 
           </div>
@@ -295,10 +321,10 @@ function App() {
               <label><input type="checkbox" onChange={() => handleProductsType("toner")} checked={userData.products_type.includes("toner")}/> Toner</label>
               <label><input type="checkbox" onChange={() => handleProductsType("serum")} checked={userData.products_type.includes("serum")}/> Serum</label>
               <label><input type="checkbox" onChange={() => handleProductsType("moisturiser")} checked={userData.products_type.includes("moisturiser")}/> Moisturiser</label>
-              <label><input type="checkbox"  onChange={() => {handleHavingRoutine("no_routine")}} checked={userData.routine === "no_routine"} /> I don't have a skincare routine</label>
+              <label><input type="checkbox"  onChange={() => handleHavingRoutine("no_routine")} checked={userData.routine === "no_routine"} /> I don't have a skincare routine</label>
               <div className="button_container">
                 <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                <button className="button_next" onClick={() => changeStage()} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>
+                <button className="button_next" onClick={() => {changeStage(); sendData()}} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>
               </div>
             
           </div>
@@ -308,10 +334,10 @@ function App() {
           <div className="labels_container">
             <h2 className="question"> Are you using actives in your skincare routine? </h2>
             <label><input type="radio" name="active" onChange={() => handleActive("yes")}/> Yes</label>
-            <label><input type="radio" name="active" onChange={() => handleActive("no")}/> No</label>
+            <label><input type="radio" name="active" onChange={() => {handleActive("no"); sendData()}}/> No</label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button className="button_next" onClick={() => changeStage()} disabled={userData.active_use === null}>Continue</button>
+              <button className="button_next" onClick={() => {changeStage(); sendData()}} disabled={userData.active_use === null}>Continue</button>
             </div>
           </div>
         )}
@@ -328,7 +354,7 @@ function App() {
             <label><input type="checkbox" onChange={() => handleActiveUsage("tretinoin")}/> Tretinoin</label>
             <label><input type="checkbox" onChange={() => handleActiveUsage("azelaicAcid")}/> Azelaic Acid</label>
             <label><input type="checkbox" onChange={() => handleActiveUsage("benzoylPeroxide")}/> Benzoyl Peroxide</label>
-            <button className="button_next" onClick={() => changeStage()} disabled={userData.activeIngre < 1}>Continue</button>
+            <button className="button_next" onClick={() => changeStage()} disabled={userData.activeIngre.length < 1}>Continue</button>
           </div>
         )}
 
@@ -338,7 +364,7 @@ function App() {
             <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("beginner")}/> Beginner </label>
             <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("intermediate")}/> Intermediate</label>
             <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("Advanced")}/> Advanced </label>
-            <button onClick={() => changeStage()} disabled={userData.advanced_user === null}>Continue</button>
+            <button onClick={() => changeStage()} disabled={userData.advanced_user === ""}>Continue</button>
           </div>
         )}
 
@@ -348,7 +374,7 @@ function App() {
             <label><input type="radio" name="no_products" onChange={() => handleNoProducts(3)}/> Simple (3 products) </label>
             <label><input type="radio" name="no_products" onChange={() => handleNoProducts(5)}/> Essentials (4-5 products)</label>
             <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)}/> Advanced (6+ products) </label>
-            <button onClick={() => changeStage()} disabled={userData.no_products === 0}>Continue</button>
+            <button onClick={() => {changeStage(); sendData()}} disabled={userData.no_products === 0}>Submit</button>
           </div>
         )}    
     </div>

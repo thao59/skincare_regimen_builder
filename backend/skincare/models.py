@@ -5,9 +5,20 @@ from django.contrib.auth.models import AbstractUser
 class User(AbstractUser):
     pass 
 
-class Profile(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name = "info")
-    skintype = models.TextField (null=True)
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="info")
+    username = models.CharField(max_length=150)
+    age = models.IntegerField()
+    skintype = models.CharField (max_length=50)
+    skin_concern = models.JSONField(default=list)
+    eye_concern = models.JSONField(null=True, blank=True)
+    pregnant = models.BooleanField(default = False)
+    products_type = models.JSONField(null = True, blank=True)
+    routine= models.CharField(max_length=200, null=True, blank=True)
+    active_use = models.BooleanField(null=True, blank=True)
+    active_ingre = models.JSONField(null=True, blank=True)
+    advanced_active_use = models.CharField(max_length=150, null=True, blank=True)
+    no_products = models.IntegerField(null = True, blank=True)
 
-def __str__(self):
-    return f"User: {self.user}, Skin type: {self.skintype}"
+    def __str__(self):
+        return f"User: {self.user}, Username: {self.username} Age: {self.age}, Pregnant: {self.pregnant}, Skin type: {self.skintype}, Skin concern: {self.skin_concern}, Eye concern: {self.eye_concern}, Routine: {self.routine}, Product types: {self.products_type}, Active use: {self.active_use}, Active Ingredient: {self.active_ingre}, Advanced active use: {self.advanced_active_use}, Number of products: {self.no_products} "

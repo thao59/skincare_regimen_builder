@@ -21,10 +21,10 @@ function Login({resetSite})
 
         if (response.ok)
         {
-            localStorage.setItem("data_access", data.access);
-            localStorage.setItem("data_refresh", data.refresh);
-            console.log("access token: ", data.access);
-            console.log("refresh token: ", data.refresh);
+            localStorage.setItem("access", data.access);
+            localStorage.setItem("refresh", data.refresh);
+            console.log("access: ", data.access);
+            console.log("refresh: ", data.refresh);
             resetSite("home");
             console.log("login was successful");
             console.log("Username: ", userAccount.username);
@@ -42,7 +42,7 @@ function Login({resetSite})
                 <p>Login</p>
                 <input className="login_input" onChange={(field) => handleAccount(field.target.value, "username")} placeholder="Your email"/>
                 <input className="login_input" type="password" onChange={(field) => handleAccount(field.target.value, "password")} placeholder="Your password" />
-                <button onClick={() => {handleSubmit(); resetSite("hone")}} type="button">Login</button>
+                <button disabled={!userAccount.username || !userAccount.password} onClick={() => {handleSubmit(); resetSite("hone")}} type="button">Login</button>
             </form>   
         </div>
     )

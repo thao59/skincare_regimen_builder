@@ -22,13 +22,14 @@ function Signup({resetSite}){
            {
             localStorage.setItem("access", data.access);
             localStorage.setItem("refresh", data.refresh);
+            console.log("access token :", localStorage.getItem("access"));
+            console.log("refresh token: ", localStorage.getItem("refresh"));
             resetSite("home");
            }
            else 
            {
             console.log("Response status: ", response.status);
            }
-        
     }
 
     return(
@@ -39,7 +40,7 @@ function Signup({resetSite}){
             <input className="signup_input" onChange={(field) => handleUser(field.target.value, "username")} placeholder="Username"/>
             <input className="signup_input" type="password" placeholder="Set your password" onChange={(field) => handleUser(field.target.value, "password")} />
             <input className="signup_input" type="password" placeholder="Confirm password" onChange={(field) => handleUser(field.target.value, "confirm_password")}/>
-            <button onClick={handleSubmit} type="button">Signin</button>
+            <button disabled={!userData.email || !userData.username || !userData.password || !userData.confirm_password} onClick={handleSubmit} type="button">Signup</button>
         </form>   
     </div>
     )
