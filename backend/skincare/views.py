@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response 
 from rest_framework import status 
-from .models import User, UserProfile
+from .models import User, UserProfile, UserImage
 from rest_framework_simplejwt.tokens import RefreshToken 
 from rest_framework.decorators import permission_classes 
 from rest_framework.permissions import IsAuthenticated 
@@ -82,11 +82,11 @@ def processdata(request):
     user_no_products = request.data["no_products"]
 
     #get user instance 
-    user = request.user 
+    get_user = request.user 
 
     #save data if new profile. If there's an existing profile, modify fields 
     profile, created = UserProfile.objects.update_or_create(
-        user = user, 
+        user = get_user, 
         defaults = {
             "username" : user_name, 
             "age": user_age, 
@@ -102,7 +102,39 @@ def processdata(request):
             "no_products": user_no_products,
         }
     )
+    print(f"User's survery has been save: {profile}")
     return Response({"message": "data is saved"}, status = status.HTTP_200_OK)
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
+def processimage(request): 
+    get_image = request.FILES["image_file"]
+
+    #ensure img < 5MB 
+    if get_image.size > 5*1024*1024: 
+        return Response({"error": "Image exceeds 5MB"}, status = status.HTTP_400_BAD_REQUEST)
+
+    #get user instance 
+    get_user_instance = request.user.info 
+
+    #save imgs to db 
+    try:
+        save_image = UserImage.objects.create(userinfo = get_user_instance, image = get_image)
+        print(f"Save image successfully: {save_image}")
+        return Response({"message": "Save image successfully"}, status=status.HTTP_201_CREATED)
+    except: 
+        print(f"Image saved unsuccessfully")
+        return Response({"error": "Image saved unsuccessfully"})
+    
+
+
+
+    
+
+
+
+
+
         
 
 

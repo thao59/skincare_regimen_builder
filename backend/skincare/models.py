@@ -7,7 +7,7 @@ class User(AbstractUser):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="info")
-    username = models.CharField(max_length=150)
+    username = models.CharField(max_length=150, null=True)
     age = models.IntegerField()
     skintype = models.CharField (max_length=50)
     skin_concern = models.JSONField(default=list)
@@ -22,3 +22,13 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"User: {self.user}, Username: {self.username} Age: {self.age}, Pregnant: {self.pregnant}, Skin type: {self.skintype}, Skin concern: {self.skin_concern}, Eye concern: {self.eye_concern}, Routine: {self.routine}, Product types: {self.products_type}, Active use: {self.active_use}, Active Ingredient: {self.active_ingre}, Advanced active use: {self.advanced_active_use}, Number of products: {self.no_products} "
+    
+class UserImage(models.Model): 
+    userinfo = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="image_profile")
+    datetime = models.DateTimeField(auto_now_add=True, null=True)
+    #install Pillow to use field ImageField
+    image = models.ImageField(upload_to="photo/", blank=True, null=True)
+
+    def __str__(self):
+        return f"Info: {self.userinfo}, Date and time: {self.datetime}, Image: {self.image}"
+

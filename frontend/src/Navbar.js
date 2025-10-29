@@ -18,7 +18,10 @@ function Navbar({onPageChange, resetStage, handleLogout}){
                                 {localStorage.getItem("access") === null && <a className="nav-link" onClick ={() => {onPageChange("signup"); resetStage(0)}} href="#">Signup</a>}
                             </li>
                             <li className="nav-item">
-                                {localStorage.getItem("access") !== null && <a className="nav-link" href="#" onClick={handleLogout}>Signout</a>}
+                                {localStorage.getItem("access") && <a className="nav-link" href="#">Profile</a>}
+                            </li>
+                            <li className="nav-item">
+                                {localStorage.getItem("access") && <a className="nav-link" href="#" onClick={handleLogout}>Signout</a>}
                             </li>
                         </ul>
                     </div>

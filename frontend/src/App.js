@@ -187,9 +187,6 @@ function App() {
     setUserData({...userData, no_products: no}); 
   }
 
-  console.log("refresh token: ", localStorage.getItem("refresh"));
-  console.log("access token :", localStorage.getItem("access"));
-
   //delete all saved info, set page to 0, navigate back to home page after logging out
   const handleLogout = () => {
     changeStage(0);
@@ -201,25 +198,81 @@ function App() {
 
   //fetch user data to Django 
   const sendData = async() => {
-    if (userData.routine === "no_routine" || userData.active_use === true || userData.no_products !== 0 )
+    if (userData.routine === "no_routine" || userData.active_use === false || userData.no_products !== 0 )
     {
       const response = await fetch("http://localhost:8000/processdata/", {
         method: "POST", 
         headers: {
           "Content-Type": "application/json",
-           "Authorization" : `Bearer ${localStorage.getItem("access")}`}, 
+           "Authorization" : `Bearer ${localStorage.getItem("access")}`},
         body: JSON.stringify(userData), 
       }); 
+      console.log("Survery has been sent successfully");
+      console.log("this  token is sent: ", localStorage.getItem("access"));
+      console.log("testing content: ", userData.routine);
 
       const data = await response.json(); 
       if (response.ok)
       {
         console.log(data.message, response.status)
+        
+        //send user to page 12 for uploading images 
+        changeStage(12);
       }
       else
       {
         console.log(data.error);
       }
+    }
+  }
+
+  const[imageFile, setImageFile] = useState(null);
+  const[image, setImage] = useState(null);
+
+  //function to read uploaded img 
+  const handleImage = (file) => {
+    
+    //limit img file < 5MB
+    if (file.size > 5 * 1024 * 1024)
+    {
+      alert("File exceeds limit input!");
+    }
+    const reader = new FileReader(); 
+
+    reader.onloadend = () => {
+      setImage(reader.result);
+    }
+    reader.onerror = () => 
+    {
+      console.log(reader.error); 
+    }
+
+    reader.readAsDataURL(file); 
+    setImageFile(file);
+  }
+
+  //function to fetch image to backend 
+  const handleSendImage = async() => {
+    const file_form = new FormData();
+    file_form.append("image_file", imageFile);
+
+    const response = await fetch("http://localhost:8000/processimage/", {
+      method: "POST", 
+      headers: {
+        "Authorization": `Bearer ${localStorage.getItem("access")}`}, 
+      body: file_form, 
+    }); 
+
+    const data = await response.json(); 
+    if (response.ok)
+    {
+      console.log("Status: ", data.message); 
+      //navigate user back to homepage 
+      handlePage("home");
+    }
+    else 
+    {
+      console.log("Error: ", data.error);
     }
   }
 
@@ -337,7 +390,7 @@ function App() {
             <label><input type="radio" name="active" onChange={() => {handleActive("no"); sendData()}}/> No</label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button className="button_next" onClick={() => {changeStage(); sendData()}} disabled={userData.active_use === null}>Continue</button>
+              <button className="button_next" onClick={() => {changeStage(); sendData()}} disabled={userData.active_use === null}>&#8594;</button>
             </div>
           </div>
         )}
@@ -354,7 +407,7 @@ function App() {
             <label><input type="checkbox" onChange={() => handleActiveUsage("tretinoin")}/> Tretinoin</label>
             <label><input type="checkbox" onChange={() => handleActiveUsage("azelaicAcid")}/> Azelaic Acid</label>
             <label><input type="checkbox" onChange={() => handleActiveUsage("benzoylPeroxide")}/> Benzoyl Peroxide</label>
-            <button className="button_next" onClick={() => changeStage()} disabled={userData.activeIngre.length < 1}>Continue</button>
+            <button className="button_next" onClick={() => changeStage()} disabled={userData.activeIngre.length < 1}>&#8594;</button>
           </div>
         )}
 
@@ -364,7 +417,7 @@ function App() {
             <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("beginner")}/> Beginner </label>
             <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("intermediate")}/> Intermediate</label>
             <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("Advanced")}/> Advanced </label>
-            <button onClick={() => changeStage()} disabled={userData.advanced_user === ""}>Continue</button>
+            <button onClick={() => changeStage()} disabled={userData.advanced_user === ""}>&#8594;</button>
           </div>
         )}
 
@@ -374,9 +427,20 @@ function App() {
             <label><input type="radio" name="no_products" onChange={() => handleNoProducts(3)}/> Simple (3 products) </label>
             <label><input type="radio" name="no_products" onChange={() => handleNoProducts(5)}/> Essentials (4-5 products)</label>
             <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)}/> Advanced (6+ products) </label>
-            <button onClick={() => {changeStage(); sendData()}} disabled={userData.no_products === 0}>Submit</button>
+            <button onClick={() => {changeStage(); sendData()}} disabled={userData.no_products === 0}>&#8594;</button>
           </div>
-        )}    
+        )} 
+
+        {(userData.routine === "no_routine" || userData.active_use === false || userData.no_products !== 0) && stage === 12 && (
+          <div className="labels_container">
+            <h2 className="question">Upload photos of your skin <span className="opt">(optional)</span></h2>
+            <p className="opt">Please upload file smaller than 5MB </p>
+            <input className="upload_img" type="file" accept="image/*" onChange ={(img) => handleImage(img.target.files[0])}/>
+            {image && <img className="preview_image" src={image} alt="preview"/>}
+            <button onClick={handleSendImage}> Complete </button>
+          </div>
+
+        )}  
     </div>
   )
 }
