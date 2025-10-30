@@ -1,5 +1,5 @@
 
-function Navbar({onPageChange, resetStage, handleLogout}){
+function Navbar({onPageChange, resetStage, handleLogout, retrieveImg}){
 
     return (
         <div>
@@ -18,7 +18,7 @@ function Navbar({onPageChange, resetStage, handleLogout}){
                                 {localStorage.getItem("access") === null && <a className="nav-link" onClick ={() => {onPageChange("signup"); resetStage(0)}} href="#">Signup</a>}
                             </li>
                             <li className="nav-item">
-                                {localStorage.getItem("access") && <a className="nav-link" href="#">Profile</a>}
+                                {localStorage.getItem("access") && <a className="nav-link" onClick={() => {onPageChange("profile"); resetStage(0); retrieveImg()}} href="#">Profile</a>}
                             </li>
                             <li className="nav-item">
                                 {localStorage.getItem("access") && <a className="nav-link" href="#" onClick={handleLogout}>Signout</a>}

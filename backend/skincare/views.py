@@ -6,6 +6,7 @@ from .models import User, UserProfile, UserImage
 from rest_framework_simplejwt.tokens import RefreshToken 
 from rest_framework.decorators import permission_classes 
 from rest_framework.permissions import IsAuthenticated 
+from .serializers import ImageSerializer
 
 # Create your views here.
 @api_view(["POST"])
@@ -105,27 +106,48 @@ def processdata(request):
     print(f"User's survery has been save: {profile}")
     return Response({"message": "data is saved"}, status = status.HTTP_200_OK)
 
-@api_view(["POST"])
+@api_view(["POST", "GET"])
 @permission_classes([IsAuthenticated])
 def processimage(request): 
-    get_image = request.FILES["image_file"]
 
-    #ensure img < 5MB 
-    if get_image.size > 5*1024*1024: 
-        return Response({"error": "Image exceeds 5MB"}, status = status.HTTP_400_BAD_REQUEST)
-
-    #get user instance 
+    #get userprofile instance 
     get_user_instance = request.user.info 
 
-    #save imgs to db 
-    try:
-        save_image = UserImage.objects.create(userinfo = get_user_instance, image = get_image)
-        print(f"Save image successfully: {save_image}")
-        return Response({"message": "Save image successfully"}, status=status.HTTP_201_CREATED)
-    except: 
-        print(f"Image saved unsuccessfully")
-        return Response({"error": "Image saved unsuccessfully"})
-    
+
+    if request.method == "POST": 
+        get_image = request.FILES["image_file"]
+
+        #ensure img < 5MB 
+        if get_image.size > 5*1024*1024: 
+            return Response({"error": "Image exceeds 5MB"}, status = status.HTTP_400_BAD_REQUEST)
+
+        #save imgs to db 
+        try:
+            save_image = UserImage.objects.create(userinfo = get_user_instance, image = get_image)
+            print(f"Save image successfully: {save_image}")
+            return Response({"message": "Save image successfully"}, status=status.HTTP_201_CREATED)
+        except: 
+            print(f"Image saved unsuccessfully")
+            return Response({"error": "Image saved unsuccessfully"})
+    else:
+        #query the whole img objects
+        get_img_obj = get_user_instance.image_profile.order_by("-datetime").all()
+        if not get_img_obj: 
+            return Response({"error": "no objects returned"}, status=status.HTTP_400_BAD_REQUEST)
+        else: 
+            print(f"img array: {get_img_obj}")
+        
+        #get user instance 
+        get_name = request.user.username
+
+        #convert python obj to json string using serializer
+        convert_json = ImageSerializer(get_img_obj, many=True)
+
+        return Response ({"message": "Data sent successfully", "image": convert_json.data, "name": get_name}, status=status.HTTP_200_OK)
+
+
+
+
 
 
 

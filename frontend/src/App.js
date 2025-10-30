@@ -5,6 +5,7 @@ import Navbar from "./Navbar.js";
 import Login from "./Login";
 import Signup from "./Signup";
 import Home from "./Home";
+import Profile from "./Profile";
 
 function App() {
   //track stages (next) 
@@ -29,17 +30,14 @@ function App() {
   }
 
   
-  const[account, setAccount] = useState("");
+  const[page, setPage] = useState("");
   
   const handlePage = (site) => {
-      if (site === "login" || site === "signup" || site === "home")
+      if (site === "login" || site === "signup" || site === "home" ||site ==="profile")
       {
-        setAccount(site); 
+        setPage(site); 
         changeStage(0);
-      }
-      else 
-      {
-        setAccount("");
+        console.log("Site: ", site);
       }
   }
 
@@ -247,12 +245,14 @@ function App() {
       console.log(reader.error); 
     }
 
-    reader.readAsDataURL(file); 
+    //save img file before it being converted to base 64 string 
     setImageFile(file);
+    reader.readAsDataURL(file); 
   }
 
   //function to fetch image to backend 
   const handleSendImage = async() => {
+ 
     const file_form = new FormData();
     file_form.append("image_file", imageFile);
 
@@ -276,12 +276,54 @@ function App() {
     }
   }
 
-   return (
+  const[imageArray, setImageArray] = useState(null);
+  const[username, setUsername] = useState(""); 
+  const image_group ={}
+
+  //fetch imgs from backend 
+  const get_img = async () => {
+      const response = await fetch("http://localhost:8000/processimage", {
+          headers: {"Authorization" : `Bearer ${localStorage.getItem("access")}`}, 
+      });
+
+      const data = await response.json(); 
+      if (response.ok)
+      {
+          console.log(data.message); 
+          setUsername(data.name);
+
+          //loops through image array and group them according to date 
+          for (const i of data.image)
+          {
+            let date = new Date(i.datetime).toLocaleDateString();
+            if (image_group[date])
+            {
+              //.push adding items to array
+              image_group[date].push(i);
+              setImageArray(image_group);
+            }
+            else 
+            {
+              image_group[date] = [i];
+              setImageArray(image_group);
+            }
+          }
+      }
+      else 
+      {
+        console.log("Fetched image: ", data);
+      }
+    }
+
+    console.log(imageArray);
+
+  return (
     <div className="App">
-        <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout}/>
-        {account === "login" && <Login resetSite={handlePage}/>}
-        {account === "signup" && <Signup resetSite={handlePage}/>}
-        {account === "home" && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
+        <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout} retrieveImg={get_img}/>
+        {page === "login" && <Login resetSite={handlePage}/>}
+        {page === "signup" && <Signup resetSite={handlePage}/>}
+        {page === "home" && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
+        {page === "profile" && <Profile imageArray={imageArray} username={username}/>}
         {stage === 1 && (
           <div className="labels_container">
             <h1 className="title"> My Skincare Routine Tracker</h1>
@@ -437,7 +479,8 @@ function App() {
             <p className="opt">Please upload file smaller than 5MB </p>
             <input className="upload_img" type="file" accept="image/*" onChange ={(img) => handleImage(img.target.files[0])}/>
             {image && <img className="preview_image" src={image} alt="preview"/>}
-            <button onClick={handleSendImage}> Complete </button>
+            <button onClick={handleSendImage} disabled={!image}> Upload photo </button>
+            <button> Skip for now </button>
           </div>
 
         )}  
