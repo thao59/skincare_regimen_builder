@@ -21,14 +21,21 @@ function App() {
     {
       setStage(count);
     }
-    
   }
 
   //allow user to go back to previous page
-  const changePreviousStage = () => {
-    setStage(stage - 1);
-  }
+  const changePreviousStage = (count = 1) => {
+    if (count === 1)
+    {
+      setStage(stage - count);
+    }
 
+    else 
+    {
+      setStage(count);
+    }
+    
+  }
   
   const[page, setPage] = useState("");
   
@@ -37,9 +44,10 @@ function App() {
       {
         setPage(site); 
         changeStage(0);
-        console.log("Site: ", site);
       }
   }
+  console.log("Site: ", page);
+  console.log("Page: ", stage);
 
   //save user's information 
   const[userData, setUserData] = useState({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0})
@@ -278,6 +286,7 @@ function App() {
 
   const[imageArray, setImageArray] = useState(null);
   const[username, setUsername] = useState(""); 
+  const[retrieveData, setRetrieveData] = useState(null);
   const image_group ={}
 
   //fetch imgs from backend 
@@ -290,7 +299,12 @@ function App() {
       if (response.ok)
       {
           console.log(data.message); 
+          
+          //extract name and save in username
           setUsername(data.name);
+
+          //extract skininfo and save in retrieveData
+          setRetrieveData(data.skininfo);
 
           //loops through image array and group them according to date 
           for (const i of data.image)
@@ -315,15 +329,15 @@ function App() {
       }
     }
 
-    console.log(imageArray);
+    console.log(retrieveData);
 
   return (
     <div className="App">
         <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout} retrieveImg={get_img}/>
         {page === "login" && <Login resetSite={handlePage}/>}
         {page === "signup" && <Signup resetSite={handlePage}/>}
-        {page === "home" && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
-        {page === "profile" && <Profile imageArray={imageArray} username={username}/>}
+        {page === "home" && stage === 0 && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
+        {page === "profile" && <Profile imageArray={imageArray} username={username} retrieveData={retrieveData}/>}
         {stage === 1 && (
           <div className="labels_container">
             <h1 className="title"> My Skincare Routine Tracker</h1>
@@ -428,8 +442,8 @@ function App() {
         {stage === 8 && userData.products_type.length > 0 && (
           <div className="labels_container">
             <h2 className="question"> Are you using actives in your skincare routine? </h2>
-            <label><input type="radio" name="active" onChange={() => handleActive("yes")}/> Yes</label>
-            <label><input type="radio" name="active" onChange={() => {handleActive("no"); sendData()}}/> No</label>
+            <label><input type="radio" name="active" onChange={() => handleActive("yes")} checked={userData.active_use === true}/> Yes</label>
+            <label><input type="radio" name="active" onChange={() => {handleActive("no"); sendData()}} checked={userData.active_use === false}/> No</label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
               <button className="button_next" onClick={() => {changeStage(); sendData()}} disabled={userData.active_use === null}>&#8594;</button>
@@ -440,36 +454,47 @@ function App() {
         { stage === 9 && userData.active_use === true && (
           <div className="labels_container">
             <h2 className="question"> What actives are in your routine? </h2>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("vitaminC")}/> Vitamin C</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("niacinamide")}/> Niacinamide</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("bha")}/> BHA</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("aha")}/> AHA</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("pha")}/> PHA</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("retinol")}/> Retinol</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("tretinoin")}/> Tretinoin</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("azelaicAcid")}/> Azelaic Acid</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("benzoylPeroxide")}/> Benzoyl Peroxide</label>
-            <button className="button_next" onClick={() => changeStage()} disabled={userData.activeIngre.length < 1}>&#8594;</button>
+            <label><input type="checkbox" onChange={() => handleActiveUsage("vitaminC")} checked={userData.activeIngre.includes("vitaminC")}/> Vitamin C</label>
+            <label><input type="checkbox" onChange={() => handleActiveUsage("niacinamide")} checked={userData.activeIngre.includes("niacinamide")}/> Niacinamide</label>
+            <label><input type="checkbox" onChange={() => handleActiveUsage("bha")} checked={userData.activeIngre.includes("bha")}/> BHA</label>
+            <label><input type="checkbox" onChange={() => handleActiveUsage("aha")} checked={userData.activeIngre.includes("aha")}/> AHA</label>
+            <label><input type="checkbox" onChange={() => handleActiveUsage("pha")} checked={userData.activeIngre.includes("pha")}/> PHA</label>
+            <label><input type="checkbox" onChange={() => handleActiveUsage("retinol")} checked={userData.activeIngre.includes("retinol")}/> Retinol</label>
+            <label><input type="checkbox" onChange={() => handleActiveUsage("tretinoin")} checked={userData.activeIngre.includes("tretinoin")}/> Tretinoin </label>
+            <label><input type="checkbox" onChange={() => handleActiveUsage("azelaicAcid")} checked={userData.activeIngre.includes("azelaicAcid")}/> Azelaic Acid</label>
+            <label><input type="checkbox" onChange={() => handleActiveUsage("benzoylPeroxide")} checked={userData.activeIngre.includes("benzoylPeroxide")}/> Benzoyl Peroxide</label>
+            <div className="button_container">
+              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+              <button className="button_next" onClick={() => changeStage()} disabled={userData.activeIngre.length < 1}>&#8594;</button>
+            </div>
+
           </div>
         )}
 
         {stage === 10 && (
           <div className="labels_container">
             <h2 className="question"> Are you an experienced user of acids, retinoids and vitamin C?</h2>
-            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("beginner")}/> Beginner </label>
-            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("intermediate")}/> Intermediate</label>
-            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("Advanced")}/> Advanced </label>
-            <button onClick={() => changeStage()} disabled={userData.advanced_user === ""}>&#8594;</button>
+            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("beginner")} checked={userData.advanced_user === "beginner"}/> Beginner </label>
+            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("intermediate")} checked={userData.advanced_user === "intermediate"}/> Intermediate</label>
+            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("Advanced")} checked={userData.advanced_user === "advanced"}/> Advanced </label>
+            <div className="button_container">
+              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+              <button onClick={() => changeStage()} disabled={userData.advanced_user === ""}>&#8594;</button>
+            </div>
           </div>
         )}
 
         {stage === 11 && (
           <div className="labels_container">
             <h2 className="question"> How many products do you prefer to have in your regimen?</h2>
-            <label><input type="radio" name="no_products" onChange={() => handleNoProducts(3)}/> Simple (3 products) </label>
-            <label><input type="radio" name="no_products" onChange={() => handleNoProducts(5)}/> Essentials (4-5 products)</label>
-            <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)}/> Advanced (6+ products) </label>
-            <button onClick={() => {changeStage(); sendData()}} disabled={userData.no_products === 0}>&#8594;</button>
+            <label><input type="radio" name="no_products" onChange={() => handleNoProducts(3)} checked={userData.no_products === 3}/> Simple (3 products) </label>
+            <label><input type="radio" name="no_products" onChange={() => handleNoProducts(5)} checked={userData.no_products === 5}/> Essentials (4-5 products)</label>
+            <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)} checked={userData.no_products === 6}/> Advanced (6+ products) </label>
+            <div className="button_container">
+              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+              <button onClick={() => {changeStage(); sendData()}} disabled={userData.no_products === 0}>&#8594;</button>
+            </div>
+
           </div>
         )} 
 
@@ -479,8 +504,13 @@ function App() {
             <p className="opt">Please upload file smaller than 5MB </p>
             <input className="upload_img" type="file" accept="image/*" onChange ={(img) => handleImage(img.target.files[0])}/>
             {image && <img className="preview_image" src={image} alt="preview"/>}
-            <button onClick={handleSendImage} disabled={!image}> Upload photo </button>
-            <button> Skip for now </button>
+            <button onClick={() => {sendData(); handlePage("home")}}> Skip for now </button>
+            <div className="button_container">
+              {userData.routine === "no_routine" &&  <button className="button_previous" onClick={()=> changePreviousStage(7)}> &#8592; </button>}
+              {userData.active_use === false &&  <button className="button_previous" onClick={()=> changePreviousStage(8)}> &#8592; </button>}
+              {userData.no_products !== 0 &&  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>}
+              <button onClick={() => {handleSendImage(); sendData(); handlePage("home")}} disabled={!image}> Upload photo </button>
+            </div>
           </div>
 
         )}  

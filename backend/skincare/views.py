@@ -6,7 +6,7 @@ from .models import User, UserProfile, UserImage
 from rest_framework_simplejwt.tokens import RefreshToken 
 from rest_framework.decorators import permission_classes 
 from rest_framework.permissions import IsAuthenticated 
-from .serializers import ImageSerializer
+from .serializers import ImageSerializer, ProfileSerializer
 
 # Create your views here.
 @api_view(["POST"])
@@ -141,9 +141,10 @@ def processimage(request):
         get_name = request.user.username
 
         #convert python obj to json string using serializer
-        convert_json = ImageSerializer(get_img_obj, many=True)
+        images = ImageSerializer(get_img_obj, many=True)
+        skininfo = ProfileSerializer(get_user_instance)
 
-        return Response ({"message": "Data sent successfully", "image": convert_json.data, "name": get_name}, status=status.HTTP_200_OK)
+        return Response ({"message": "Data sent successfully", "image": images.data, "name": get_name, "skininfo": skininfo.data}, status=status.HTTP_200_OK)
 
 
 
