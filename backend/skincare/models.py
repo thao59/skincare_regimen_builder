@@ -37,7 +37,8 @@ class Products(models.Model):
     product_brand = models.CharField(max_length=200)
     product_cat = models.CharField(max_length=200)
     product_main_ingre = models.JSONField()
-    product_link = models.URLField(max_length=200)
+    product_target = models.JSONField()
+    product_link = models.URLField(max_length=500)
     product_img = models.ImageField(upload_to="product/")
 
     def __str__(self):
