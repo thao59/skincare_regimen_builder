@@ -6,7 +6,7 @@ from .models import User, UserProfile, UserImage
 from rest_framework_simplejwt.tokens import RefreshToken 
 from rest_framework.decorators import permission_classes 
 from rest_framework.permissions import IsAuthenticated 
-from .serializers import ImageSerializer, ProfileSerializer
+from .serializers import ImageSerializer, ProfileSerializer, ProductSerializer 
 
 # Create your views here.
 @api_view(["POST"])
