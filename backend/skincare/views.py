@@ -2,7 +2,7 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response 
 from rest_framework import status 
-from .models import User, UserProfile, UserImage
+from .models import User, UserProfile, UserImage, Products
 from rest_framework_simplejwt.tokens import RefreshToken 
 from rest_framework.decorators import permission_classes 
 from rest_framework.permissions import IsAuthenticated 
@@ -103,7 +103,6 @@ def processdata(request):
             "no_products": user_no_products,
         }
     )
-    print(f"User's survery has been save: {profile}")
     return Response({"message": "data is saved"}, status = status.HTTP_200_OK)
 
 @api_view(["POST", "GET"])
@@ -111,8 +110,7 @@ def processdata(request):
 def processimage(request): 
 
     #get userprofile instance 
-    get_user_instance = request.user.info 
-
+    user = request.user.info 
 
     if request.method == "POST": 
         get_image = request.FILES["image_file"]
@@ -123,7 +121,7 @@ def processimage(request):
 
         #save imgs to db 
         try:
-            save_image = UserImage.objects.create(userinfo = get_user_instance, image = get_image)
+            save_image = UserImage.objects.create(userinfo = user, image = get_image)
             print(f"Save image successfully: {save_image}")
             return Response({"message": "Save image successfully"}, status=status.HTTP_201_CREATED)
         except: 
@@ -131,7 +129,7 @@ def processimage(request):
             return Response({"error": "Image saved unsuccessfully"})
     else:
         #query the whole img objects
-        get_img_obj = get_user_instance.image_profile.order_by("-datetime").all()
+        get_img_obj = user.image_profile.order_by("-datetime").all()
         if not get_img_obj: 
             return Response({"error": "no objects returned"}, status=status.HTTP_400_BAD_REQUEST)
         else: 
@@ -140,9 +138,146 @@ def processimage(request):
         #get user instance 
         get_name = request.user.username
 
-        #convert python obj to json string using serializer
         images = ImageSerializer(get_img_obj, many=True)
-        skininfo = ProfileSerializer(get_user_instance)
+        skininfo = ProfileSerializer(user)
+        
+        #query product list according to category 
+        cleanser_list = Products.objects.filter(product_cat = "cleanser")
+        toner_list = Products.objects.filter(product_cat = "toner")
+        serum_list = Products.objects.filter(product_cat = "serum")
+        moisturiser_list = Products.objects.filter(product_cat = "moisturiser")
+        sunscreen_list = Products.objects.filter(product_cat = "sunscreen")
+        eye_list = Products.objects.filter(product_cat = "eye")
+        oil_cleanser_list = Products.objects.filter(product_cat="oil cleanser")
+        micellar_water_list = Products.objects.filter(product_cat = "micellar water")
+
+        cleanser = []
+        toner = []
+        serum = []
+        moituriser = []
+        sunscreen = []
+        eye = []
+        oil_cleanser = []
+        micellar_water = []
+
+        #loop through the list and append those catering to user's skin concern
+        for row in cleanser_list:
+            if user.pregnant and row.product_target == "avoid pregnancy":
+                continue
+            
+            if user.skintype in row.skintypes or row.skintypes == "all skin types":
+                add_product = {
+                    "name": row.product_name, 
+                    "brand": row.product_brand, 
+                    "category": row.product_cat, 
+                    "price": row.product_price, 
+                    "link": row.product_link, 
+                    "product_img": row.product_img, 
+                }
+                cleanser.append(add_product)
+
+        
+        for row in toner_list: 
+            if user.pregnant and row.product_target != "avoid pregnancy":
+                continue
+
+            if user.skintype in row.skintypes or row.skintypes == "all skin types": 
+                add_product = {
+                    "name": row.product_name, 
+                    "brand": row.product_brand, 
+                    "category": row.product_cat, 
+                    "price": row.product_price, 
+                    "link": row.product_link, 
+                    "product_img": row.product_img, 
+                }
+                toner.append(add_product)
+
+        for row in serum_list: 
+            if user.pregnant and row.product_target != "avoid pregnancy":
+                continue
+
+            if user.skintype in row.skintypes or row.skintypes == "all skin types": 
+                add_product = {
+                    "name": row.product_name, 
+                    "brand": row.product_brand, 
+                    "category": row.product_cat, 
+                    "price": row.product_price, 
+                    "link": row.product_link, 
+                    "product_img": row.product_img, 
+                }
+                serum.append(add_product)
+        
+        for row in moisturiser_list: 
+            if user.pregnant and row.product_target != "avoid pregnancy":
+                continue
+
+            if user.skintype in row.skintypes or row.skintypes == "all skin types": 
+                add_product = {
+                    "name": row.product_name, 
+                    "brand": row.product_brand, 
+                    "category": row.product_cat, 
+                    "price": row.product_price, 
+                    "link": row.product_link, 
+                    "product_img": row.product_img, 
+                }
+                moituriser.append(add_product)
+        
+        for row in sunscreen_list: 
+            if user.pregnant and row.product_target != "avoid pregnancy":
+                continue
+
+            if user.skintype in row.skintypes or row.skintypes == "all skin types": 
+                add_product = {
+                    "name": row.product_name, 
+                    "brand": row.product_brand, 
+                    "category": row.product_cat, 
+                    "price": row.product_price, 
+                    "link": row.product_link, 
+                    "product_img": row.product_img, 
+                }
+                sunscreen.append(add_product)
+        
+        for row in eye_list: 
+            if user.pregnant and row.product_target != "avoid pregnancy":
+                continue
+
+            if user.skintype in row.skintypes or row.skintypes == "all skin types": 
+                add_product = {
+                    "name": row.product_name, 
+                    "brand": row.product_brand, 
+                    "category": row.product_cat, 
+                    "price": row.product_price, 
+                    "link": row.product_link, 
+                    "product_img": row.product_img, 
+                }
+                eye.append(add_product)
+        
+        if "acne" in user.skin_conern:
+            for row in micellar_water_list:
+                if user.skintype in row.skintypes or row.skintypes == "all skin types": 
+                    add_product = {
+                        "name": row.product_name, 
+                        "brand": row.product_brand, 
+                        "category": row.product_cat, 
+                        "price": row.product_price, 
+                        "link": row.product_link, 
+                        "product_img": row.product_img, 
+                    }
+                    micellar_water.append(add_product)
+        else: 
+            for row in oil_cleanser_list:
+                if user.skintype in row.skintypes or row.skintypes == "all skin types": 
+                    add_product = {
+                        "name": row.product_name, 
+                        "brand": row.product_brand, 
+                        "category": row.product_cat, 
+                        "price": row.product_price, 
+                        "link": row.product_link, 
+                        "product_img": row.product_img, 
+                    } 
+                    oil_cleanser.append(add_product)
+
+
 
         return Response ({"message": "Data sent successfully", "image": images.data, "name": get_name, "skininfo": skininfo.data}, status=status.HTTP_200_OK)
 

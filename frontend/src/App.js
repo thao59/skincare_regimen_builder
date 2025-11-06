@@ -6,6 +6,7 @@ import Login from "./Login";
 import Signup from "./Signup";
 import Home from "./Home";
 import Profile from "./Profile";
+import Productrec from "./Product";
 
 function App() {
   //track stages (next) 
@@ -275,8 +276,9 @@ function App() {
     if (response.ok)
     {
       console.log("Status: ", data.message); 
-      //navigate user back to homepage 
-      handlePage("home");
+      
+      //navigate user to product rec page  
+      changeStage(13);
     }
     else 
     {
@@ -367,6 +369,7 @@ function App() {
             <label><input type="radio" name="skin_type" onChange={() => handleSkinType("dry")} checked={userData.skin_type === "dry"}/>Dry</label>
             <label><input type="radio" name="skin_type" onChange={() => handleSkinType("balanced")} checked={userData.skin_type === "balanced"}/>Balanced</label>
             <label><input type="radio" name="skin_type" onChange={() => handleSkinType("combination")} checked={userData.skin_type === "combination"}/>Combination</label>
+            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("sensitive")} checked={userData.skin_type === "sensitive"}/>Sensitive</label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
               <button className="button_next" onClick ={() => changeStage()} disabled={!userData.skin_type}>&#8594;</button>
@@ -380,12 +383,13 @@ function App() {
           <h2 className="question"> Identify top 3 concerns </h2>
           <label><input type="checkbox" onChange={() => handleConcern("acne")} checked={userData.skin_concern.includes("acne")}/> Acne</label>
           <label><input type="checkbox" onChange={() => handleConcern("aging")} checked={userData.skin_concern.includes("aging")}/> Aging</label>
-          <label><input type="checkbox" onChange={() => handleConcern("darksports")} checked={userData.skin_concern.includes("darksports")}/> Dark spots/Hyperpigmentation</label>
+          <label><input type="checkbox" onChange={() => handleConcern("pigmentation")} checked={userData.skin_concern.includes("pigmentation")}/> Dark spots/Hyperpigmentation</label>
           <label><input type="checkbox" onChange={() => handleConcern("dehydrated")} checked={userData.skin_concern.includes("dehydrated")}/> Dehydrated</label>
+          <label><input type="checkbox" onChange={() => handleConcern("dryness")} checked={userData.skin_concern.includes("dryness")}/> Dry</label>
           <label><input type="checkbox" onChange={() => handleConcern("largepores")} checked={userData.skin_concern.includes("largepores")}/> Large pores </label> 
           <label><input type="checkbox" onChange={() => handleConcern("sensitive")} checked={userData.skin_concern.includes("sensitive")}/> Sensitive/Redness </label>
           <label><input type="checkbox" onChange={() => handleConcern("dullness")} checked={userData.skin_concern.includes("dullness")}/> Dullness</label>
-          <label><input type="checkbox" onChange={() => handleConcern("uneventexture")} checked={userData.skin_concern.includes("uneventexture")}/> Uneven texture</label>
+          <label><input type="checkbox" onChange={() => handleConcern("texture")} checked={userData.skin_concern.includes("texture")}/> Uneven texture</label>
           <div className="button_container">
             <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
             <button className="button_next" onClick ={() => changeStage()} disabled={userData.skin_concern.length < 1}>&#8594;</button>
@@ -512,8 +516,9 @@ function App() {
               <button onClick={() => {handleSendImage(); sendData(); handlePage("home")}} disabled={!image}> Upload photo </button>
             </div>
           </div>
-
         )}  
+
+        {stage === 13 && <Productrec/>}
     </div>
   )
 }
