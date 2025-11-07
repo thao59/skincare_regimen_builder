@@ -11,7 +11,6 @@ class UserProfile(models.Model):
     age = models.IntegerField()
     skintype = models.CharField (max_length=50)
     skin_concern = models.JSONField(default=list)
-    eye_concern = models.JSONField(null=True, blank=True)
     pregnant = models.BooleanField(default = False)
     products_type = models.JSONField(null = True, blank=True)
     routine= models.CharField(max_length=200, null=True, blank=True)
