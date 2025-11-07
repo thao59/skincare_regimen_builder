@@ -335,6 +335,16 @@ function App() {
             }
           }
 
+          //set products rec 
+          setCleanser(data.cleanser);
+          setToner(data.toner);
+          setSerum(data.serum);
+          setMoituriser(data.moisturiser);
+          setSunscreen(data.sunscreen);
+          setEye(data.eye);
+          setOilcleanser(data.cleansing_oil);
+          setMicellarwater(data.micellar_water);
+
 
       }
       else 
@@ -530,7 +540,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec/>}
+        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moituriser={moituriser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} />}
     </div>
   )
 }
