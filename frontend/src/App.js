@@ -291,6 +291,16 @@ function App() {
   const[retrieveData, setRetrieveData] = useState(null);
   const image_group ={}
 
+  const[cleanser, setCleanser] = useState(null); 
+  const[toner, setToner] = useState(null);
+  const[serum, setSerum] = useState(null);
+  const[moituriser, setMoituriser] = useState(null);
+  const[sunscreen, setSunscreen] = useState(null); 
+  const[eye, setEye] = useState(null);
+  const[oilcleanser, setOilcleanser] = useState(null);
+  const[micellarwater, setMicellarwater] = useState(null); 
+
+
   //fetch imgs from backend 
   const get_img = async () => {
       const response = await fetch("http://localhost:8000/processimage", {
@@ -324,6 +334,8 @@ function App() {
               setImageArray(image_group);
             }
           }
+
+
       }
       else 
       {
