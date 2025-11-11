@@ -231,10 +231,6 @@ function App() {
         console.log(data.error);
       }
     }
-    if (imageFile !== null)
-      {
-        
-      }
   }
 
   const[imageFile, setImageFile] = useState(null);
@@ -269,7 +265,7 @@ function App() {
     const file_form = new FormData();
     file_form.append("image_file", imageFile);
 
-    const response = await fetch("http://localhost:8000/processimage/", {
+    const response = await fetch("http://localhost:8000/processdata/", {
       method: "POST", 
       headers: {
         "Authorization": `Bearer ${localStorage.getItem("access")}`}, 
