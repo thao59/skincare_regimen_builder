@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import {useState} from "react";
-import Navbar from "./Navbar.js";
+import Navbar from "./Navbar";
 import Login from "./Login";
 import Signup from "./Signup";
 import Home from "./Home";
@@ -231,6 +231,10 @@ function App() {
         console.log(data.error);
       }
     }
+    if (imageFile !== null)
+      {
+        
+      }
   }
 
   const[imageFile, setImageFile] = useState(null);
@@ -291,14 +295,14 @@ function App() {
   const[retrieveData, setRetrieveData] = useState(null);
   const image_group ={}
 
-  const[cleanser, setCleanser] = useState(null); 
-  const[toner, setToner] = useState(null);
-  const[serum, setSerum] = useState(null);
-  const[moituriser, setMoituriser] = useState(null);
-  const[sunscreen, setSunscreen] = useState(null); 
-  const[eye, setEye] = useState(null);
-  const[oilcleanser, setOilcleanser] = useState(null);
-  const[micellarwater, setMicellarwater] = useState(null); 
+  const[cleanser, setCleanser] = useState([]); 
+  const[toner, setToner] = useState([]);
+  const[serum, setSerum] = useState([]);
+  const[moisturiser, setMoisturiser] = useState([]);
+  const[sunscreen, setSunscreen] = useState([]); 
+  const[eye, setEye] = useState([]);
+  const[oilcleanser, setOilcleanser] = useState([]);
+  const[micellarwater, setMicellarwater] = useState([]); 
 
 
   //fetch imgs from backend 
@@ -339,7 +343,7 @@ function App() {
           setCleanser(data.cleanser);
           setToner(data.toner);
           setSerum(data.serum);
-          setMoituriser(data.moisturiser);
+          setMoisturiser(data.moisturiser);
           setSunscreen(data.sunscreen);
           setEye(data.eye);
           setOilcleanser(data.cleansing_oil);
@@ -353,7 +357,7 @@ function App() {
       }
     }
 
-    console.log(retrieveData);
+    console.log(cleanser);
 
   return (
     <div className="App">
@@ -459,7 +463,9 @@ function App() {
               <label><input type="checkbox"  onChange={() => handleHavingRoutine("no_routine")} checked={userData.routine === "no_routine"} /> I don't have a skincare routine</label>
               <div className="button_container">
                 <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                <button className="button_next" onClick={() => {changeStage(); sendData()}} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>
+                {(userData.products_type.length < 1 && userData.routine === "") && <button disabled ={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
+                {userData.routine === "no_routine" && <button className="button_next" onClick={() => {changeStage(12); sendData()}} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
+                {userData.products_type.length > 0 && <button className="button_next" onClick={() => changeStage()} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
               </div>
             
           </div>
@@ -469,10 +475,12 @@ function App() {
           <div className="labels_container">
             <h2 className="question"> Are you using actives in your skincare routine? </h2>
             <label><input type="radio" name="active" onChange={() => handleActive("yes")} checked={userData.active_use === true}/> Yes</label>
-            <label><input type="radio" name="active" onChange={() => {handleActive("no"); sendData()}} checked={userData.active_use === false}/> No</label>
+            <label><input type="radio" name="active" onChange={() => handleActive("no")} checked={userData.active_use === false}/> No</label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button className="button_next" onClick={() => {changeStage(); sendData()}} disabled={userData.active_use === null}>&#8594;</button>
+              {userData.active_use === null && <button disabled={userData.active_use === null}>&#8594;</button>}
+              {userData.active_use === false && <button className="button_next" onClick={() => {changeStage(12); sendData()}} disabled={userData.active_use === null}>&#8594;</button> }
+              {userData.active_use === true && <button className="button_next" onClick={() => changeStage()} disabled={userData.active_use === null}>&#8594;</button>}
             </div>
           </div>
         )}
@@ -530,17 +538,17 @@ function App() {
             <p className="opt">Please upload file smaller than 5MB </p>
             <input className="upload_img" type="file" accept="image/*" onChange ={(img) => handleImage(img.target.files[0])}/>
             {image && <img className="preview_image" src={image} alt="preview"/>}
-            <button onClick={() => {sendData(); handlePage("home")}}> Skip for now </button>
+            <button onClick={() => {sendData(); changeStage()}}> Skip for now </button>
             <div className="button_container">
               {userData.routine === "no_routine" &&  <button className="button_previous" onClick={()=> changePreviousStage(7)}> &#8592; </button>}
               {userData.active_use === false &&  <button className="button_previous" onClick={()=> changePreviousStage(8)}> &#8592; </button>}
               {userData.no_products !== 0 &&  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>}
-              <button onClick={() => {handleSendImage(); sendData(); handlePage("home")}} disabled={!image}> Upload photo </button>
+              <button onClick={() => {handleSendImage(); sendData(); changeStage()}} disabled={!image}> Upload photo </button>
             </div>
           </div>
         )}  
 
-        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moituriser={moituriser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} />}
+        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater}/>}
     </div>
   )
 }

@@ -17,6 +17,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
     for (const item of cleanser)
     {
+        console.log(item);
         if (item.price < 40)    
             product_list.cleanser.low.push(item);
         else if (item.price >= 40 && item.price <= 80)
@@ -28,6 +29,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.cleanser.high.push(item); 
         }
     }
+    console.log(product_list.cleanser);
 
     for (const item of toner)
     {
@@ -42,6 +44,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.toner.high.push(item); 
         }
     }
+    console.log(product_list.toner);
 
     for (const item of serum)
     {
@@ -56,6 +59,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.serum.high.push(item); 
         }
     }
+    console.log(product_list.serum);
 
     for (const item of moisturiser)
     {
@@ -70,6 +74,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.moisturiser.high.push(item); 
         }
     }
+    console.log(product_list.moisturiser);
 
     for (const item of eye)
     {
@@ -84,6 +89,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.eye.high.push(item); 
         }
     }
+    console.log(product_list.eye);
 
     for (const item of sunscreen)
     {
@@ -98,6 +104,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.sunscreen.high.push(item); 
         }
     }
+    console.log(product_list.sunscreen);
 
     for (const item of oilcleanser)
     {
@@ -112,6 +119,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.oilcleanser.high.push(item); 
         }
     }
+    console.log(product_list.oilcleanser);
 
     for (const item of micellarwater)
     {
@@ -126,26 +134,35 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.micellarwater.high.push(item); 
         }
     }
+    console.log(product_list.micellarwater);
 
     return (
-        {Object.entries(product_list).map((key, value) => (
-            <div key={key}>
-                <h2>Cleanser</h2>
-                {value.low && value.map(x => x (
-                    <div>
-                        <h2>Affordable</h2>
-                        <p><span>x.brand</span> x.name</p>
-                        <img src="x.product_img"/>
-                        <a href="x.link">Find product here</a>
-                    </div>
+        <>
+            {Object.entries(product_list).map(([key, value]) => (
+                <div key={key}>
+                    <h2>{key}</h2>
+                    {/* loop through each category(high,mid,low) and display */}
+                    {value.low && value.low.map(x => (
+                        <div key={x.name}>
+                            <h2>Affordable</h2>
+                            <p><span>{x.brand}</span>{x.name}</p>
+                            <img src={x.product_img}/>
+                            <a href={x.link}>Find product here</a>
+                        </div>
+                    ))}
+                    {value.mid && value.mid.map(x => (
+                        <div key={x.name}> 
+                            <h2>Mid-end</h2>
+                            <p><span>{x.brand}</span> {x.name}</p>
+                            <img src={x.product_img}/>
+                            <a href={x.link}>Find product here</a>
+                        </div>
+                    ))}
 
 
-                ))}
-
-            </div>
-
-        ))}
-
+                </div>
+            ))}
+        </>
     )
 }
 
