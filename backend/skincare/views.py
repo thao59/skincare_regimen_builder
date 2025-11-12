@@ -419,32 +419,6 @@ def processdata(request):
         else: 
             return Response ({"message": "success", "image": None, "skininfo": skininfo.data, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status=status.HTTP_200_OK)
 
-@api_view(["POST"])
-def processimage(request): 
-
-    #if user is logged in
-    if request.user_is.authenticated: 
-        #get username for display
-        get_name = request.user.username
-
-
-       
-    
-
-
-        
-        
-
-
-
-
-        
-
-    #if user is not logged in 
-    else:
-        pass
-        
-
 
 
 

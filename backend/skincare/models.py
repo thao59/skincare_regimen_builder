@@ -46,3 +46,9 @@ class Products(models.Model):
     def __str__(self):
         return f"{self.product_brand} - {self.product_name}: {self.product_cat}, {self.product_price}"
     
+class UserProduct(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name = "recommendation")
+    product = models.ForeignKey(Products, on_delete=models.CASCADE, related_name="recommended_to")
+
+    def __str__(self):
+        return f"User: {self.user} Rec: {self.product}"
