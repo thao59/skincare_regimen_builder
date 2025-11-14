@@ -444,9 +444,9 @@ def getImage(request):
     image_dict = ImageSerializer(user_photo)
     info_dict = ProfileSerializer(user)
     get_product_recs = UserProduct.objects.filter(user=request.user)
-    product_recs_dict = UserProductSerializer(get_product_recs)
+    product_recs_dict = UserProductSerializer(get_product_recs, many=True)
     
-    return Response({"message": "success", "image": image_dict.data, "skininfo": info_dict, "product_recs": product_recs_dict}, status=status.HTTP_200_OK)
+    return Response({"message": "success", "image": image_dict.data, "skininfo": info_dict, "product_recs": product_recs_dict.data}, status=status.HTTP_200_OK)
 
 
 

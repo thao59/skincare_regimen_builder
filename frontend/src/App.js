@@ -344,33 +344,33 @@ function App() {
           //loop through the list of product recs and assign them to variables 
           for (const i of data.product_recs)
           {
-            if (i.product_cat === "cleanser")
+            if (i.product.product_cat === "cleanser")
               {
                 setCleanser([...cleanser, i])
               }
-            else if (i.product_cat === "toner")
+            else if (i.product.product_cat === "toner")
               {
                 setToner([...toner, i])
               }
-            else if (i.product_cat === "serum")
+            else if (i.product.product_cat === "serum")
               {
                 setSerum([...serum, i])
               }
-            else if (i.product_cat === "moisturiser")
+            else if (i.product.product_cat === "moisturiser")
               {
                 setMoisturiser([...moisturiser, i])
               }
-            else if (i.product_cat === "sunscreen")
+            else if (i.product.product_cat === "sunscreen")
               {
                 setSunscreen([...sunscreen, i])
               }
-            else if (i.product_cat === "eye")
+            else if (i.product.product_cat === "eye")
               {
                 setEye([...eye, i])
               }
             else 
               {
-                if (i.product_cat === "micellar water")
+                if (i.product.product_cat === "micellar water")
                   {
                     setMicellarwater([...micellarwater, i])
                   }
