@@ -576,7 +576,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec/>}
+        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwarter={micellarwater}/>}
     </div>
   )
 }
