@@ -386,6 +386,7 @@ function App() {
         console.log("error");
       }
     }
+    console.log("micellar water: ", micellarwater);
 
   return (
     <div className="App">

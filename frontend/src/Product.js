@@ -18,9 +18,9 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
     for (const item of cleanser)
     {
         console.log(item);
-        if (item.price < 40)    
+        if (item.product_price < 40)    
             product_list.cleanser.low.push(item);
-        else if (item.price >= 40 && item.price <= 80)
+        else if (item.product_price >= 40 && item.price <= 80)
         {
             product_list.cleanser.mid.push(item);
         }
@@ -35,7 +35,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
     {
         if (item.price < 40)
             product_list.toner.low.push(item);
-        else if (item.price >= 40 && item.price <= 80)
+        else if (item.product_price >= 40 && item.price <= 80)
         {
             product_list.toner.mid.push(item);
         }
@@ -48,9 +48,9 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
     for (const item of serum)
     {
-        if (item.price < 40)
+        if (item.product_price < 40)
             product_list.serum.low.push(item);
-        else if (item.price >= 40 && item.price <= 80)
+        else if (item.product_price >= 40 && item.price <= 80)
         {
             product_list.serum.mid.push(item);
         }
@@ -63,9 +63,9 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
     for (const item of moisturiser)
     {
-        if (item.price < 40)
+        if (item.product_price < 40)
             product_list.moisturiser.low.push(item);
-        else if (item.price >= 40 && item.price <= 80)
+        else if (item.product_price >= 40 && item.price <= 80)
         {
             product_list.moisturiser.mid.push(item);
         }
@@ -80,7 +80,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
     {
         if (item.price < 40)
             product_list.eye.low.push(item);
-        else if (item.price >= 40 && item.price <= 80)
+        else if (item.product_price >= 40 && item.price <= 80)
         {
             product_list.eye.mid.push(item);
         }
@@ -93,7 +93,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
     for (const item of sunscreen)
     {
-        if (item.price < 40)
+        if (item.product_price < 40)
             product_list.sunscreen.low.push(item);
         else if (item.price >= 40 && item.price <= 80)
         {
@@ -108,9 +108,9 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
     for (const item of oilcleanser)
     {
-        if (item.price < 40)
+        if (item.product_price < 40)
             product_list.oilcleanser.low.push(item);
-        else if (item.price >= 40 && item.price <= 80)
+        else if (item.product_price >= 40 && item.price <= 80)
         {
             product_list.oilcleanser.mid.push(item);
         }
@@ -123,9 +123,9 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
     for (const item of micellarwater)
     {
-        if (item.price < 40)
+        if (item.product_price < 40)
             product_list.micellarwater.low.push(item);
-        else if (item.price >= 40 && item.price <= 80)
+        else if (item.product_price >= 40 && item.price <= 80)
         {
             product_list.micellarwater.mid.push(item);
         }
@@ -145,17 +145,17 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                     {value.low && value.low.map(x => (
                         <div key={x.name}>
                             <h2>Affordable</h2>
-                            <p><span>{x.brand}</span>{x.name}</p>
+                            <p><span>{x.product_brand}</span>{x.product_name}</p>
                             <img src={x.product_img}/>
-                            <a href={x.link}>Find product here</a>
+                            <a href={x.product_link}>Find product here</a>
                         </div>
                     ))}
                     {value.mid && value.mid.map(x => (
-                        <div key={x.name}> 
+                        <div key={x.product_name}> 
                             <h2>Mid-end</h2>
-                            <p><span>{x.brand}</span> {x.name}</p>
+                            <p><span>{x.product_brand}</span> {x.product_name}</p>
                             <img src={x.product_img}/>
-                            <a href={x.link}>Find product here</a>
+                            <a href={x.product_link}>Find product here</a>
                         </div>
                     ))}
 
