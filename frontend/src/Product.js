@@ -15,6 +15,17 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
         "micellarwater": {"high": [], "mid": [], "low": []},
     }
 
+    console.log(cleanser);
+    console.log(toner);
+    console.log(serum);
+    console.log(moisturiser);
+    console.log(eye);
+    console.log(sunscreen);
+    console.log(oilcleanser);
+    console.log(micellarwater);
+
+
+
     for (const item of cleanser)
     {
         console.log(item);

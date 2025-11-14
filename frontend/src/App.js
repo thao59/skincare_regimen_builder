@@ -205,6 +205,20 @@ function App() {
 
   const token = localStorage.getItem("access"); 
 
+  const[imageArray, setImageArray] = useState(null);
+  const[username, setUsername] = useState(""); 
+  const[retrieveData, setRetrieveData] = useState(null);
+  const image_group ={}
+
+  const[cleanser, setCleanser] = useState([]); 
+  const[toner, setToner] = useState([]);
+  const[serum, setSerum] = useState([]);
+  const[moisturiser, setMoisturiser] = useState([]);
+  const[sunscreen, setSunscreen] = useState([]); 
+  const[eye, setEye] = useState([]);
+  const[oilcleanser, setOilcleanser] = useState([]);
+  const[micellarwater, setMicellarwater] = useState([]); 
+
   //fetch user data to Django 
   const sendData = async() => {
     if (userData.routine === "no_routine" || userData.active_use === false || userData.no_products !== 0 )
@@ -225,11 +239,87 @@ function App() {
       const data = await response.json(); 
       if (response.ok)
       {
-        console.log(data.message, response.status)
+        console.log(data.message, response.status) 
         
-        //send user to page 12 for uploading images 
-        changeStage(12);
+        //process data if user is logged in
+        if (data.product_recs)
+        {
+          //if user uploaded photo, loops through image array and group them according to date 
+          if (data.image.length > 0)
+          {
+            for (const i of data.image)
+              {
+                let date = new Date(i.datetime).toLocaleDateString();
+                if (image_group[date])
+                {
+                  //.push adding items to array
+                  image_group[date].push(i);
+                }
+                else 
+                {
+                  image_group[date] = [i];
+                }
+              }
+            setImageArray(image_group);
+          }
+          
+          //filter products into categories and assign them to variables
+          const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser"); 
+          setCleanser(cleanser_cat);
+
+          const toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner");
+          setToner(toner_cat);
+
+          const serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum");
+          setSerum(serum_cat);
+
+          const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser");
+          setMoisturiser(moist_cat);
+
+          const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "sunscreen");
+          setSunscreen(sunscreen_cat);
+
+          const eye_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser");
+          setEye(eye_cat);
+
+          const micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water");
+          setMicellarwater(micellarwater_cat);
+
+          const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser");
+          setOilcleanser(cleansingoil_cat);
+        }
+
+        //process data if user is not logged in
+        else 
+        {
+          if(data.cleanser)
+            setCleanser(data.cleanser);
+        
+          if(data.toner)
+            setToner(data.toner);
+          
+          if(data.serum)
+            setSerum(data.serum);
+
+          if(data.moisturizer)
+            setMoisturiser(data.moisturizer);
+
+          if(data.sunscreen)
+            setSunscreen(data.sunscreen);
+
+          if(data.eye)
+            setEye(data.eye);
+
+          if(data.micellar_water)
+            setMicellarwater(data.micellar_water)
+          
+          if(data.cleansing_oil)
+            setOilcleanser(data.cleansing_oil)
+        }
+
+        changeStage(13);
       }
+
       else
       {
         console.log(data.error);
@@ -295,21 +385,6 @@ function App() {
     }
   }
 
-  const[imageArray, setImageArray] = useState(null);
-  const[username, setUsername] = useState(""); 
-  const[retrieveData, setRetrieveData] = useState(null);
-  const image_group ={}
-
-  const[cleanser, setCleanser] = useState([]); 
-  const[toner, setToner] = useState([]);
-  const[serum, setSerum] = useState([]);
-  const[moisturiser, setMoisturiser] = useState([]);
-  const[sunscreen, setSunscreen] = useState([]); 
-  const[eye, setEye] = useState([]);
-  const[oilcleanser, setOilcleanser] = useState([]);
-  const[micellarwater, setMicellarwater] = useState([]); 
-
-
   //fetch imgs from backend 
   const get_data = async () => {
       const response = await fetch("http://localhost:8000/getImage", {
@@ -320,76 +395,59 @@ function App() {
       if (response.ok)
       {
           console.log(data.message); 
-          
-          //extract name and save in username
-          setUsername(data.name);
 
           //extract skininfo and save in retrieveData
           setRetrieveData(data.skininfo);
 
-          //loops through image array and group them according to date 
-          for (const i of data.image)
+          //if image, loops through image array and group them according to date 
+          if (data.image.length > 0)
           {
-            let date = new Date(i.datetime).toLocaleDateString();
-            if (image_group[date])
-            {
-              //.push adding items to array
-              image_group[date].push(i);
-              setImageArray(image_group);
-            }
-            else 
-            {
-              image_group[date] = [i];
-              setImageArray(image_group);
-            }
+            for (const i of data.image)
+              {
+                let date = new Date(i.datetime).toLocaleDateString();
+                if (image_group[date])
+                {
+                  //.push adding items to array
+                  image_group[date].push(i);
+                }
+                else 
+                {
+                  image_group[date] = [i];
+                }
+              }
+            setImageArray(image_group);
           }
 
-          //loop through the list of product recs and assign them to variables 
-          for (const i of data.product_recs)
-          {
-            if (i.product.product_cat === "cleanser")
-              {
-                setCleanser([...cleanser, i])
-              }
-            else if (i.product.product_cat === "toner")
-              {
-                setToner([...toner, i])
-              }
-            else if (i.product.product_cat === "serum")
-              {
-                setSerum([...serum, i])
-              }
-            else if (i.product.product_cat === "moisturiser")
-              {
-                setMoisturiser([...moisturiser, i])
-              }
-            else if (i.product.product_cat === "sunscreen")
-              {
-                setSunscreen([...sunscreen, i])
-              }
-            else if (i.product.product_cat === "eye")
-              {
-                setEye([...eye, i])
-              }
-            else 
-              {
-                if (i.product.product_cat === "micellar water")
-                  {
-                    setMicellarwater([...micellarwater, i])
-                  }
-                else 
-                  {
-                    setOilcleanser([...oilcleanser, i])
-                  }
-              }
-          }
+          //filter products into categories and assign them to variables
+          const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser"); 
+          setCleanser(cleanser_cat);
+
+          const toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner");
+          setToner(toner_cat);
+
+          const serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum");
+          setSerum(serum_cat);
+
+          const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser");
+          setMoisturiser(moist_cat);
+
+          const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "sunscreen");
+          setSunscreen(sunscreen_cat);
+
+          const eye_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser");
+          setEye(eye_cat);
+
+          const micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water");
+          setMicellarwater(micellarwater_cat);
+
+          const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser");
+          setOilcleanser(cleansingoil_cat);
       }
       else 
       {
         console.log("error");
       }
     }
-    console.log("micellar water: ", micellarwater);
 
   return (
     <div className="App">
@@ -496,7 +554,7 @@ function App() {
               <div className="button_container">
                 <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
                 {(userData.products_type.length < 1 && userData.routine === "") && <button disabled ={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
-                {userData.routine === "no_routine" && <button className="button_next" onClick={() => {changeStage(12); sendData()}} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
+                {userData.routine === "no_routine" && <button className="button_next" onClick={() => changeStage(12)} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
                 {userData.products_type.length > 0 && <button className="button_next" onClick={() => changeStage()} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
               </div>
             
@@ -511,7 +569,7 @@ function App() {
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
               {userData.active_use === null && <button disabled={userData.active_use === null}>&#8594;</button>}
-              {userData.active_use === false && <button className="button_next" onClick={() => {changeStage(12); sendData()}} disabled={userData.active_use === null}>&#8594;</button> }
+              {userData.active_use === false && <button className="button_next" onClick={() => {changeStage(12)}} disabled={userData.active_use === null}>&#8594;</button> }
               {userData.active_use === true && <button className="button_next" onClick={() => changeStage()} disabled={userData.active_use === null}>&#8594;</button>}
             </div>
           </div>
@@ -558,7 +616,7 @@ function App() {
             <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)} checked={userData.no_products === 6}/> Advanced (6+ products) </label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button onClick={() => {changeStage(); sendData()}} disabled={userData.no_products === 0}>&#8594;</button>
+              <button onClick={() => changeStage()} disabled={userData.no_products === 0}>&#8594;</button>
             </div>
 
           </div>
@@ -575,7 +633,7 @@ function App() {
               {userData.routine === "no_routine" &&  <button className="button_previous" onClick={()=> changePreviousStage(7)}> &#8592; </button>}
               {userData.active_use === false &&  <button className="button_previous" onClick={()=> changePreviousStage(8)}> &#8592; </button>}
               {userData.no_products !== 0 &&  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>}
-              <button onClick={() => {handleSendImage(); sendData(); changeStage()}} disabled={!image}> Upload photo </button>
+              <button onClick={() => {handleSendImage(); changeStage()}} disabled={!image}> Upload photo </button>
             </div>
           </div>
         )}  
