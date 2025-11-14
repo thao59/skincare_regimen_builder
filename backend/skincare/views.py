@@ -81,6 +81,8 @@ def processdata(request):
     user_advanced_use = request.data["advanced_user"]
     user_no_products = request.data["no_products"]
 
+    img_file = None
+
     #check if user uploads photo
     if "image_file" in request.FILES:
         get_image = request.FILES["image_file"]
@@ -111,7 +113,8 @@ def processdata(request):
                 #detect image type 
                 img_type = get_image.content_type 
                 convert_img = base64.b64encode(get_image.read()).decode("utf-8")
-                image_file = f"data: {img_type};base64,{convert_img}"
+                img_file = f"data: {img_type};base64,{convert_img}"
+                print(f"image file: {img_file}")
 
     #query product list according to category 
     cleanser_list = Products.objects.filter(product_cat = "cleanser")
@@ -155,7 +158,7 @@ def processdata(request):
                 "no_products": user_no_products,
             })
         #detele the old recommendation and only saving the latest
-        UserProduct.objects.filter(user = request.user).detele()
+        UserProduct.objects.filter(user = request.user).delete()
 
         #loop through the list and append those catering to user's skin concern
         for row in cleanser_list:
@@ -169,7 +172,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 cleanser.append(add_product)
                 #save new rec 
@@ -186,7 +189,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 toner.append(add_product)
                 #save new rec 
@@ -203,7 +206,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 serum.append(add_product)
                 #save new rec 
@@ -220,7 +223,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 moisturiser.append(add_product)
                 #save new rec 
@@ -237,7 +240,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 sunscreen.append(add_product)
                 #save new rec 
@@ -254,13 +257,13 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 eye.append(add_product)
                 #save new rec 
                 UserProduct.objects.create(user=request.user, product=row)
         
-        if "acne" in profile.skin_conern:
+        if "acne" in profile.skin_concern:
             for row in micellar_water_list:
                 if profile.pregnant and "avoid pregnancy" in row.product_target:
                     continue
@@ -272,7 +275,7 @@ def processdata(request):
                         "category": row.product_cat, 
                         "price": row.product_price, 
                         "link": row.product_link, 
-                        "product_img": row.product_img, 
+                        "product_img": row.product_img.url, 
                     }
                     micellar_water.append(add_product)
                     #save new rec 
@@ -289,7 +292,7 @@ def processdata(request):
                         "category": row.product_cat, 
                         "price": row.product_price, 
                         "link": row.product_link, 
-                        "product_img": row.product_img, 
+                        "product_img": row.product_img.url, 
                     } 
                     oil_cleanser.append(add_product)
                     #save new rec 
@@ -300,13 +303,13 @@ def processdata(request):
 
         #query all products rec 
         get_product_recs = UserProduct.objects.filter(user=request.user)
-        product_recs_dict = UserProductSerializer(get_product_recs)
+        product_recs_dict = UserProductSerializer(get_product_recs, many=True)
         
         if get_img_obj: 
             images = ImageSerializer(get_img_obj, many=True)
-            return Response ({"message": "success", "image": images.data, "product_recs": product_recs_dict}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": images.data, "product_recs": product_recs_dict.data}, status=status.HTTP_200_OK)
         else:
-            return Response ({"message": "success", "image": None, "product_recs" : product_recs_dict}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": None, "product_recs" : product_recs_dict.data}, status=status.HTTP_200_OK)
     
     #if user is NOT LOGGED IN
     else:
@@ -321,7 +324,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 cleanser.append(add_product)
                 print(f"cleanser list: {cleanser}")
@@ -337,7 +340,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 toner.append(add_product)
 
@@ -352,7 +355,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 serum.append(add_product)
         
@@ -367,7 +370,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 moisturiser.append(add_product)
         
@@ -382,7 +385,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 sunscreen.append(add_product)
         
@@ -397,7 +400,7 @@ def processdata(request):
                     "category": row.product_cat, 
                     "price": row.product_price, 
                     "link": row.product_link, 
-                    "product_img": row.product_img, 
+                    "product_img": row.product_img.url, 
                 }
                 eye.append(add_product)
         
@@ -413,7 +416,7 @@ def processdata(request):
                         "category": row.product_cat, 
                         "price": row.product_price, 
                         "link": row.product_link, 
-                        "product_img": row.product_img, 
+                        "product_img": row.product_img.url, 
                     }
                     micellar_water.append(add_product)
         else: 
@@ -428,13 +431,13 @@ def processdata(request):
                         "category": row.product_cat, 
                         "price": row.product_price, 
                         "link": row.product_link, 
-                        "product_img": row.product_img, 
+                        "product_img": row.product_img.url, 
                     } 
                     oil_cleanser.append(add_product)   
-        if image_file: 
-            return Response({"message": "success", "image": image_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status = status.HTTP_200_OK)
+        if img_file: 
+            return Response({"message": "success", "image": img_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status = status.HTTP_200_OK)
         else: 
-            return Response ({"message": "success", "image": None, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": img_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 @permission_classes(IsAuthenticated)
