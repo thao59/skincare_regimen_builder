@@ -2,11 +2,11 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response 
 from rest_framework import status 
-from .models import User, UserProfile, UserImage, Products
+from .models import User, UserProfile, UserImage, Products, UserProduct
 from rest_framework_simplejwt.tokens import RefreshToken 
 from rest_framework.decorators import permission_classes 
 from rest_framework.permissions import IsAuthenticated 
-from .serializers import ImageSerializer, ProfileSerializer, ProductSerializer
+from .serializers import ImageSerializer, ProfileSerializer, ProductSerializer, UserProductSerializer
 import base64  
 
 # Create your views here.
@@ -154,7 +154,9 @@ def processdata(request):
                 "advanced_active_use": user_advanced_use, 
                 "no_products": user_no_products,
             })
-        
+        #detele the old recommendation and only saving the latest
+        UserProduct.objects.filter(user = request.user).detele()
+
         #loop through the list and append those catering to user's skin concern
         for row in cleanser_list:
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -170,8 +172,8 @@ def processdata(request):
                     "product_img": row.product_img, 
                 }
                 cleanser.append(add_product)
-                print(f"cleanser list: {cleanser}")
-
+                #save new rec 
+                UserProduct.objects.create(user=request.user, product=row)
     
         for row in toner_list: 
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -187,6 +189,8 @@ def processdata(request):
                     "product_img": row.product_img, 
                 }
                 toner.append(add_product)
+                #save new rec 
+                UserProduct.objects.create(user=request.user, product=row)
 
         for row in serum_list: 
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -202,6 +206,8 @@ def processdata(request):
                     "product_img": row.product_img, 
                 }
                 serum.append(add_product)
+                #save new rec 
+                UserProduct.objects.create(user=request.user, product=row)
         
         for row in moisturiser_list: 
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -217,6 +223,8 @@ def processdata(request):
                     "product_img": row.product_img, 
                 }
                 moisturiser.append(add_product)
+                #save new rec 
+                UserProduct.objects.create(user=request.user, product=row)
         
         for row in sunscreen_list: 
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -232,6 +240,8 @@ def processdata(request):
                     "product_img": row.product_img, 
                 }
                 sunscreen.append(add_product)
+                #save new rec 
+                UserProduct.objects.create(user=request.user, product=row)
         
         for row in eye_list: 
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -247,6 +257,8 @@ def processdata(request):
                     "product_img": row.product_img, 
                 }
                 eye.append(add_product)
+                #save new rec 
+                UserProduct.objects.create(user=request.user, product=row)
         
         if "acne" in profile.skin_conern:
             for row in micellar_water_list:
@@ -263,6 +275,8 @@ def processdata(request):
                         "product_img": row.product_img, 
                     }
                     micellar_water.append(add_product)
+                    #save new rec 
+                    UserProduct.objects.create(user=request.user, product=row)
         else: 
             for row in oil_cleanser_list:
                 if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -278,18 +292,21 @@ def processdata(request):
                         "product_img": row.product_img, 
                     } 
                     oil_cleanser.append(add_product)
-        
-   
-        skininfo = ProfileSerializer(user)
+                    #save new rec 
+                    UserProduct.objects.create(user=request.user, product=row)
                 
         #query img objects
         get_img_obj = user.image_profile.order_by("-datetime").all()
+
+        #query all products rec 
+        get_product_recs = UserProduct.objects.filter(user=request.user)
+        product_recs_dict = UserProductSerializer(get_product_recs)
         
         if get_img_obj: 
             images = ImageSerializer(get_img_obj, many=True)
-            return Response ({"message": "success", "image": images.data, "skininfo": skininfo.data, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": images.data, "product_recs": product_recs_dict}, status=status.HTTP_200_OK)
         else:
-            return Response ({"message": "success", "image": None, "skininfo": skininfo.data, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": None, "product_recs" : product_recs_dict}, status=status.HTTP_200_OK)
     
     #if user is NOT LOGGED IN
     else:
@@ -415,9 +432,23 @@ def processdata(request):
                     } 
                     oil_cleanser.append(add_product)   
         if image_file: 
-            return Response({"message": "success", "image": image_file, "skininfo": skininfo.data, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status = status.HTTP_200_OK)
+            return Response({"message": "success", "image": image_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status = status.HTTP_200_OK)
         else: 
-            return Response ({"message": "success", "image": None, "skininfo": skininfo.data, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": None, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status=status.HTTP_200_OK)
+
+@api_view(["GET"])
+@permission_classes(IsAuthenticated)
+def getImage(request):
+    user = request.user.info
+    user_photo = user.image_profile
+    image_dict = ImageSerializer(user_photo)
+    info_dict = ProfileSerializer(user)
+    get_product_recs = UserProduct.objects.filter(user=request.user)
+    product_recs_dict = UserProductSerializer(get_product_recs)
+    
+    return Response({"message": "success", "image": image_dict.data, "skininfo": info_dict, "product_recs": product_recs_dict}, status=status.HTTP_200_OK)
+
+
 
 
 

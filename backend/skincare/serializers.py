@@ -1,5 +1,5 @@
 from rest_framework import serializers 
-from .models import UserImage, UserProfile, Products 
+from .models import UserImage, UserProfile, Products, UserProduct
 
 class ImageSerializer(serializers.ModelSerializer):
     class Meta: 
@@ -14,4 +14,10 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer): 
     class Meta: 
         model = Products 
-        fields = ["product_name", "product_brand", "product_cat", "product_main_ingre", "product_target", "product_price", "product_link", "product_img"]
+        fields = ["product_name", "product_brand", "product_cat", "product_target", "product_price", "product_link", "product_img"]
+
+class UserProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+    class Meta:
+        model = UserProduct
+        fields =["id", "product"]

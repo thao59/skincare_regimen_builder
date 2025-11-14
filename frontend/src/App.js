@@ -261,16 +261,22 @@ function App() {
 
   //function to fetch image to backend 
   const handleSendImage = async() => {
- 
+    const token = localStorage.getItem("access"); 
     const file_form = new FormData();
     file_form.append("image_file", imageFile);
 
-    const response = await fetch("http://localhost:8000/processdata/", {
+    const object_header = {
       method: "POST", 
-      headers: {
-        "Authorization": `Bearer ${localStorage.getItem("access")}`}, 
-      body: file_form, 
-    }); 
+      body: file_form 
+    }
+
+    //if user is logged in, send token along with data
+    if (token)
+    {
+      object_header.headers = {"Authorization": `Bearer ${token}`};
+    }
+
+    const response = await fetch("http://localhost:8000/processdata/", object_header)
 
     const data = await response.json(); 
     if (response.ok)
@@ -302,8 +308,8 @@ function App() {
 
 
   //fetch imgs from backend 
-  const get_img = async () => {
-      const response = await fetch("http://localhost:8000/processimage", {
+  const get_data = async () => {
+      const response = await fetch("http://localhost:8000/getImage", {
           headers: {"Authorization" : `Bearer ${localStorage.getItem("access")}`}, 
       });
 
@@ -335,29 +341,55 @@ function App() {
             }
           }
 
-          //set products rec 
-          setCleanser(data.cleanser);
-          setToner(data.toner);
-          setSerum(data.serum);
-          setMoisturiser(data.moisturiser);
-          setSunscreen(data.sunscreen);
-          setEye(data.eye);
-          setOilcleanser(data.cleansing_oil);
-          setMicellarwater(data.micellar_water);
-
-
+          //loop through the list of product recs and assign them to variables 
+          for (const i of data.product_recs)
+          {
+            if (i.product_cat === "cleanser")
+              {
+                setCleanser([...cleanser, i])
+              }
+            else if (i.product_cat === "toner")
+              {
+                setToner([...toner, i])
+              }
+            else if (i.product_cat === "serum")
+              {
+                setSerum([...serum, i])
+              }
+            else if (i.product_cat === "moisturiser")
+              {
+                setMoisturiser([...moisturiser, i])
+              }
+            else if (i.product_cat === "sunscreen")
+              {
+                setSunscreen([...sunscreen, i])
+              }
+            else if (i.product_cat === "eye")
+              {
+                setEye([...eye, i])
+              }
+            else 
+              {
+                if (i.product_cat === "micellar water")
+                  {
+                    setMicellarwater([...micellarwater, i])
+                  }
+                else 
+                  {
+                    setOilcleanser([...oilcleanser, i])
+                  }
+              }
+          }
       }
       else 
       {
-        console.log("Fetched image: ", data);
+        console.log("error");
       }
     }
 
-    console.log(cleanser);
-
   return (
     <div className="App">
-        <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout} retrieveImg={get_img}/>
+        <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout} retrieveData={get_data}/>
         {page === "login" && <Login resetSite={handlePage}/>}
         {page === "signup" && <Signup resetSite={handlePage}/>}
         {page === "home" && stage === 0 && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
@@ -544,7 +576,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater}/>}
+        {stage === 13 && <Productrec/>}
     </div>
   )
 }

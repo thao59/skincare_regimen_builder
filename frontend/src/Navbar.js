@@ -1,5 +1,5 @@
 
-function Navbar({onPageChange, resetStage, handleLogout, retrieveImg}){
+function Navbar({onPageChange, resetStage, handleLogout, retrieveData}){
 
     return (
         <div>

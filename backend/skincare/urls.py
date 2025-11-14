@@ -8,6 +8,7 @@ urlpatterns = [
     path("login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("signup/", views.signup, name="signup"),
     path("processdata/", views.processdata, name="process_data"), 
+    path("getImage/", views.getImage, name="get_image")
 ]
 
     #if debug = true, set path and storage for photos 
