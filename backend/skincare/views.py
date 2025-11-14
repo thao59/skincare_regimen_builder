@@ -93,7 +93,7 @@ def processdata(request):
                 return Response({"error": "Image exceeds 5MB"}, status = status.HTTP_400_BAD_REQUEST)
             
             #if user is logged in
-            if request.user_is.authenticated: 
+            if request.user.is_authenticated: 
                 #get UserProfile instance
                 user = request.user.info
                 
@@ -133,7 +133,7 @@ def processdata(request):
     micellar_water = []
 
     #if user is LOGGED IN
-    if request.user_is.authenticated:
+    if request.user.is_authenticated:
         #get user instance 
         get_user = request.user 
 

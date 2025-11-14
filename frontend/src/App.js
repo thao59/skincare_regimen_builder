@@ -203,20 +203,24 @@ function App() {
     setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
   }
 
+  const token = localStorage.getItem("access"); 
+
   //fetch user data to Django 
   const sendData = async() => {
     if (userData.routine === "no_routine" || userData.active_use === false || userData.no_products !== 0 )
     {
-      const response = await fetch("http://localhost:8000/processdata/", {
-        method: "POST", 
-        headers: {
-          "Content-Type": "application/json",
-           "Authorization" : `Bearer ${localStorage.getItem("access")}`},
-        body: JSON.stringify(userData), 
-      }); 
-      console.log("Survery has been sent successfully");
-      console.log("this  token is sent: ", localStorage.getItem("access"));
-      console.log("testing content: ", userData.routine);
+      const option_headers = {
+        method : "POST", 
+        headers : {"Content-Type": "application/json",},
+        body: JSON.stringify(userData),
+      };
+
+      //if user is logged in, send data with token
+      if (token)
+      {
+        option_headers.headers.Authorization = `Bearer ${token}`; 
+      }
+      const response = await fetch("http://localhost:8000/processdata/", option_headers); 
 
       const data = await response.json(); 
       if (response.ok)
@@ -261,7 +265,6 @@ function App() {
 
   //function to fetch image to backend 
   const handleSendImage = async() => {
-    const token = localStorage.getItem("access"); 
     const file_form = new FormData();
     file_form.append("image_file", imageFile);
 
