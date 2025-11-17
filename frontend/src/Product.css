@@ -8,8 +8,14 @@
 
 .img_rec
 {
-    width: 300px;
-    height: auto;
+    max-width: 300px;
     max-height: 300px;
     object-fit: contain;
+}
+
+.product_link
+{
+    text-decoration: none;
+    font-weight: 700;
+    color: black;
 }

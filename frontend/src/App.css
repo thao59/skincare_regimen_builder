@@ -2,7 +2,6 @@ body
 {
   background-color: #F8F6F4;
   color: #2C2C2C;
-  font-family: 'Georgia', serif !important;
 }
 
 .title
@@ -36,7 +35,7 @@ p
 label 
 {
   text-align: left;
-  width: 250px;
+  width: 300px;
   
 }
 
@@ -47,6 +46,7 @@ label
   align-items: center;
   justify-content: center;
   gap: 1rem;
+  width:100%;
 }
 
 .button_container 
