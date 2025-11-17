@@ -161,26 +161,29 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                     {/* loop through each category(high,mid,low) and display */}
                     {value.low.length > 0 && value.low.map(x => (
                         <div key={x.product_name} className="product_display">
-                            <a href={x.product_link} className="product_link">{x.product_brand} {x.product_name} </a>
+                             <p className="product_link">{x.product_brand} {x.product_name} </p>
                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                             <p>Price: ${x.product_price}</p>
                             <p>Targeted concerns: {x.product_target.join(", ")}</p>
+                            <button><a href={x.product_link}></a> Shop now</button>
                         </div>
                     ))}
                     {value.mid.length > 0 && value.mid.map(x => (
                         <div key={x.product_name} className="product_display"> 
-                            <a href={x.product_link} className="product_link">{x.product_brand} {x.product_name}</a>
+                            <p className="product_link">{x.product_brand} {x.product_name}</p>
                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                             <p>Price: ${x.product_price}</p>
                             <p>Targeted concerns: {x.product_target.join(", ")}</p>
+                            <button> <a href={x.product_link}></a> Shop now </button>
                         </div>
                     ))}
                     {value.high.length > 0 && value.high.map(x => (
                         <div key={x.product_name} className="product_display">
-                            <a href={x.product_link} className="product_link">{x.product_brand} {x.product_name}</a>
+                            <p className="product_link">{x.product_brand} {x.product_name}</p>
                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                             <p>Price: ${x.product_price}</p>
                             <p>Targeted concerns: {x.product_target.join(", ")}</p>
+                            <button><a href={x.product_link}></a> Shop now</button>
                         </div>
                     ))}
                 </div>
