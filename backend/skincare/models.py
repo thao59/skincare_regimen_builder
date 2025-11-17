@@ -42,6 +42,7 @@ class Products(models.Model):
     product_price = models.DecimalField (null = True, max_digits = 6, decimal_places=2)
     product_link = models.URLField(max_length=500)
     product_img = models.ImageField(upload_to="product/")
+    product_des = models.TextField(null=True)
 
     def __str__(self):
         return f"{self.product_brand} - {self.product_name}: {self.product_cat}, {self.product_price}"

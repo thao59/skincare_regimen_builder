@@ -174,6 +174,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 cleanser.append(add_product)
                 #save new rec 
@@ -192,6 +193,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 toner.append(add_product)
                 #save new rec 
@@ -210,6 +212,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 serum.append(add_product)
                 #save new rec 
@@ -228,6 +231,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 moisturiser.append(add_product)
                 #save new rec 
@@ -246,6 +250,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 sunscreen.append(add_product)
                 #save new rec 
@@ -264,6 +269,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 eye.append(add_product)
                 #save new rec 
@@ -283,6 +289,7 @@ def processdata(request):
                         "product_link": row.product_link, 
                         "product_img": row.product_img.url, 
                         "product_target": row.product_target,
+                        "product_des": row.product_des,
                     }
                     micellar_water.append(add_product)
                     #save new rec 
@@ -301,6 +308,7 @@ def processdata(request):
                         "product_link": row.product_link, 
                         "product_img": row.product_img.url, 
                         "product_target": row.product_target,
+                        "product_des": row.product_des,
                     } 
                     oil_cleanser.append(add_product)
                     #save new rec 
@@ -334,6 +342,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 cleanser.append(add_product)
                 print(f"cleanser list: {cleanser}")
@@ -351,6 +360,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 toner.append(add_product)
 
@@ -367,6 +377,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 serum.append(add_product)
         
@@ -383,6 +394,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 moisturiser.append(add_product)
         
@@ -399,6 +411,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 sunscreen.append(add_product)
         
@@ -415,6 +428,7 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "product_des": row.product_des,
                 }
                 eye.append(add_product)
         
@@ -432,6 +446,7 @@ def processdata(request):
                         "product_link": row.product_link, 
                         "product_img": row.product_img.url, 
                         "product_target": row.product_target,
+                        "product_des": row.product_des,
                     }
                     micellar_water.append(add_product)
         else: 
@@ -448,6 +463,7 @@ def processdata(request):
                         "product_link": row.product_link, 
                         "product_img": row.product_img.url, 
                         "product_target": row.product_target,
+                        "product_des": row.product_des,
                     } 
                     oil_cleanser.append(add_product)   
         if img_file: 

@@ -165,6 +165,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                             <p>Price: ${x.product_price}</p>
                             <p>Targeted concerns: {x.product_target.join(", ")}</p>
+                            <p>Description: {x.product_des}</p>
                             <button><a href={x.product_link}></a> Shop now</button>
                         </div>
                     ))}
@@ -173,7 +174,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                             <p className="product_link">{x.product_brand} {x.product_name}</p>
                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                             <p>Price: ${x.product_price}</p>
-                            <p>Targeted concerns: {x.product_target.join(", ")}</p>
+                            <p>Description: {x.product_target.join(", ")}</p>
                             <button> <a href={x.product_link}></a> Shop now </button>
                         </div>
                     ))}
@@ -182,7 +183,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                             <p className="product_link">{x.product_brand} {x.product_name}</p>
                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                             <p>Price: ${x.product_price}</p>
-                            <p>Targeted concerns: {x.product_target.join(", ")}</p>
+                            <p>Description: {x.product_target.join(", ")}</p>
                             <button><a href={x.product_link}></a> Shop now</button>
                         </div>
                     ))}
