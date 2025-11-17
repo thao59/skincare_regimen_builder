@@ -1,4 +1,5 @@
 import {useState} from "react";
+import "./Product.css"
 
 
 function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcleanser, micellarwater})
@@ -22,7 +23,6 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
     console.log(eye);
     console.log(sunscreen);
     console.log(oilcleanser);
-    console.log(micellarwater);
 
 
 
@@ -149,30 +149,38 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
     return (
         <>
-            {Object.entries(product_list).map(([key, value]) => (
-                <div key={key}>
-                    <h2>{key}</h2>
-                    {/* loop through each category(high,mid,low) and display */}
-                    {value.low && value.low.map(x => (
-                        <div key={x.name}>
-                            <h2>Affordable</h2>
-                            <p><span>{x.product_brand}</span>{x.product_name}</p>
-                            <img src={x.product_img}/>
-                            <a href={x.product_link}>Find product here</a>
-                        </div>
-                    ))}
-                    {value.mid && value.mid.map(x => (
-                        <div key={x.product_name}> 
-                            <h2>Mid-end</h2>
-                            <p><span>{x.product_brand}</span> {x.product_name}</p>
-                            <img src={x.product_img}/>
-                            <a href={x.product_link}>Find product here</a>
-                        </div>
-                    ))}
-
-
-                </div>
-            ))}
+            {Object.entries(product_list).map(([key, value]) =>
+            (key &&
+                <div key={key} className="product_display">
+                <h2>{key}</h2>
+                {/* loop through each category(high,mid,low) and display */}
+                {value.low && value.low.map(x => (
+                    <div key={x.name}>
+                        <p><span>{x.product_brand}</span>{x.product_name}</p>
+                        <img src={x.product_img}/>
+                        <a href={x.product_link}>Find product here</a>
+                        <p>Price: ${x.product_price}</p>
+                    </div>
+                ))}
+                {value.mid && value.mid.map(x => (
+                    <div key={x.product_name}> 
+                        <p><span>{x.product_brand}</span> {x.product_name}</p>
+                        <img src={x.product_img}/>
+                        <a href={x.product_link}>Find product here</a>
+                        <p>Price: ${x.product_price}</p>
+                    </div>
+                ))}
+                {value.high && value.high.map(x => (
+                    <div key={x.product_name}>
+                        <p><span>{x.product_brand}</span> {x.product_name}</p>
+                        <img src={x.product_img}/>
+                        <a href={x.product_link}>Find product here</a>
+                        <p>Price: ${x.product_price}</p>
+                    </div>
+                ))}
+            </div>
+            )
+            )}
         </>
     )
 }

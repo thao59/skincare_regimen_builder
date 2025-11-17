@@ -263,7 +263,7 @@ function App() {
             setImageArray(image_group);
           }
           
-          //filter products into categories and assign them to variables
+          
           const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser"); 
           setCleanser(cleanser_cat);
 
@@ -301,8 +301,8 @@ function App() {
           if(data.serum)
             setSerum(data.serum);
 
-          if(data.moisturizer)
-            setMoisturiser(data.moisturizer);
+          if(data.moisturiser)
+            setMoisturiser(data.moisturiser);
 
           if(data.sunscreen)
             setSunscreen(data.sunscreen);
@@ -326,6 +326,15 @@ function App() {
       }
     }
   }
+
+  console.log(cleanser);
+  console.log(toner);
+  console.log(serum);
+  console.log(moisturiser);
+  console.log(eye);
+  console.log(sunscreen);
+  console.log(oilcleanser);
+
 
   const[imageFile, setImageFile] = useState(null);
   const[image, setImage] = useState(null);
@@ -638,7 +647,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwarter={micellarwater}/>}
+        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater}/>}
     </div>
   )
 }

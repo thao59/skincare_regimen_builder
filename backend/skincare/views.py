@@ -167,11 +167,11 @@ def processdata(request):
             
             if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_cat": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 cleanser.append(add_product)
@@ -184,11 +184,11 @@ def processdata(request):
 
             if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 toner.append(add_product)
@@ -201,11 +201,11 @@ def processdata(request):
 
             if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 serum.append(add_product)
@@ -218,11 +218,11 @@ def processdata(request):
 
             if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 moisturiser.append(add_product)
@@ -235,11 +235,11 @@ def processdata(request):
 
             if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 sunscreen.append(add_product)
@@ -252,11 +252,11 @@ def processdata(request):
 
             if profile.skintype in row.skintypes or any (item in row.product_target for item in profile.eye_concern) or "all skin types" in row.skintypes: 
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 eye.append(add_product)
@@ -270,11 +270,11 @@ def processdata(request):
 
                 if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes: 
                     add_product = {
-                        "name": row.product_name, 
-                        "brand": row.product_brand, 
-                        "category": row.product_cat, 
-                        "price": row.product_price, 
-                        "link": row.product_link, 
+                        "product_name": row.product_name, 
+                        "product_brand": row.product_brand, 
+                        "product_category": row.product_cat, 
+                        "product_price": row.product_price, 
+                        "product_link": row.product_link, 
                         "product_img": row.product_img.url, 
                     }
                     micellar_water.append(add_product)
@@ -287,11 +287,11 @@ def processdata(request):
 
                 if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes: 
                     add_product = {
-                        "name": row.product_name, 
-                        "brand": row.product_brand, 
-                        "category": row.product_cat, 
-                        "price": row.product_price, 
-                        "link": row.product_link, 
+                        "product_name": row.product_name, 
+                        "product_brand": row.product_brand, 
+                        "product_category": row.product_cat, 
+                        "product_price": row.product_price, 
+                        "product_link": row.product_link, 
                         "product_img": row.product_img.url, 
                     } 
                     oil_cleanser.append(add_product)
@@ -319,11 +319,11 @@ def processdata(request):
             
             if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 cleanser.append(add_product)
@@ -335,11 +335,11 @@ def processdata(request):
 
             if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes: 
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 toner.append(add_product)
@@ -350,11 +350,11 @@ def processdata(request):
 
             if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 serum.append(add_product)
@@ -365,11 +365,11 @@ def processdata(request):
 
             if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 moisturiser.append(add_product)
@@ -380,11 +380,11 @@ def processdata(request):
 
             if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 sunscreen.append(add_product)
@@ -395,11 +395,11 @@ def processdata(request):
 
             if user_skintype in row.skintypes or any( item in row.product_target for item in user_eyeconcern) or row.skintypes == "all skin types": 
                 add_product = {
-                    "name": row.product_name, 
-                    "brand": row.product_brand, 
-                    "category": row.product_cat, 
-                    "price": row.product_price, 
-                    "link": row.product_link, 
+                    "product_name": row.product_name, 
+                    "product_brand": row.product_brand, 
+                    "product_category": row.product_cat, 
+                    "product_price": row.product_price, 
+                    "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                 }
                 eye.append(add_product)
@@ -411,11 +411,11 @@ def processdata(request):
 
                 if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
                     add_product = {
-                        "name": row.product_name, 
-                        "brand": row.product_brand, 
-                        "category": row.product_cat, 
-                        "price": row.product_price, 
-                        "link": row.product_link, 
+                        "product_name": row.product_name, 
+                        "product_brand": row.product_brand, 
+                        "product_category": row.product_cat, 
+                        "product_price": row.product_price, 
+                        "product_link": row.product_link, 
                         "product_img": row.product_img.url, 
                     }
                     micellar_water.append(add_product)
@@ -426,11 +426,11 @@ def processdata(request):
 
                 if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
                     add_product = {
-                        "name": row.product_name, 
-                        "brand": row.product_brand, 
-                        "category": row.product_cat, 
-                        "price": row.product_price, 
-                        "link": row.product_link, 
+                        "product_name": row.product_name, 
+                        "product_brand": row.product_brand, 
+                        "product_category": row.product_cat, 
+                        "product_price": row.product_price, 
+                        "product_link": row.product_link, 
                         "product_img": row.product_img.url, 
                     } 
                     oil_cleanser.append(add_product)   
@@ -440,7 +440,7 @@ def processdata(request):
             return Response ({"message": "success", "image": img_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
-@permission_classes(IsAuthenticated)
+@permission_classes([IsAuthenticated])
 def getImage(request):
     user = request.user.info
     user_photo = user.image_profile
