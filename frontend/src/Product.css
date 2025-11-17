@@ -5,3 +5,11 @@
     align-items: flex-start;
     margin-left: 1rem;
 }
+
+.img_rec
+{
+    width: 300px;
+    height: auto;
+    max-height: 300px;
+    object-fit: contain;
+}
