@@ -156,34 +156,42 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
         <>
             {Object.entries(product_list).map(([key, value]) =>
             (
-                <div key={key} className="product_display">
-                    {(value.low.length > 0 || value.mid.length > 0 || value.high.length > 0) && <h2>{cap(key)}</h2>}
+                <div key={key} className="product_cat">
+                    {(value.low.length > 0 || value.mid.length > 0 || value.high.length > 0) && <h2 className="category">{cap(key)}</h2>}
                     {/* loop through each category(high,mid,low) and display */}
                     {value.low.length > 0 && value.low.map(x => (
                         <div key={x.product_name} className="product_display">
-                             <p className="product_link">{x.product_brand} {x.product_name} </p>
+                            <p className="class_affordable">Affordable</p>
+                            <p className="product_brand">{x.product_brand} </p>
+                            <p className="product_name">{x.product_name} </p>
                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                            <p>Price: ${x.product_price}</p>
-                            <p>Targeted concerns: {x.product_target.join(", ")}</p>
-                            <p>Description: {x.product_des}</p>
+                            <p className="product_price">${x.product_price}</p>
+                            <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                            <p className="product_des">Description: {x.product_des}</p>
                             <button><a href={x.product_link}></a> Shop now</button>
                         </div>
                     ))}
                     {value.mid.length > 0 && value.mid.map(x => (
                         <div key={x.product_name} className="product_display"> 
-                            <p className="product_link">{x.product_brand} {x.product_name}</p>
+                            <p className="class_mid">Mid-Range</p>
+                            <p className="product_brand">{x.product_brand} </p>
+                            <p className="product_name">{x.product_name} </p>
                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                            <p>Price: ${x.product_price}</p>
-                            <p>Description: {x.product_target.join(", ")}</p>
+                            <p className="product_price">${x.product_price}</p>
+                            <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                            <p className="product_des">Description: {x.product_des}</p>
                             <button> <a href={x.product_link}></a> Shop now </button>
                         </div>
                     ))}
                     {value.high.length > 0 && value.high.map(x => (
                         <div key={x.product_name} className="product_display">
-                            <p className="product_link">{x.product_brand} {x.product_name}</p>
+                            <p className="class_premium">Premium</p>
+                            <p className="product_brand">{x.product_brand} </p>
+                            <p className="product_name">{x.product_name} </p>
                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                            <p>Price: ${x.product_price}</p>
-                            <p>Description: {x.product_target.join(", ")}</p>
+                            <p className="product_price">${x.product_price}</p>
+                            <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                            <p className="product_des">Description: {x.product_des}</p>
                             <button><a href={x.product_link}></a> Shop now</button>
                         </div>
                     ))}

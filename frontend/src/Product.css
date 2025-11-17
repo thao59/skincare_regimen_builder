@@ -1,3 +1,17 @@
+body
+{
+    background: linear-gradient(to bottom, #fdfbf7, #ffffff)
+}
+
+
+.product_cat
+{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: 1rem;
+}
+
 .product_display
 {
     display: flex; 
@@ -5,6 +19,32 @@
     align-items: flex-start;
     margin-left: 1rem;
     margin-bottom: 3rem;
+    margin-top: 1rem;
+    background-color: white;
+    width: 500px;
+    padding: 1rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.product_price 
+{
+    color: #27ae60;
+    font-weight: 700;
+}
+
+.product_target
+{
+    color:#7f8c8d;
+    font-style: italic;
+    font-size: 0.8rem;
+}
+
+.product_des 
+{
+    text-align: left;
+    font-size: 0.95rem;
+    color: #5a6c7d;
 }
 
 .img_rec
@@ -14,9 +54,54 @@
     object-fit: contain;
 }
 
-.product_link
+.product_name
 {
     text-decoration: none;
     font-weight: 700;
     color: black;
+}
+
+.class_affordable
+{
+    width: 87px;
+    height: 27px;
+    background-color: #d5f4e6;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    padding: 0.3rem;
+    color: #27ae60;
+    font-weight: 500;
+}
+
+.class_mid
+{
+    width: 87px;
+    height: 27px;
+    background-color: #fff3cd;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    padding: 0.3rem;
+    color: #f39c12;
+    font-weight: 500;
+
+}
+
+.class_premium
+{
+    width: 87px;
+    height: 27px;
+    background-color: #fadbd8;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    padding: 0.3rem;
+    color: #e74c3c;
+    font-weight: 500;
+
+}
+
+.category
+{
+    border-bottom: solid #e8d5c4 3px;
+    width: 95%;
+    text-align: left;
 }
