@@ -16,38 +16,29 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
         "micellarwater": {"high": [], "mid": [], "low": []},
     }
 
-    console.log(cleanser);
-    console.log(toner);
-    console.log(serum);
-    console.log(moisturiser);
-    console.log(eye);
-    console.log(sunscreen);
-    console.log(oilcleanser);
-    console.log(micellarwater);
-
-
-
     for (const item of cleanser)
     {
-        console.log(item);
-        if (item.product_price < 40)    
+        if (item.product_price < 40) 
+        {
             product_list.cleanser.low.push(item);
-        else if (item.product_price >= 40 && item.price <= 80)
+        }  
+        else if (item.product_price >= 40 && item.product_price <= 80)
         {
             product_list.cleanser.mid.push(item);
         }
-        else 
+        else
         {
             product_list.cleanser.high.push(item); 
         }
     }
-    console.log(product_list.cleanser);
 
     for (const item of toner)
     {
-        if (item.price < 40)
+        if (item.product_price < 40)
+        {
             product_list.toner.low.push(item);
-        else if (item.product_price >= 40 && item.price <= 80)
+        } 
+        else if (item.product_price >= 40 && item.product_price <= 80)
         {
             product_list.toner.mid.push(item);
         }
@@ -56,13 +47,14 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.toner.high.push(item); 
         }
     }
-    console.log(product_list.toner);
 
     for (const item of serum)
     {
         if (item.product_price < 40)
+        {
             product_list.serum.low.push(item);
-        else if (item.product_price >= 40 && item.price <= 80)
+        }
+        else if (item.product_price >= 40 && item.product_price <= 80)
         {
             product_list.serum.mid.push(item);
         }
@@ -71,13 +63,14 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.serum.high.push(item); 
         }
     }
-    console.log(product_list.serum);
 
     for (const item of moisturiser)
     {
         if (item.product_price < 40)
+        {
             product_list.moisturiser.low.push(item);
-        else if (item.product_price >= 40 && item.price <= 80)
+        } 
+        else if (item.product_price >= 40 && item.product_price <= 80)
         {
             product_list.moisturiser.mid.push(item);
         }
@@ -86,13 +79,14 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.moisturiser.high.push(item); 
         }
     }
-    console.log(product_list.moisturiser);
 
     for (const item of eye)
     {
-        if (item.price < 40)
+        if (item.product_price < 40)
+        {
             product_list.eye.low.push(item);
-        else if (item.product_price >= 40 && item.price <= 80)
+        }  
+        else if (item.product_price >= 40 && item.product_price <= 80)
         {
             product_list.eye.mid.push(item);
         }
@@ -106,8 +100,10 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
     for (const item of sunscreen)
     {
         if (item.product_price < 40)
+        {
             product_list.sunscreen.low.push(item);
-        else if (item.price >= 40 && item.price <= 80)
+        }  
+        else if (item.product_price >= 40 && item.product_price <= 80)
         {
             product_list.sunscreen.mid.push(item);
         }
@@ -116,13 +112,14 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.sunscreen.high.push(item); 
         }
     }
-    console.log(product_list.sunscreen);
 
     for (const item of oilcleanser)
     {
         if (item.product_price < 40)
+        {
             product_list.oilcleanser.low.push(item);
-        else if (item.product_price >= 40 && item.price <= 80)
+        }   
+        else if (item.product_price >= 40 && item.product_price <= 80)
         {
             product_list.oilcleanser.mid.push(item);
         }
@@ -131,13 +128,14 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.oilcleanser.high.push(item); 
         }
     }
-    console.log(product_list.oilcleanser);
 
     for (const item of micellarwater)
     {
         if (item.product_price < 40)
+        {
             product_list.micellarwater.low.push(item);
-        else if (item.product_price >= 40 && item.price <= 80)
+        }
+        else if (item.product_price >= 40 && item.product_price <= 80)
         {
             product_list.micellarwater.mid.push(item);
         }
@@ -146,59 +144,74 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.micellarwater.high.push(item); 
         }
     }
-    console.log(product_list.micellarwater);
 
     //capitalise the first letter of key 
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     const URL = "http://localhost:8000";
 
     return (
-        <>
+        <div className="product_page">
             {Object.entries(product_list).map(([key, value]) =>
             (
                 <div key={key} className="product_cat">
                     {(value.low.length > 0 || value.mid.length > 0 || value.high.length > 0) && <h2 className="category">{cap(key)}</h2>}
                     {/* loop through each category(high,mid,low) and display */}
-                    {value.low.length > 0 && value.low.map(x => (
-                        <div key={x.product_name} className="product_display">
-                            <p className="class_affordable">Affordable</p>
-                            <p className="product_brand">{x.product_brand} </p>
-                            <p className="product_name">{x.product_name} </p>
-                            <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                            <p className="product_price">${x.product_price}</p>
-                            <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
-                            <p className="product_des">Description: {x.product_des}</p>
-                            <button><a href={x.product_link}></a> Shop now</button>
-                        </div>
-                    ))}
-                    {value.mid.length > 0 && value.mid.map(x => (
-                        <div key={x.product_name} className="product_display"> 
-                            <p className="class_mid">Mid-Range</p>
-                            <p className="product_brand">{x.product_brand} </p>
-                            <p className="product_name">{x.product_name} </p>
-                            <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                            <p className="product_price">${x.product_price}</p>
-                            <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
-                            <p className="product_des">Description: {x.product_des}</p>
-                            <button> <a href={x.product_link}></a> Shop now </button>
-                        </div>
-                    ))}
-                    {value.high.length > 0 && value.high.map(x => (
-                        <div key={x.product_name} className="product_display">
-                            <p className="class_premium">Premium</p>
-                            <p className="product_brand">{x.product_brand} </p>
-                            <p className="product_name">{x.product_name} </p>
-                            <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                            <p className="product_price">${x.product_price}</p>
-                            <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
-                            <p className="product_des">Description: {x.product_des}</p>
-                            <button><a href={x.product_link}></a> Shop now</button>
-                        </div>
-                    ))}
+                    <div className="product_row">
+                        {value.low.length > 0 && value.low.map(x => (
+                            <div key={x.product_name} className="product_display">
+                                <p className="class_affordable">Affordable</p>
+                                <p className="product_brand">{x.product_brand} </p>
+                                <p className="product_name">{x.product_name} </p>
+                                <div className="img_container">
+                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                </div>
+                                <p className="product_price">${x.product_price}</p>
+                                <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                <p className="product_des">{x.product_des}</p>
+                                <button className="shop_button"><a href={x.product_link}></a> Shop now</button>
+                            </div>
+                        ))}
+                        {value.mid.length > 0 && <p className="divider"></p>}
+                    </div>
+
+
+                    <div className="product_row">
+                        {value.mid.length > 0 && value.mid.map(x => (
+                            <div key={x.product_name} className="product_display"> 
+                                <p className="class_mid">Mid-Range</p>
+                                <p className="product_brand">{x.product_brand} </p>
+                                <p className="product_name">{x.product_name} </p>
+                                <div className="img_container">
+                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                </div>
+                                <p className="product_price">${x.product_price}</p>
+                                <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                <p className="product_des">{x.product_des}</p>
+                                <button className="shop_button"> <a href={x.product_link}></a> Shop now </button>
+                            </div>
+                        ))}
+                        {value.high.length > 0 && <p className="divider"></p>}
+                    </div>
+
+                    <div className="product_row">
+                        {value.high.length > 0 && value.high.map(x => (
+                            <div key={x.product_name} className="product_display">
+                                <p className="class_premium">Premium</p>
+                                <p className="product_brand">{x.product_brand} </p>
+                                <p className="product_name">{x.product_name} </p>
+                                <div className="img_container">
+                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                </div>
+                                <p className="product_price">${x.product_price}</p>
+                                <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                <p className="product_des">{x.product_des}</p>
+                                <button className="shop_button"><a href={x.product_link}></a> Shop now</button>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            )
-            )}
-        </>
+            ))}
+        </div>
     )
 }
 

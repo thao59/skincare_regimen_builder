@@ -1,4 +1,4 @@
-body
+.product_page
 {
     background: linear-gradient(to bottom, #fdfbf7, #ffffff)
 }
@@ -6,10 +6,13 @@ body
 
 .product_cat
 {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
     margin-left: 1rem;
+}
+
+.product_row
+{
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .product_display
@@ -21,7 +24,7 @@ body
     margin-bottom: 3rem;
     margin-top: 1rem;
     background-color: white;
-    width: 500px;
+    width: 400px;
     padding: 1rem;
     border-radius: 1rem;
     box-shadow: 0 8px 20px rgba(0,0,0,0.12);
@@ -104,4 +107,30 @@ body
     border-bottom: solid #e8d5c4 3px;
     width: 95%;
     text-align: left;
+}
+
+.shop_button
+{
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 0.4rem;
+    width: 100%;
+    height: 30px;
+    font-size: 0.9rem;
+}
+
+.divider
+{
+    display: flex;
+    justify-content: center;
+    width: 98%; 
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.img_container 
+{
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }
