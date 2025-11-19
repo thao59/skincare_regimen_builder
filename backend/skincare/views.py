@@ -127,14 +127,14 @@ def processdata(request):
     oil_cleanser_list = Products.objects.filter(product_cat="oil cleanser")
     micellar_water_list = Products.objects.filter(product_cat = "micellar water")
 
-    cleanser = []
-    toner = []
-    serum = []
-    moisturiser = []
-    sunscreen = []
-    eye = []
-    oil_cleanser = []
-    micellar_water = []
+    cleanser = {}
+    toner = {}
+    serum = {}
+    moisturiser = {}
+    sunscreen = {}
+    eye = {}
+    oil_cleanser = {}
+    micellar_water = {}
 
     #if user is LOGGED IN
     if request.user.is_authenticated:
@@ -163,80 +163,217 @@ def processdata(request):
 
         #loop through the list and append those catering to user's skin concern
         for row in cleanser_list:
+            # if user is pregnant and product is marked avoid pregnancy then skip that product
             if profile.pregnant and "avoid pregnancy" in row.product_target:
                 continue
+
+            #reset score for every product
+            score = 0
+
+            #for every criteria met, plus 1 to score
+            if profile.skintype in row.skintypes: 
+                score += 1
+            if any(item in row.product_target for item in profile.skin_concern):
+                score += 1
+            if "all skin types" in row.skintypes:
+                score += 1
             
-            if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
-                add_product = {
-                    "product_name": row.product_name, 
-                    "product_brand": row.product_brand, 
-                    "product_cat": row.product_cat, 
-                    "product_price": row.product_price, 
-                    "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
-                    "product_target": row.product_target,
-                    "product_des": row.product_des,
-                }
-                cleanser.append(add_product)
-                #save new rec 
-                UserProduct.objects.create(user=request.user, product=row)
+            # rank products according to scores 
+            if score == 3:
+                cleanser["high_score"].append(row)
+            elif score == 2:
+                cleanser["mid_score"].append(row)
+            elif score == 1:
+                cleanser["low_score"].append(row)
+
+        #initiate product count
+        count = 0
+
+        #loop through cleanser list and save products with the highest scores to the db
+        #if less than 4 products saved to db, continue to loop through each cat until 4 products are saved 
+        if cleanser["high_score"]: 
+            for row in cleanser["high_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
+        if count < 4 and cleanser["mid_score"]: 
+            for row in cleanser["mid_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
+        if count < 4 and cleanser["low_score"]: 
+            for row in cleanser["low_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
     
         for row in toner_list: 
+            # if user is pregnant and product is marked avoid pregnancy then skip that product
             if profile.pregnant and "avoid pregnancy" in row.product_target:
                 continue
 
-            if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
-                add_product = {
-                    "product_name": row.product_name, 
-                    "product_brand": row.product_brand, 
-                    "product_category": row.product_cat, 
-                    "product_price": row.product_price, 
-                    "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
-                    "product_target": row.product_target,
-                    "product_des": row.product_des,
-                }
-                toner.append(add_product)
-                #save new rec 
-                UserProduct.objects.create(user=request.user, product=row)
+            #reset score for every product
+            score = 0
+
+            #for every criteria met, plus 1 to score
+            if profile.skintype in row.skintypes: 
+                score += 1
+            if any(item in row.product_target for item in profile.skin_concern):
+                score += 1
+            if "all skin types" in row.skintypes:
+                score += 1
+            
+            # rank products according to scores 
+            if score == 3:
+                toner["high_score"].append(row)
+            elif score == 2:
+                toner["mid_score"].append(row)
+            elif score == 1:
+                toner["low_score"].append(row)
+
+        #initiate product count
+        count = 0
+
+        #loop through cleanser list and save products with the highest scores to the db
+        #if less than 4 products saved to db, continue to loop through each cat until 4 products are saved 
+        if toner["high_score"]: 
+            for row in toner["high_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
+        if count < 4 and toner["mid_score"]: 
+            for row in toner["mid_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
+        if count < 4 and toner["low_score"]: 
+            for row in toner["low_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
 
         for row in serum_list: 
+            # if user is pregnant and product is marked avoid pregnancy then skip that product
             if profile.pregnant and "avoid pregnancy" in row.product_target:
                 continue
 
-            if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
-                add_product = {
-                    "product_name": row.product_name, 
-                    "product_brand": row.product_brand, 
-                    "product_category": row.product_cat, 
-                    "product_price": row.product_price, 
-                    "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
-                    "product_target": row.product_target,
-                    "product_des": row.product_des,
-                }
-                serum.append(add_product)
-                #save new rec 
-                UserProduct.objects.create(user=request.user, product=row)
+            #reset score for every product
+            score = 0
+
+            #for every criteria met, plus 1 to score
+            if profile.skintype in row.skintypes: 
+                score += 1
+            if any(item in row.product_target for item in profile.skin_concern):
+                score += 1
+            if "all skin types" in row.skintypes:
+                score += 1
+            
+            # rank products according to scores 
+            if score == 3:
+                serum["high_score"].append(row)
+            elif score == 2:
+                serum["mid_score"].append(row)
+            elif score == 1:
+                serum["low_score"].append(row)
+
+        #initiate product count
+        count = 0
+
+        #loop through cleanser list and save products with the highest scores to the db
+        #if less than 4 products saved to db, continue to loop through each cat until 4 products are saved 
+        if serum["high_score"]: 
+            for row in serum["high_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
+        if count < 4 and serum["mid_score"]: 
+            for row in serum["mid_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
+        if count < 4 and serum["low_score"]: 
+            for row in serum["low_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
         
         for row in moisturiser_list: 
+            # if user is pregnant and product is marked avoid pregnancy then skip that product
             if profile.pregnant and "avoid pregnancy" in row.product_target:
                 continue
 
-            if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
-                add_product = {
-                    "product_name": row.product_name, 
-                    "product_brand": row.product_brand, 
-                    "product_category": row.product_cat, 
-                    "product_price": row.product_price, 
-                    "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
-                    "product_target": row.product_target,
-                    "product_des": row.product_des,
-                }
-                moisturiser.append(add_product)
-                #save new rec 
-                UserProduct.objects.create(user=request.user, product=row)
+            #reset score for every product
+            score = 0
+
+            #for every criteria met, plus 1 to score
+            if profile.skintype in row.skintypes: 
+                score += 1
+            if any(item in row.product_target for item in profile.skin_concern):
+                score += 1
+            if "all skin types" in row.skintypes:
+                score += 1
+            
+            # rank products according to scores 
+            if score == 3:
+                moisturiser["high_score"].append(row)
+            elif score == 2:
+                moisturiser["mid_score"].append(row)
+            elif score == 1:
+                moisturiser["low_score"].append(row)
+
+        #initiate product count
+        count = 0
+
+        #loop through cleanser list and save products with the highest scores to the db
+        #if less than 4 products saved to db, continue to loop through each cat until 4 products are saved 
+        if moisturiser["high_score"]: 
+            for row in moisturiser["high_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
+        if count < 4 and moisturiser["mid_score"]: 
+            for row in moisturiser["mid_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
+        if count < 4 and moisturiser["low_score"]: 
+            for row in moisturiser["low_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
 
         #if acne is the concern, only loop through physcial sunscreen list
         if "acne" in profile.skin_concern or "sensitive" in profile.skin_concern:   
@@ -244,103 +381,269 @@ def processdata(request):
                 if profile.pregnant and "avoid pregnancy" in row.product_target:
                     continue
 
-                if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
-                    add_product = {
-                        "product_name": row.product_name, 
-                        "product_brand": row.product_brand, 
-                        "product_category": row.product_cat, 
-                        "product_price": row.product_price, 
-                        "product_link": row.product_link, 
-                        "product_img": row.product_img.url, 
-                        "product_target": row.product_target,
-                        "product_des": row.product_des,
-                    }
-                    sunscreen.append(add_product)
-                    #save new rec 
-                    UserProduct.objects.create(user=request.user, product=row)
+                #reset score for every product
+                score = 0
+
+                #for every criteria met, plus 1 to score
+                if profile.skintype in row.skintypes: 
+                    score += 1
+                if any(item in row.product_target for item in profile.skin_concern):
+                    score += 1
+                if "all skin types" in row.skintypes:
+                    score += 1
+                
+                # rank products according to scores 
+                if score == 3:
+                    sunscreen["high_score"].append(row)
+                elif score == 2:
+                    sunscreen["mid_score"].append(row)
+                elif score == 1:
+                    sunscreen["low_score"].append(row)
+
+            #initiate product count
+            count = 0
+
+            #loop through cleanser list and save products with the highest scores to the db
+            #if less than 4 products saved to db, continue to loop through each cat until 4 products are saved 
+            if sunscreen["high_score"]: 
+                for row in sunscreen["high_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
+
+            if count < 4 and sunscreen["mid_score"]: 
+                for row in sunscreen["mid_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
+
+            if count < 4 and sunscreen["low_score"]: 
+                for row in sunscreen["low_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
         else: 
             for row in chemical_sunscreen_list: 
                 if profile.pregnant and "avoid pregnancy" in row.product_target:
                     continue  
 
-                if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
-                    add_product = {
-                        "product_name": row.product_name, 
-                        "product_brand": row.product_brand, 
-                        "product_category": row.product_cat, 
-                        "product_price": row.product_price, 
-                        "product_link": row.product_link, 
-                        "product_img": row.product_img.url, 
-                        "product_target": row.product_target,
-                        "product_des": row.product_des,
-                    }
-                    sunscreen.append(add_product)
-                    #save new rec 
-                    UserProduct.objects.create(user=request.user, product=row)
+                #reset score for every product
+                score = 0
+
+                #for every criteria met, plus 1 to score
+                if profile.skintype in row.skintypes: 
+                    score += 1
+                if any(item in row.product_target for item in profile.skin_concern):
+                    score += 1
+                if "all skin types" in row.skintypes:
+                    score += 1
+                
+                # rank products according to scores 
+                if score == 3:
+                    sunscreen["high_score"].append(row)
+                elif score == 2:
+                    sunscreen["mid_score"].append(row)
+                elif score == 1:
+                    sunscreen["low_score"].append(row)
+
+            #initiate product count
+            count = 0
+
+            #loop through cleanser list and save products with the highest scores to the db
+            #if less than 4 products saved to db, continue to loop through each cat until 4 products are saved 
+            if sunscreen["high_score"]: 
+                for row in sunscreen["high_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
+
+            if count < 4 and sunscreen["mid_score"]: 
+                for row in sunscreen["mid_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
+
+            if count < 4 and sunscreen["low_score"]: 
+                for row in sunscreen["low_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
 
         
         for row in eye_list: 
             if profile.pregnant and "avoid pregnancy" in row.product_target:
                 continue
 
-            if profile.skintype in row.skintypes or any (item in row.product_target for item in profile.eye_concern) or "all skin types" in row.skintypes: 
-                add_product = {
-                    "product_name": row.product_name, 
-                    "product_brand": row.product_brand, 
-                    "product_category": row.product_cat, 
-                    "product_price": row.product_price, 
-                    "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
-                    "product_target": row.product_target,
-                    "product_des": row.product_des,
-                }
-                eye.append(add_product)
-                #save new rec 
-                UserProduct.objects.create(user=request.user, product=row)
-        
+            #reset score for every product
+            score = 0
+
+            #for every criteria met, plus 1 to score
+            if profile.skintype in row.skintypes: 
+                score += 1
+            if any(item in row.product_target for item in profile.skin_concern):
+                score += 1
+            if "all skin types" in row.skintypes:
+                score += 1
+            
+            # rank products according to scores 
+            if score == 3:
+                eye["high_score"].append(row)
+            elif score == 2:
+                eye["mid_score"].append(row)
+            elif score == 1:
+                eye["low_score"].append(row)
+
+        #initiate product count
+        count = 0
+
+        #loop through cleanser list and save products with the highest scores to the db
+        #if less than 4 products saved to db, continue to loop through each cat until 4 products are saved 
+        if eye["high_score"]: 
+            for row in eye["high_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
+        if count < 4 and eye["mid_score"]: 
+            for row in eye["mid_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+
+        if count < 4 and eye["low_score"]: 
+            for row in eye["low_score"]:
+                if count < 4: 
+                    UserProduct.objects.create(user=request.user, product=row)
+                    count += 1
+                else:
+                    break
+    
+        #if acne is the concern only loop thro micellar water list
         if "acne" in profile.skin_concern:
             for row in micellar_water_list:
                 if profile.pregnant and "avoid pregnancy" in row.product_target:
                     continue
 
-                if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes: 
-                    add_product = {
-                        "product_name": row.product_name, 
-                        "product_brand": row.product_brand, 
-                        "product_category": row.product_cat, 
-                        "product_price": row.product_price, 
-                        "product_link": row.product_link, 
-                        "product_img": row.product_img.url, 
-                        "product_target": row.product_target,
-                        "product_des": row.product_des,
-                    }
-                    micellar_water.append(add_product)
-                    #save new rec 
-                    UserProduct.objects.create(user=request.user, product=row)
+                #reset score for every product
+                score = 0
+
+                #for every criteria met, plus 1 to score
+                if profile.skintype in row.skintypes: 
+                    score += 1
+                if any(item in row.product_target for item in profile.skin_concern):
+                    score += 1
+                if "all skin types" in row.skintypes:
+                    score += 1
+                
+                # rank products according to scores 
+                if score == 3:
+                    micellar_water["high_score"].append(row)
+                elif score == 2:
+                    micellar_water["mid_score"].append(row)
+                elif score == 1:
+                    micellar_water["low_score"].append(row)
+
+            #initiate product count
+            count = 0
+
+            #loop through cleanser list and save products with the highest scores to the db
+            #if less than 4 products saved to db, continue to loop through each cat until 4 products are saved 
+            if micellar_water["high_score"]: 
+                for row in micellar_water["high_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
+
+            if count < 4 and micellar_water["mid_score"]: 
+                for row in micellar_water["mid_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
+
+            if count < 4 and micellar_water["low_score"]: 
+                for row in micellar_water["low_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
         else: 
             for row in oil_cleanser_list:
                 if profile.pregnant and "avoid pregnancy" in row.product_target:
                     continue
 
-                if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes: 
-                    add_product = {
-                        "product_name": row.product_name, 
-                        "product_brand": row.product_brand, 
-                        "product_category": row.product_cat, 
-                        "product_price": row.product_price, 
-                        "product_link": row.product_link, 
-                        "product_img": row.product_img.url, 
-                        "product_target": row.product_target,
-                        "product_des": row.product_des,
-                    } 
-                    oil_cleanser.append(add_product)
-                    #save new rec 
-                    UserProduct.objects.create(user=request.user, product=row)
+                #reset score for every product
+                score = 0
+
+                #for every criteria met, plus 1 to score
+                if profile.skintype in row.skintypes: 
+                    score += 1
+                if any(item in row.product_target for item in profile.skin_concern):
+                    score += 1
+                if "all skin types" in row.skintypes:
+                    score += 1
+                
+                # rank products according to scores 
+                if score == 3:
+                    oil_cleanser["high_score"].append(row)
+                elif score == 2:
+                    oil_cleanser["mid_score"].append(row)
+                elif score == 1:
+                    oil_cleanser["low_score"].append(row)
+
+            #initiate product count
+            count = 0
+
+            #loop through cleanser list and save products with the highest scores to the db
+            #if less than 4 products saved to db, continue to loop through each cat until 4 products are saved 
+            if oil_cleanser["high_score"]: 
+                for row in oil_cleanser["high_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
+
+            if count < 4 and oil_cleanser["mid_score"]: 
+                for row in oil_cleanser["mid_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
+
+            if count < 4 and oil_cleanser["low_score"]: 
+                for row in oil_cleanser["low_score"]:
+                    if count < 4: 
+                        UserProduct.objects.create(user=request.user, product=row)
+                        count += 1
+                    else:
+                        break
                 
         #query img objects
         get_img_obj = user.image_profile.order_by("-datetime").all()
 
-        #query all products rec 
+        #query products rec from db after filter and saving from above
         get_product_recs = UserProduct.objects.filter(user=request.user)
         product_recs_dict = UserProductSerializer(get_product_recs, many=True)
         
@@ -352,11 +655,27 @@ def processdata(request):
     
     #if user is NOT LOGGED IN
     else:
+        #reset count before looping through every product list
+        count = 0
+
         for row in cleanser_list:
             if user_pregnant and "avoid pregnancy" in row.product_target:
                 continue
-            
-            if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
+
+            #reset score for every product
+            score = 0
+
+            #if less than 4 products are saved in the dict
+            if count < 4: 
+                #for every criteria met, plus 1 to score
+                if profile.skintype in row.skintypes: 
+                    score += 1
+                if any(item in row.product_target for item in profile.skin_concern):
+                    score += 1
+                if "all skin types" in row.skintypes:
+                    score += 1
+
+                #build a product dict 
                 add_product = {
                     "product_name": row.product_name, 
                     "product_brand": row.product_brand, 
@@ -366,15 +685,38 @@ def processdata(request):
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
                     "product_des": row.product_des,
-                }
-                cleanser.append(add_product)
-                print(f"cleanser list: {cleanser}")
+                    }
 
+                # rank and append products according to scores 
+                if score == 3:
+                    cleanser["high_score"].append(add_product)
+                elif score == 2:
+                    cleanser["mid_score"].append(add_product)
+                elif score == 1:
+                    cleanser["low_score"].append(add_product)
+            else:
+                break
+
+        #reset count before looping through every product list
+        count = 0
         for row in toner_list: 
             if user_pregnant and "avoid pregnancy" in row.product_target:
                 continue
 
-            if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes: 
+            #reset score for every product
+            score = 0
+
+            #if less than 4 products are saved in the dict
+            if count < 4: 
+                #for every criteria met, plus 1 to score
+                if profile.skintype in row.skintypes: 
+                    score += 1
+                if any(item in row.product_target for item in profile.skin_concern):
+                    score += 1
+                if "all skin types" in row.skintypes:
+                    score += 1
+
+                #build a product dict 
                 add_product = {
                     "product_name": row.product_name, 
                     "product_brand": row.product_brand, 
@@ -384,14 +726,37 @@ def processdata(request):
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
                     "product_des": row.product_des,
-                }
-                toner.append(add_product)
+                    }
 
+                # rank and append products according to scores 
+                if score == 3:
+                    toner["high_score"].append(add_product)
+                elif score == 2:
+                    toner["mid_score"].append(add_product)
+                elif score == 1:
+                    toner["low_score"].append(add_product)
+            else:
+                break
+
+        #reset count before looping through every product list
+        count = 0
         for row in serum_list: 
             if user_pregnant and "avoid pregnancy" in row.product_target:
                 continue
+            #reset score for every product
+            score = 0
 
-            if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
+            #if less than 4 products are saved in the dict
+            if count < 4: 
+                #for every criteria met, plus 1 to score
+                if profile.skintype in row.skintypes: 
+                    score += 1
+                if any(item in row.product_target for item in profile.skin_concern):
+                    score += 1
+                if "all skin types" in row.skintypes:
+                    score += 1
+
+                #build a product dict 
                 add_product = {
                     "product_name": row.product_name, 
                     "product_brand": row.product_brand, 
@@ -401,14 +766,39 @@ def processdata(request):
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
                     "product_des": row.product_des,
-                }
-                serum.append(add_product)
-        
+                    }
+
+                # rank and append products according to scores 
+                if score == 3:
+                    serum["high_score"].append(add_product)
+                elif score == 2:
+                    serum["mid_score"].append(add_product)
+                elif score == 1:
+                    serum["low_score"].append(add_product)
+            else:
+                break
+
+            
+        #reset count before looping through every product list
+        count = 0
         for row in moisturiser_list: 
             if user_pregnant and "avoid pregnancy" in row.product_target:
                 continue
 
-            if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
+            #reset score for every product
+            score = 0
+
+            #if less than 4 products are saved in the dict
+            if count < 4: 
+                #for every criteria met, plus 1 to score
+                if profile.skintype in row.skintypes: 
+                    score += 1
+                if any(item in row.product_target for item in profile.skin_concern):
+                    score += 1
+                if "all skin types" in row.skintypes:
+                    score += 1
+
+                #build a product dict 
                 add_product = {
                     "product_name": row.product_name, 
                     "product_brand": row.product_brand, 
@@ -418,15 +808,39 @@ def processdata(request):
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
                     "product_des": row.product_des,
-                }
-                moisturiser.append(add_product)
+                    }
+
+                # rank and append products according to scores 
+                if score == 3:
+                    moisturiser["high_score"].append(add_product)
+                elif score == 2:
+                    moisturiser["mid_score"].append(add_product)
+                elif score == 1:
+                    moisturiser["low_score"].append(add_product)
+            else:
+                break
         
+        #reset count before looping through every product list
+        count = 0
         if "acne" in user_skinconcern or "sensitive" in user_skinconcern:
             for row in physical_sunscreen_list: 
                 if user_pregnant and "avoid pregnancy" in row.product_target:
                     continue
 
-                if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
+                #reset score for every product
+                score = 0
+
+                #if less than 4 products are saved in the dict
+                if count < 4: 
+                    #for every criteria met, plus 1 to score
+                    if profile.skintype in row.skintypes: 
+                        score += 1
+                    if any(item in row.product_target for item in profile.skin_concern):
+                        score += 1
+                    if "all skin types" in row.skintypes:
+                        score += 1
+
+                    #build a product dict 
                     add_product = {
                         "product_name": row.product_name, 
                         "product_brand": row.product_brand, 
@@ -436,14 +850,37 @@ def processdata(request):
                         "product_img": row.product_img.url, 
                         "product_target": row.product_target,
                         "product_des": row.product_des,
-                    }
-                    sunscreen.append(add_product)
+                        }
+
+                    # rank and append products according to scores 
+                    if score == 3:
+                        sunscreen["high_score"].append(add_product)
+                    elif score == 2:
+                        sunscreen["mid_score"].append(add_product)
+                    elif score == 1:
+                        sunscreen["low_score"].append(add_product)
+                else:
+                    break
+
         else:
             for row in chemical_sunscreen_list: 
                 if user_pregnant and "avoid pregnancy" in row.product_target:
                     continue
 
-                if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
+                 #reset score for every product
+                score = 0
+
+                #if less than 4 products are saved in the dict
+                if count < 4: 
+                    #for every criteria met, plus 1 to score
+                    if profile.skintype in row.skintypes: 
+                        score += 1
+                    if any(item in row.product_target for item in profile.skin_concern):
+                        score += 1
+                    if "all skin types" in row.skintypes:
+                        score += 1
+
+                    #build a product dict 
                     add_product = {
                         "product_name": row.product_name, 
                         "product_brand": row.product_brand, 
@@ -453,14 +890,38 @@ def processdata(request):
                         "product_img": row.product_img.url, 
                         "product_target": row.product_target,
                         "product_des": row.product_des,
-                    }
-                    sunscreen.append(add_product)
-            
+                        }
+
+                    # rank and append products according to scores 
+                    if score == 3:
+                        sunscreen["high_score"].append(add_product)
+                    elif score == 2:
+                        sunscreen["mid_score"].append(add_product)
+                    elif score == 1:
+                        sunscreen["low_score"].append(add_product)
+                else:
+                    break
+        
+        #reset count before looping through every product list
+        count = 0
         for row in eye_list: 
             if user_pregnant and "avoid pregnancy" in row.product_target:
                 continue
 
-            if user_skintype in row.skintypes or any( item in row.product_target for item in user_eyeconcern) or row.skintypes == "all skin types": 
+            #reset score for every product
+            score = 0
+
+            #if less than 4 products are saved in the dict
+            if count < 4: 
+                #for every criteria met, plus 1 to score
+                if profile.skintype in row.skintypes: 
+                    score += 1
+                if any(item in row.product_target for item in profile.skin_concern):
+                    score += 1
+                if "all skin types" in row.skintypes:
+                    score += 1
+
+                #build a product dict 
                 add_product = {
                     "product_name": row.product_name, 
                     "product_brand": row.product_brand, 
@@ -470,15 +931,39 @@ def processdata(request):
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
                     "product_des": row.product_des,
-                }
-                eye.append(add_product)
+                    }
+
+                # rank and append products according to scores 
+                if score == 3:
+                    eye["high_score"].append(add_product)
+                elif score == 2:
+                    eye["mid_score"].append(add_product)
+                elif score == 1:
+                    eye["low_score"].append(add_product)
+            else:
+                break
         
+        #reset count before looping through every product list
+        count = 0
         if "acne" in user_skinconcern:
             for row in micellar_water_list:
                 if user_pregnant and "avoid pregnancy" in row.product_target:
                     continue
+                
+                #reset score for every product
+                score = 0
 
-                if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
+                #if less than 4 products are saved in the dict
+                if count < 4: 
+                    #for every criteria met, plus 1 to score
+                    if profile.skintype in row.skintypes: 
+                        score += 1
+                    if any(item in row.product_target for item in profile.skin_concern):
+                        score += 1
+                    if "all skin types" in row.skintypes:
+                        score += 1
+
+                    #build a product dict 
                     add_product = {
                         "product_name": row.product_name, 
                         "product_brand": row.product_brand, 
@@ -488,14 +973,36 @@ def processdata(request):
                         "product_img": row.product_img.url, 
                         "product_target": row.product_target,
                         "product_des": row.product_des,
-                    }
-                    micellar_water.append(add_product)
+                        }
+
+                    # rank and append products according to scores 
+                    if score == 3:
+                        micellar_water["high_score"].append(add_product)
+                    elif score == 2:
+                        micellar_water["mid_score"].append(add_product)
+                    elif score == 1:
+                        micellar_water["low_score"].append(add_product)
+                else:
+                    break
         else: 
             for row in oil_cleanser_list:
                 if user_pregnant and "avoid pregnancy" in row.product_target:
                     continue
 
-                if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
+                #reset score for every product
+                score = 0
+
+                #if less than 4 products are saved in the dict
+                if count < 4: 
+                    #for every criteria met, plus 1 to score
+                    if profile.skintype in row.skintypes: 
+                        score += 1
+                    if any(item in row.product_target for item in profile.skin_concern):
+                        score += 1
+                    if "all skin types" in row.skintypes:
+                        score += 1
+
+                    #build a product dict 
                     add_product = {
                         "product_name": row.product_name, 
                         "product_brand": row.product_brand, 
@@ -505,8 +1012,17 @@ def processdata(request):
                         "product_img": row.product_img.url, 
                         "product_target": row.product_target,
                         "product_des": row.product_des,
-                    } 
-                    oil_cleanser.append(add_product)   
+                        }
+
+                    # rank and append products according to scores 
+                    if score == 3:
+                        oil_cleanser["high_score"].append(add_product)
+                    elif score == 2:
+                        oil_cleanser["mid_score"].append(add_product)
+                    elif score == 1:
+                        oil_cleanser["low_score"].append(add_product)
+                else:
+                    break  
         if img_file: 
             return Response({"message": "success", "image": img_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status = status.HTTP_200_OK)
         else: 
