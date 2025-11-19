@@ -1023,6 +1023,7 @@ def processdata(request):
                         oil_cleanser["low_score"].append(add_product)
                 else:
                     break  
+                
         if img_file: 
             return Response({"message": "success", "image": img_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status = status.HTTP_200_OK)
         else: 

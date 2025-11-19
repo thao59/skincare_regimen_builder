@@ -20,4 +20,4 @@ class UserProductSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
     class Meta:
         model = UserProduct
-        fields =["id", "product"]
+        fields =["id", "product"] 

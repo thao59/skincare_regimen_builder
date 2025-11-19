@@ -293,28 +293,53 @@ function App() {
         else 
         {
           if(data.cleanser)
-            setCleanser(data.cleanser);
+          {
+            const cleanser_array = Object.values(data.cleanser).flat();
+            setCleanser(cleanser_array);
+          }
         
           if(data.toner)
-            setToner(data.toner);
-          
+          {
+            const toner_array = Object.values(data.toner).flat();
+            setToner(toner_array);
+          }
+            
           if(data.serum)
-            setSerum(data.serum);
-
+          {
+            const serum_array = Object.values(data.serum).flat();
+            setSerum(serum_array);
+          }
+          
           if(data.moisturiser)
-            setMoisturiser(data.moisturiser);
-
+          {
+            const moisturiser_array = Object.values(data.moisturiser).flat();
+            setMoisturiser(moisturiser_array);
+          }
+            
           if(data.sunscreen)
-            setSunscreen(data.sunscreen);
+          {
+            const sunscreen_array = Object.values(data.sunscreen).flat();
+            setSunscreen(sunscreen_array);
+          }
 
           if(data.eye)
-            setEye(data.eye);
+          {
+            const eye_array = Object.values(data.eye).flat();
+            setEye(eye_array);
+          }
+           
 
           if(data.micellar_water)
-            setMicellarwater(data.micellar_water)
+          {
+            const micellar_water_array = Object.values(data.micellar_water).flat();
+            setMicellarwater(micellar_water_array);
+          }
           
           if(data.cleansing_oil)
-            setOilcleanser(data.cleansing_oil)
+          {
+            const cleansing_oil_array = Object.values(data.cleansing_oil).flat();
+            setOilcleanser(cleansing_oil_array);
+          }
         }
 
         changeStage(13);
@@ -326,15 +351,6 @@ function App() {
       }
     }
   }
-
-  console.log(cleanser);
-  console.log(toner);
-  console.log(serum);
-  console.log(moisturiser);
-  console.log(eye);
-  console.log(sunscreen);
-  console.log(oilcleanser);
-
 
   const[imageFile, setImageFile] = useState(null);
   const[image, setImage] = useState(null);
