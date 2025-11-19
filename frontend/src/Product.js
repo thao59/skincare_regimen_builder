@@ -168,7 +168,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                                 <p className="product_price">${x.product_price}</p>
                                 <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                 <p className="product_des">{x.product_des}</p>
-                                <button className="shop_button"><a href={x.product_link}></a> Shop now</button>
+                                <a className="shop_button" href={x.product_link}>Shop now</a>
                             </div>
                         ))}
                         {value.mid.length > 0 && <p className="divider"></p>}
@@ -187,7 +187,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                                 <p className="product_price">${x.product_price}</p>
                                 <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                 <p className="product_des">{x.product_des}</p>
-                                <button className="shop_button"> <a href={x.product_link}></a> Shop now </button>
+                                <a className="shop_button" href={x.product_link}>Shop now </a> 
                             </div>
                         ))}
                         {value.high.length > 0 && <p className="divider"></p>}
@@ -205,7 +205,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                                 <p className="product_price">${x.product_price}</p>
                                 <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                 <p className="product_des">{x.product_des}</p>
-                                <button className="shop_button"><a href={x.product_link}></a> Shop now</button>
+                                <a className="shop_button" href={x.product_link}> Shop now </a> 
                             </div>
                         ))}
                     </div>

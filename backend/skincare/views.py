@@ -121,8 +121,8 @@ def processdata(request):
     toner_list = Products.objects.filter(product_cat = "toner")
     serum_list = Products.objects.filter(product_cat = "serum")
     moisturiser_list = Products.objects.filter(product_cat = "moisturiser")
-    physical_sunscreen_list = Products.objects.filter(product_cat = "sunscreen")
-    chemical_sunscreen_list = Products.objects.filter(product_cat = "sunscreen")
+    physical_sunscreen_list = Products.objects.filter(product_cat = "physical sunscreen")
+    chemical_sunscreen_list = Products.objects.filter(product_cat = "chemical sunscreen")
     eye_list = Products.objects.filter(product_cat = "eye")
     oil_cleanser_list = Products.objects.filter(product_cat="oil cleanser")
     micellar_water_list = Products.objects.filter(product_cat = "micellar water")
@@ -237,25 +237,47 @@ def processdata(request):
                 moisturiser.append(add_product)
                 #save new rec 
                 UserProduct.objects.create(user=request.user, product=row)
-        
-        for row in sunscreen_list: 
-            if profile.pregnant and "avoid pregnancy" in row.product_target:
-                continue
 
-            if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
-                add_product = {
-                    "product_name": row.product_name, 
-                    "product_brand": row.product_brand, 
-                    "product_category": row.product_cat, 
-                    "product_price": row.product_price, 
-                    "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
-                    "product_target": row.product_target,
-                    "product_des": row.product_des,
-                }
-                sunscreen.append(add_product)
-                #save new rec 
-                UserProduct.objects.create(user=request.user, product=row)
+        #if acne is the concern, only loop through physcial sunscreen list
+        if "acne" in profile.skin_concern or "sensitive" in profile.skin_concern:   
+            for row in physical_sunscreen_list: 
+                if profile.pregnant and "avoid pregnancy" in row.product_target:
+                    continue
+
+                if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
+                    add_product = {
+                        "product_name": row.product_name, 
+                        "product_brand": row.product_brand, 
+                        "product_category": row.product_cat, 
+                        "product_price": row.product_price, 
+                        "product_link": row.product_link, 
+                        "product_img": row.product_img.url, 
+                        "product_target": row.product_target,
+                        "product_des": row.product_des,
+                    }
+                    sunscreen.append(add_product)
+                    #save new rec 
+                    UserProduct.objects.create(user=request.user, product=row)
+        else: 
+            for row in chemical_sunscreen_list: 
+                if profile.pregnant and "avoid pregnancy" in row.product_target:
+                    continue  
+
+                if profile.skintype in row.skintypes or any(item in row.product_target for item in profile.skin_concern) or "all skin types" in row.skintypes:
+                    add_product = {
+                        "product_name": row.product_name, 
+                        "product_brand": row.product_brand, 
+                        "product_category": row.product_cat, 
+                        "product_price": row.product_price, 
+                        "product_link": row.product_link, 
+                        "product_img": row.product_img.url, 
+                        "product_target": row.product_target,
+                        "product_des": row.product_des,
+                    }
+                    sunscreen.append(add_product)
+                    #save new rec 
+                    UserProduct.objects.create(user=request.user, product=row)
+
         
         for row in eye_list: 
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -399,23 +421,41 @@ def processdata(request):
                 }
                 moisturiser.append(add_product)
         
-        for row in sunscreen_list: 
-            if user_pregnant and "avoid pregnancy" in row.product_target:
-                continue
+        if "acne" in user_skinconcern or "sensitive" in user_skinconcern:
+            for row in physical_sunscreen_list: 
+                if user_pregnant and "avoid pregnancy" in row.product_target:
+                    continue
 
-            if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
-                add_product = {
-                    "product_name": row.product_name, 
-                    "product_brand": row.product_brand, 
-                    "product_category": row.product_cat, 
-                    "product_price": row.product_price, 
-                    "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
-                    "product_target": row.product_target,
-                    "product_des": row.product_des,
-                }
-                sunscreen.append(add_product)
-        
+                if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
+                    add_product = {
+                        "product_name": row.product_name, 
+                        "product_brand": row.product_brand, 
+                        "product_category": row.product_cat, 
+                        "product_price": row.product_price, 
+                        "product_link": row.product_link, 
+                        "product_img": row.product_img.url, 
+                        "product_target": row.product_target,
+                        "product_des": row.product_des,
+                    }
+                    sunscreen.append(add_product)
+        else:
+            for row in chemical_sunscreen_list: 
+                if user_pregnant and "avoid pregnancy" in row.product_target:
+                    continue
+
+                if user_skintype in row.skintypes or any(item in row.product_target for item in user_skinconcern) or "all skin types" in row.skintypes:
+                    add_product = {
+                        "product_name": row.product_name, 
+                        "product_brand": row.product_brand, 
+                        "product_category": row.product_cat, 
+                        "product_price": row.product_price, 
+                        "product_link": row.product_link, 
+                        "product_img": row.product_img.url, 
+                        "product_target": row.product_target,
+                        "product_des": row.product_des,
+                    }
+                    sunscreen.append(add_product)
+            
         for row in eye_list: 
             if user_pregnant and "avoid pregnancy" in row.product_target:
                 continue
