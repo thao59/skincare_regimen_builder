@@ -127,14 +127,14 @@ def processdata(request):
     oil_cleanser_list = Products.objects.filter(product_cat="oil cleanser")
     micellar_water_list = Products.objects.filter(product_cat = "micellar water")
 
-    cleanser = {}
-    toner = {}
-    serum = {}
-    moisturiser = {}
-    sunscreen = {}
-    eye = {}
-    oil_cleanser = {}
-    micellar_water = {}
+    cleanser = {"high_score": [], "mid_score": [], "low_score": []}
+    toner = {"high_score": [], "mid_score": [], "low_score": []}
+    serum = {"high_score": [], "mid_score": [], "low_score": []}
+    moisturiser = {"high_score": [], "mid_score": [], "low_score": []}
+    sunscreen = {"high_score": [], "mid_score": [], "low_score": []}
+    eye = {"high_score": [], "mid_score": [], "low_score": []}
+    oil_cleanser = {"high_score": [], "mid_score": [], "low_score": []}
+    micellar_water = {"high_score": [], "mid_score": [], "low_score": []}
 
     #if user is LOGGED IN
     if request.user.is_authenticated:
@@ -653,11 +653,10 @@ def processdata(request):
         else:
             return Response ({"message": "success", "image": None, "product_recs" : product_recs_dict.data}, status=status.HTTP_200_OK)
     
-    #if user is NOT LOGGED IN
+    #if USER IS NOT LOGGED IN
     else:
         #reset count before looping through every product list
         count = 0
-
         for row in cleanser_list:
             if user_pregnant and "avoid pregnancy" in row.product_target:
                 continue
@@ -668,9 +667,9 @@ def processdata(request):
             #if less than 4 products are saved in the dict
             if count < 4: 
                 #for every criteria met, plus 1 to score
-                if profile.skintype in row.skintypes: 
+                if user_skintype in row.skintypes: 
                     score += 1
-                if any(item in row.product_target for item in profile.skin_concern):
+                if any(item in row.product_target for item in user_skinconcern):
                     score += 1
                 if "all skin types" in row.skintypes:
                     score += 1
@@ -694,6 +693,9 @@ def processdata(request):
                     cleanser["mid_score"].append(add_product)
                 elif score == 1:
                     cleanser["low_score"].append(add_product)
+                
+                #increase count 
+                count += 1
             else:
                 break
 
@@ -709,9 +711,9 @@ def processdata(request):
             #if less than 4 products are saved in the dict
             if count < 4: 
                 #for every criteria met, plus 1 to score
-                if profile.skintype in row.skintypes: 
+                if user_skintype in row.skintypes: 
                     score += 1
-                if any(item in row.product_target for item in profile.skin_concern):
+                if any(item in row.product_target for item in user_skinconcern):
                     score += 1
                 if "all skin types" in row.skintypes:
                     score += 1
@@ -735,6 +737,9 @@ def processdata(request):
                     toner["mid_score"].append(add_product)
                 elif score == 1:
                     toner["low_score"].append(add_product)
+                
+                #increase count 
+                count += 1
             else:
                 break
 
@@ -749,9 +754,9 @@ def processdata(request):
             #if less than 4 products are saved in the dict
             if count < 4: 
                 #for every criteria met, plus 1 to score
-                if profile.skintype in row.skintypes: 
+                if user_skintype in row.skintypes: 
                     score += 1
-                if any(item in row.product_target for item in profile.skin_concern):
+                if any(item in row.product_target for item in user_skinconcern):
                     score += 1
                 if "all skin types" in row.skintypes:
                     score += 1
@@ -775,6 +780,9 @@ def processdata(request):
                     serum["mid_score"].append(add_product)
                 elif score == 1:
                     serum["low_score"].append(add_product)
+                #increase count 
+                count += 1
+
             else:
                 break
 
@@ -791,9 +799,9 @@ def processdata(request):
             #if less than 4 products are saved in the dict
             if count < 4: 
                 #for every criteria met, plus 1 to score
-                if profile.skintype in row.skintypes: 
+                if user_skintype in row.skintypes: 
                     score += 1
-                if any(item in row.product_target for item in profile.skin_concern):
+                if any(item in row.product_target for item in user_skinconcern):
                     score += 1
                 if "all skin types" in row.skintypes:
                     score += 1
@@ -817,6 +825,9 @@ def processdata(request):
                     moisturiser["mid_score"].append(add_product)
                 elif score == 1:
                     moisturiser["low_score"].append(add_product)
+
+                #increase count 
+                count += 1
             else:
                 break
         
@@ -833,9 +844,9 @@ def processdata(request):
                 #if less than 4 products are saved in the dict
                 if count < 4: 
                     #for every criteria met, plus 1 to score
-                    if profile.skintype in row.skintypes: 
+                    if user_skintype in row.skintypes: 
                         score += 1
-                    if any(item in row.product_target for item in profile.skin_concern):
+                    if any(item in row.product_target for item in user_skinconcern):
                         score += 1
                     if "all skin types" in row.skintypes:
                         score += 1
@@ -859,6 +870,10 @@ def processdata(request):
                         sunscreen["mid_score"].append(add_product)
                     elif score == 1:
                         sunscreen["low_score"].append(add_product)
+                    
+                    #increase count 
+                    count += 1
+                
                 else:
                     break
 
@@ -873,9 +888,9 @@ def processdata(request):
                 #if less than 4 products are saved in the dict
                 if count < 4: 
                     #for every criteria met, plus 1 to score
-                    if profile.skintype in row.skintypes: 
+                    if user_skintype in row.skintypes: 
                         score += 1
-                    if any(item in row.product_target for item in profile.skin_concern):
+                    if any(item in row.product_target for item in user_skinconcern):
                         score += 1
                     if "all skin types" in row.skintypes:
                         score += 1
@@ -899,6 +914,10 @@ def processdata(request):
                         sunscreen["mid_score"].append(add_product)
                     elif score == 1:
                         sunscreen["low_score"].append(add_product)
+                    
+                    #increase count 
+                    count += 1
+                
                 else:
                     break
         
@@ -914,9 +933,9 @@ def processdata(request):
             #if less than 4 products are saved in the dict
             if count < 4: 
                 #for every criteria met, plus 1 to score
-                if profile.skintype in row.skintypes: 
+                if user_skintype in row.skintypes: 
                     score += 1
-                if any(item in row.product_target for item in profile.skin_concern):
+                if any(item in row.product_target for item in user_skinconcern):
                     score += 1
                 if "all skin types" in row.skintypes:
                     score += 1
@@ -940,6 +959,10 @@ def processdata(request):
                     eye["mid_score"].append(add_product)
                 elif score == 1:
                     eye["low_score"].append(add_product)
+
+                #increase count 
+                count += 1
+
             else:
                 break
         
@@ -956,9 +979,9 @@ def processdata(request):
                 #if less than 4 products are saved in the dict
                 if count < 4: 
                     #for every criteria met, plus 1 to score
-                    if profile.skintype in row.skintypes: 
+                    if user_skintype in row.skintypes: 
                         score += 1
-                    if any(item in row.product_target for item in profile.skin_concern):
+                    if any(item in row.product_target for item in user_skinconcern):
                         score += 1
                     if "all skin types" in row.skintypes:
                         score += 1
@@ -982,6 +1005,10 @@ def processdata(request):
                         micellar_water["mid_score"].append(add_product)
                     elif score == 1:
                         micellar_water["low_score"].append(add_product)
+                    
+                    #increase count 
+                    count += 1
+
                 else:
                     break
         else: 
@@ -995,9 +1022,9 @@ def processdata(request):
                 #if less than 4 products are saved in the dict
                 if count < 4: 
                     #for every criteria met, plus 1 to score
-                    if profile.skintype in row.skintypes: 
+                    if user_skintype in row.skintypes: 
                         score += 1
-                    if any(item in row.product_target for item in profile.skin_concern):
+                    if any(item in row.product_target for item in user_skinconcern):
                         score += 1
                     if "all skin types" in row.skintypes:
                         score += 1
@@ -1021,6 +1048,10 @@ def processdata(request):
                         oil_cleanser["mid_score"].append(add_product)
                     elif score == 1:
                         oil_cleanser["low_score"].append(add_product)
+                    
+                    #increase count 
+                    count += 1
+                
                 else:
                     break  
                 
