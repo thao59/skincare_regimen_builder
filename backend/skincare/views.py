@@ -136,7 +136,7 @@ def processdata(request):
     oil_cleanser = {"high_score": [], "mid_score": [], "low_score": []}
     micellar_water = {"high_score": [], "mid_score": [], "low_score": []}
 
-    #if user is LOGGED IN
+    #if USER IS LOGGED IN
     if request.user.is_authenticated:
         #get user instance 
         get_user = request.user 
@@ -215,7 +215,6 @@ def processdata(request):
                 else:
                     break
 
-    
         for row in toner_list: 
             # if user is pregnant and product is marked avoid pregnancy then skip that product
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -646,12 +645,16 @@ def processdata(request):
         #query products rec from db after filter and saving from above
         get_product_recs = UserProduct.objects.filter(user=request.user)
         product_recs_dict = UserProductSerializer(get_product_recs, many=True)
+
+        #query user's skin profile
+        skin_profile = UserProfile.objects.get(user=request.user)
+        user_skin_profile = ProfileSerializer(skin_profile)
         
         if get_img_obj: 
             images = ImageSerializer(get_img_obj, many=True)
-            return Response ({"message": "success", "image": images.data, "product_recs": product_recs_dict.data}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": images.data, "product_recs": product_recs_dict.data, "user_skin_profile": user_skin_profile}, status=status.HTTP_200_OK)
         else:
-            return Response ({"message": "success", "image": None, "product_recs" : product_recs_dict.data}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": None, "product_recs" : product_recs_dict.data, "user_skin_profile": user_skin_profile}, status=status.HTTP_200_OK)
     
     #if USER IS NOT LOGGED IN
     else:
@@ -1054,11 +1057,20 @@ def processdata(request):
                 
                 else:
                     break  
+        
+        #create dict to store user's skin profile 
+        skin_profile = {"username": "", "skin_concern": []}
+
+        skin_profile["username"] = user_name
+        skin_profile["skin_concern"] = user_skinconcern
+
+        print(f"skin concern: {skin_profile["skin_concern"]}")
+
                 
         if img_file: 
-            return Response({"message": "success", "image": img_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status = status.HTTP_200_OK)
+            return Response({"message": "success", "image": img_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water, "user_skin_profile": skin_profile}, status = status.HTTP_200_OK)
         else: 
-            return Response ({"message": "success", "image": img_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": img_file, "cleanser": cleanser, "toner": toner, "serum": serum, "moisturiser": moisturiser, "sunscreen": sunscreen, "eye": eye, "cleansing_oil": oil_cleanser, "micellar_water": micellar_water, "user_skin_profile": skin_profile}, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])

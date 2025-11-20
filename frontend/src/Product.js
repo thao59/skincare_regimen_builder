@@ -2,7 +2,7 @@ import {useState} from "react";
 import "./Product.css"
 
 
-function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcleanser, micellarwater})
+function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcleanser, micellarwater, user_name, userConcern})
 {
 
     const product_list = {
@@ -148,9 +148,44 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
     //capitalise the first letter of key 
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     const URL = "http://localhost:8000";
+    console.log("skin concern: ", userConcern);
 
     return (
         <div className="product_page">
+            <div className="info_left">
+                <div className="profile">
+                    <h2 className="result_title">Hi {user_name}, here are your regimen results.</h2>
+                    <p className="concern_title">CONCERNS</p>
+                    <ul>
+                        {userConcern.map(x => (
+                            <li className="list">{cap(x)}</li>
+                        ))}
+                    </ul>
+                    <a>Retake survey &#8594;</a>
+                </div>
+                <img className="skincare_img" src="/images/2_39dcafaf-18fa-4aff-9292-918c7b5c22c6.webp" alt="skincare"/>
+                
+            </div>
+            <p className="full_divider"></p>
+
+            <div className="customisation">
+                <h2 className="result_title">Customised for You.</h2>
+                <div className="button_cont">
+                    <button className="am_button">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="15" height="15" class="size-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
+                        </svg>
+                        <span>AM</span>
+                    </button>
+                    <button className="pm_button">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="15" height="15" class="size-2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
+                        </svg> 
+                        <span>PM </span>
+                    </button>
+                </div>
+            </div>
+
             {Object.entries(product_list).map(([key, value]) =>
             (
                 <div key={key} className="product_cat">

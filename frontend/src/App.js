@@ -206,10 +206,10 @@ function App() {
   const token = localStorage.getItem("access"); 
 
   const[imageArray, setImageArray] = useState(null);
-  const[username, setUsername] = useState(""); 
+  const[user_name, setUsername] = useState(""); 
+  const[userConcern, setConcern] = useState([])
   const[retrieveData, setRetrieveData] = useState(null);
   const image_group ={}
-
   const[cleanser, setCleanser] = useState([]); 
   const[toner, setToner] = useState([]);
   const[serum, setSerum] = useState([]);
@@ -263,7 +263,7 @@ function App() {
             setImageArray(image_group);
           }
           
-          
+          //group and save products according to types 
           const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser"); 
           setCleanser(cleanser_cat);
 
@@ -287,6 +287,13 @@ function App() {
 
           const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser");
           setOilcleanser(cleansingoil_cat);
+
+          //set name and skin concerns 
+          const get_name = data.user_skin_profile.username;
+          setUsername(get_name);
+
+          const get_skinConcern = data.user_skin_profile.skin_concern;
+          setConcern(get_skinConcern);
         }
 
         //process data if user is not logged in
@@ -340,6 +347,14 @@ function App() {
             const cleansing_oil_array = Object.values(data.cleansing_oil).flat();
             setOilcleanser(cleansing_oil_array);
           }
+
+          //set name and skin concerns 
+          const get_name = data.user_skin_profile.username;
+          setUsername(get_name);
+
+          const get_skinConcern = data.user_skin_profile.skin_concern;
+          setConcern(get_skinConcern);
+          console.log("skin concern: ", get_skinConcern);
         }
 
         changeStage(13);
@@ -351,6 +366,8 @@ function App() {
       }
     }
   }
+
+  console.log("skin concern: ", userConcern);
 
   const[imageFile, setImageFile] = useState(null);
   const[image, setImage] = useState(null);
@@ -480,7 +497,7 @@ function App() {
         {page === "login" && <Login resetSite={handlePage}/>}
         {page === "signup" && <Signup resetSite={handlePage}/>}
         {page === "home" && stage === 0 && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
-        {page === "profile" && <Profile imageArray={imageArray} username={username} retrieveData={retrieveData}/>}
+        {page === "profile" && <Profile imageArray={imageArray} username={user_name} retrieveData={retrieveData}/>}
         {stage === 1 && (
           <div className="labels_container">
             <h1 className="title"> My Skincare Routine Tracker</h1>
@@ -663,7 +680,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater}/>}
+        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} user_name={user_name} userConcern={userConcern} />}
     </div>
   )
 }
