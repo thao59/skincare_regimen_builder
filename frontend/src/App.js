@@ -355,6 +355,16 @@ function App() {
           const get_skinConcern = data.user_skin_profile.skin_concern;
           setConcern(get_skinConcern);
           console.log("skin concern: ", get_skinConcern);
+
+          console.log("cleanser: ", data.cleanser);
+          console.log("toner: ", data.toner);
+          console.log("serum: ", data.serum);
+          console.log("moisturiser: ", data.moisturiser);
+          console.log("sunscreen: ", data.sunscreen);
+          console.log("eye: ", data.eye);
+          console.log("oilcleanser: ", data.cleansing_oil);
+          console.log("micellawater: ", data.micellar_water);
+        
         }
 
         changeStage(13);
@@ -366,7 +376,6 @@ function App() {
       }
     }
   }
-
   console.log("skin concern: ", userConcern);
 
   const[imageFile, setImageFile] = useState(null);
@@ -560,7 +569,7 @@ function App() {
           <div className="labels_container">
             <h2 className="question">Do you have any eye area concerns?</h2>
             <p className="note">Select all that apply</p>
-            <label><input type="checkbox" onChange={()=> handleEyeConcern("finelines&wrinkles")} checked={userData.eye_concern.includes("finelines&wrinkles")}/>Fine Lines and Wrinkles</label>
+            <label><input type="checkbox" onChange={()=> handleEyeConcern("aging")} checked={userData.eye_concern.includes("aging")}/>Fine Lines and Wrinkles</label>
             <label><input type="checkbox" onChange={()=> handleEyeConcern("darkcircle")} checked={userData.eye_concern.includes("darkcircle")}/>Dark Circles & Puffiness</label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
