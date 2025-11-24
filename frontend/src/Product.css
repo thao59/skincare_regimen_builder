@@ -202,36 +202,64 @@
 .button_cont
 {
     display: flex;
-    width: 200px;
+    width: 500px;
     margin-left: 4rem;
     gap: 2rem;
 }
 
 .am_button
 {
-    width: 180px !important;
-    height: 50px !important;
-    border: 1px solid #2c3e50;
-    border-radius: 1rem;
+    width: 120px;
+    height: 48px;
+    border: 1px solid #e0e0e0;
+    border-radius: 1.4rem;
     background-color: white;
     display: flex;
     gap: 0.3rem;
     justify-content: center;
     align-items: center;
+    transition: all 0.3s;
+}
+
+.am_button.active 
+{
+    background-color: #fff3cd;
+    border: #f39c12 solid 1px;
+    color: #856404;
+}
+
+.am_button:hover 
+{
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
 .pm_button
 {
-    width: 180px;
-    height: 50px;
+    width: 120px;
+    height: 48px;
     border: none;
-    background-color: #2c3e50;
-    border-radius: 1rem;
-    color: white;
+    border-radius: 1.4rem;
+    border: 1px solid #e0e0e0;
+    background-color: white;
     display: flex;
     gap: 0.3rem;
     justify-content: center;
     align-items: center;
+    transition: all 0.3s;
+}
+
+.pm_button.active
+{
+    background-color: #d1ecf1;
+    border: #3498db solid 1px;
+    color: #0c5460;
+}
+
+.pm_button:hover 
+{
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
 }
 
 
@@ -249,3 +277,36 @@
     gap: 15rem;
 }
 
+.sun_icon 
+{
+    background-color: #fff3cd;
+    color: #856404; 
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: 10px;
+    padding: 0.2rem;
+}
+
+.moon_icon
+{
+    background-color: #d1ecf1;
+    color: #0c5460 ; 
+    width: 19px;
+    height: 19px;
+    border: none;
+    border-radius: 10px;  
+    padding: 0.2rem;
+}
+
+.return_button
+{
+    transition: all 0.3s;
+}
+
+.return_button:hover
+{
+    cursor: pointer;
+    text-decoration: underline;
+    font-size: 1.1rem;
+}

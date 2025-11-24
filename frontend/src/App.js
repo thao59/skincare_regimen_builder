@@ -45,6 +45,7 @@ function App() {
       {
         setPage(site); 
         changeStage(0);
+        setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0})
       }
   }
   console.log("Site: ", page);
@@ -651,7 +652,7 @@ function App() {
             <h2 className="question"> Are you an experienced user of acids, retinoids and vitamin C?</h2>
             <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("beginner")} checked={userData.advanced_user === "beginner"}/> Beginner </label>
             <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("intermediate")} checked={userData.advanced_user === "intermediate"}/> Intermediate</label>
-            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("Advanced")} checked={userData.advanced_user === "advanced"}/> Advanced </label>
+            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("advanced")} checked={userData.advanced_user === "advanced"}/> Advanced </label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
               <button onClick={() => changeStage()} disabled={userData.advanced_user === ""}>&#8594;</button>
@@ -689,7 +690,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} user_name={user_name} userConcern={userConcern} />}
+        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} user_name={user_name} userConcern={userConcern} handlePage={handlePage} />}
     </div>
   )
 }
