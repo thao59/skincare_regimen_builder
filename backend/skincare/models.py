@@ -43,9 +43,10 @@ class Products(models.Model):
     product_link = models.URLField(max_length=500)
     product_img = models.ImageField(upload_to="product/")
     product_des = models.TextField(null=True)
+    product_time = models.CharField(null=True)
 
     def __str__(self):
-        return f"{self.product_brand} - {self.product_name}: {self.product_cat}, {self.product_price}"
+        return f"{self.product_brand} - {self.product_name}: {self.product_cat}, {self.product_price} - {self.product_time}"
     
 class UserProduct(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name = "recommendation")

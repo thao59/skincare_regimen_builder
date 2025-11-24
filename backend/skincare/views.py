@@ -15,7 +15,7 @@ def signup(request):
 
     #request.data is dict automatically parsed by DRF. 
     #catch missing keys 
-    try: 
+    try:  
         username = request.data["username"]
         email = request.data["email"]
         password = request.data["password"]
@@ -642,6 +642,7 @@ def processdata(request):
                 "product_img": row.product_img.url, 
                 "product_target": row.product_target,
                 "product_des": row.product_des,
+                "product_time" : row.product_time,
                 }
             print(f"cleanser score: {score}")
 
@@ -702,6 +703,7 @@ def processdata(request):
                 "product_img": row.product_img.url, 
                 "product_target": row.product_target,
                 "product_des": row.product_des,
+                "product_time" : row.product_time,
                 }
             print(f"toner: {score}")
 
@@ -759,6 +761,7 @@ def processdata(request):
                 "product_img": row.product_img.url, 
                 "product_target": row.product_target,
                 "product_des": row.product_des,
+                "product_time" : row.product_time,
                 }
             print(f"serum score: {score}")
 
@@ -817,6 +820,7 @@ def processdata(request):
                 "product_img": row.product_img.url, 
                 "product_target": row.product_target,
                 "product_des": row.product_des,
+                "product_time" : row.product_time,
                 }
             print(f"moisturiser score: {score}")
 
@@ -876,6 +880,7 @@ def processdata(request):
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
                     "product_des": row.product_des,
+                    "product_time" : row.product_time,
                     }
                 print(f"physical sunscreen score: {score}")
 
@@ -935,6 +940,7 @@ def processdata(request):
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
                     "product_des": row.product_des,
+                    "product_time" : row.product_time,
                     }
                 print(f"sunscreen score: {score}")
 
@@ -995,6 +1001,7 @@ def processdata(request):
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
                     "product_des": row.product_des,
+                    "product_time" : row.product_time,
                     }
                 print(f"eye score: {score}")
 
@@ -1054,6 +1061,7 @@ def processdata(request):
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
                     "product_des": row.product_des,
+                    "product_time" : row.product_time,
                     }
                 print(f"micellar water score: {score}")
 
@@ -1113,6 +1121,7 @@ def processdata(request):
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
                     "product_des": row.product_des,
+                    "product_time" : row.product_time,
                     }
                 print(f"cleansing oil score: {score}")
 

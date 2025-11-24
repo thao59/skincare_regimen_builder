@@ -150,6 +150,27 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
     const URL = "http://localhost:8000";
     console.log("skin concern: ", userConcern);
 
+    //when am/pm button is clicked, displayed products marked as am/pm
+    const [time, setTime] = useState("am")
+
+    console.log(time);
+
+    const handleTime = (string) => {
+        setTime(string);
+    }
+
+    console.log("time", time);
+
+    for (const row of product_list.cleanser.low)
+    {
+        console.log(row.product_name);
+    }
+
+    for (const row of product_list.toner.low)
+        {
+            console.log(row.product_name);
+        }
+
     return (
         <div className="product_page">
             <div className="info_left">
@@ -171,13 +192,13 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             <div className="customisation">
                 <h2 className="result_title">Customised for You.</h2>
                 <div className="button_cont">
-                    <button className="am_button">
+                    <button onClick={() => handleTime("am")}  className="am_button">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="15" height="15" class="size-2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z" />
                         </svg>
                         <span>AM</span>
                     </button>
-                    <button className="pm_button">
+                    <button onClick={() => handleTime("pm")} className="pm_button">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="15" height="15" class="size-2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z" />
                         </svg> 
@@ -192,57 +213,63 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                     {(value.low.length > 0 || value.mid.length > 0 || value.high.length > 0) && <h2 className="category">{cap(key)}</h2>}
                     {/* loop through each category(high,mid,low) and display */}
                     <div className="product_row">
-                        {value.low.length > 0 && value.low.map(x => (
-                            <div key={x.product_name} className="product_display">
-                                <p className="class_affordable">Affordable</p>
-                                <p className="product_brand">{x.product_brand} </p>
-                                <p className="product_name">{x.product_name} </p>
-                                <div className="img_container">
-                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                                </div>
-                                <p className="product_price">${x.product_price}</p>
-                                <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
-                                <p className="product_des">{x.product_des}</p>
-                                <a className="shop_button" href={x.product_link}>Shop now</a>
-                            </div>
-                        ))}
+                        {value.low.length > 0 && value.low.map(x => {
+                            if (x.product_time === time || x.product_time === "am_pm")
+                                return(
+                                <div key={x.product_name} className="product_display">
+                                    <p className="class_affordable">Affordable</p>
+                                    <p className="product_brand">{x.product_brand} </p>
+                                    <p className="product_name">{x.product_name} </p>
+                                    <div className="img_container">
+                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                    </div>
+                                    <p className="product_price">${x.product_price}</p>
+                                    <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                    <p className="product_des">{x.product_des}</p>
+                                    <a className="shop_button" href={x.product_link}>Shop now</a>
+                                </div>)
+                        })}
                         {value.mid.length > 0 && <p className="divider"></p>}
                     </div>
 
 
                     <div className="product_row">
-                        {value.mid.length > 0 && value.mid.map(x => (
-                            <div key={x.product_name} className="product_display"> 
-                                <p className="class_mid">Mid-Range</p>
-                                <p className="product_brand">{x.product_brand} </p>
-                                <p className="product_name">{x.product_name} </p>
-                                <div className="img_container">
-                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                                </div>
-                                <p className="product_price">${x.product_price}</p>
-                                <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
-                                <p className="product_des">{x.product_des}</p>
-                                <a className="shop_button" href={x.product_link}>Shop now </a> 
-                            </div>
-                        ))}
+                        {value.mid.length > 0 && value.mid.map(x => {
+                            if (x.product_time === time || x.product_time === "am_pm")
+                                return (
+                                    <div key={x.product_name} className="product_display"> 
+                                    <p className="class_mid">Mid-Range</p>
+                                    <p className="product_brand">{x.product_brand} </p>
+                                    <p className="product_name">{x.product_name} </p>
+                                    <div className="img_container">
+                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                    </div>
+                                    <p className="product_price">${x.product_price}</p>
+                                    <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                    <p className="product_des">{x.product_des}</p>
+                                    <a className="shop_button" href={x.product_link}>Shop now </a> 
+                                </div>)
+                        })}
                         {value.high.length > 0 && <p className="divider"></p>}
                     </div>
 
                     <div className="product_row">
-                        {value.high.length > 0 && value.high.map(x => (
-                            <div key={x.product_name} className="product_display">
-                                <p className="class_premium">Premium</p>
-                                <p className="product_brand">{x.product_brand} </p>
-                                <p className="product_name">{x.product_name} </p>
-                                <div className="img_container">
-                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                                </div>
-                                <p className="product_price">${x.product_price}</p>
-                                <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
-                                <p className="product_des">{x.product_des}</p>
-                                <a className="shop_button" href={x.product_link}> Shop now </a> 
-                            </div>
-                        ))}
+                        {value.high.length > 0 && value.high.map(x => {
+                             if (x.product_time === time || x.product_time === "am_pm")
+                                return (
+                                <div key={x.product_name} className="product_display">
+                                    <p className="class_premium">Premium</p>
+                                    <p className="product_brand">{x.product_brand} </p>
+                                    <p className="product_name">{x.product_name} </p>
+                                    <div className="img_container">
+                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                    </div>
+                                    <p className="product_price">${x.product_price}</p>
+                                    <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                    <p className="product_des">{x.product_des}</p>
+                                    <a className="shop_button" href={x.product_link}> Shop now </a> 
+                                </div>)
+                            })}
                     </div>
                 </div>
             ))}
