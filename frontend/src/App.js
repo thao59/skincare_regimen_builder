@@ -137,13 +137,14 @@ function App() {
         else
         {
           //clear products_type array before checking "I dont have a routine" option
+          //set active_use to null in case user goes to q8 and go back to 7 to check "I dont have a routine" which will cause two back arrows on p12
           if(userData.products_type.length > 0)
             {
-              setUserData({...userData, products_type: [], routine: statement});
+              setUserData({...userData, products_type: [], routine: statement, active_use: null});
             }
           else 
           {
-            setUserData({...userData, routine: statement});
+            setUserData({...userData, routine: statement, active_use: null});
           }
         }
       }
@@ -200,6 +201,7 @@ function App() {
   const[user_name, setUsername] = useState(""); 
   const[userConcern, setConcern] = useState([]);
   const[userSkintype, setUserSkintype] = useState("");
+  const[eyeConcern, setEyeConcern] = useState([]);
   const[retrieveData, setRetrieveData] = useState(null);
   const image_group ={};
   const[cleanser, setCleanser] = useState([]); 
@@ -258,36 +260,52 @@ function App() {
           }
           
           //group and save products according to types 
-          const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser"); 
+          const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
+
           setCleanser(cleanser_cat);
 
-          const toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner");
+          const toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner").map(x => x.product);
           setToner(toner_cat);
 
-          const serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum");
+          const serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum").map(x => x.product);
           setSerum(serum_cat);
 
-          const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser");
+          const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
           setMoisturiser(moist_cat);
 
-          const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "sunscreen");
-          setSunscreen(sunscreen_cat);
+          if (data.user_skin_profile.skin_concern.includes("acne"))
+          {
+            const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
+            setSunscreen(sunscreen_cat);
+          }
 
-          const eye_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser");
+          else 
+          {
+            const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "chemical sunscreen").map(x => x.product);
+            setSunscreen(sunscreen_cat);
+          }
+
+          const eye_cat = data.product_recs.filter(x=> x.product.product_cat === "eye").map(x => x.product);
           setEye(eye_cat);
 
-          const micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water");
+          const micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water").map(x => x.product);
           setMicellarwater(micellarwater_cat);
 
-          const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser");
+          const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
           setOilcleanser(cleansingoil_cat);
 
-          //set name and skin concerns 
+          //set name and skin concerns, skintype
           const get_name = data.user_skin_profile.username;
           setUsername(get_name);
 
           const get_skinConcern = data.user_skin_profile.skin_concern;
           setConcern(get_skinConcern);
+
+          const get_skinType = data.user_skin_profile.skintype; 
+          setUserSkintype(get_skinType);
+
+          const get_eyeConcern = data.user_skin_profile.eye_concern;
+          setEyeConcern(get_eyeConcern);
         }
 
         //process data if user is not logged in
@@ -351,6 +369,9 @@ function App() {
 
           const get_skinType = data.user_skin_profile.skintype; 
           setUserSkintype(get_skinType);
+
+          const get_eyeConcern = data.user_skin_profile.eye_concern;
+          setEyeConcern(get_eyeConcern);
         }
 
         changeStage(13);
@@ -362,6 +383,15 @@ function App() {
       }
     }
   }
+
+  console.log(cleanser);
+  console.log(toner);
+  console.log(serum);
+  console.log(moisturiser);
+  console.log(eye);
+  console.log(sunscreen);
+  console.log(oilcleanser);
+  console.log(micellarwater);
 
   const[imageFile, setImageFile] = useState(null);
   const[image, setImage] = useState(null);
@@ -538,7 +568,7 @@ function App() {
           <label><input type="checkbox" onChange={() => handleConcern("pigmentation")} checked={userData.skin_concern.includes("pigmentation")}/> Dark spots/Hyperpigmentation</label>
           <label><input type="checkbox" onChange={() => handleConcern("dehydrated")} checked={userData.skin_concern.includes("dehydrated")}/> Dehydrated</label>
           <label><input type="checkbox" onChange={() => handleConcern("dryness")} checked={userData.skin_concern.includes("dryness")}/> Dry</label>
-          <label><input type="checkbox" onChange={() => handleConcern("largepores")} checked={userData.skin_concern.includes("largepores")}/> Large pores </label> 
+          <label><input type="checkbox" onChange={() => handleConcern("pores")} checked={userData.skin_concern.includes("pores")}/> Large pores </label> 
           <label><input type="checkbox" onChange={() => handleConcern("sensitive")} checked={userData.skin_concern.includes("sensitive")}/> Sensitive/Redness </label>
           <label><input type="checkbox" onChange={() => handleConcern("dullness")} checked={userData.skin_concern.includes("dullness")}/> Dullness</label>
           <label><input type="checkbox" onChange={() => handleConcern("texture")} checked={userData.skin_concern.includes("texture")}/> Uneven texture</label>
@@ -555,7 +585,7 @@ function App() {
             <h2 className="question">Do you have any eye area concerns?</h2>
             <p className="note">Select all that apply</p>
             <label><input type="checkbox" onChange={()=> handleEyeConcern("aging")} checked={userData.eye_concern.includes("aging")}/>Fine Lines and Wrinkles</label>
-            <label><input type="checkbox" onChange={()=> handleEyeConcern("darkcircle")} checked={userData.eye_concern.includes("darkcircle")}/>Dark Circles & Puffiness</label>
+            <label><input type="checkbox" onChange={()=> handleEyeConcern("dark circle")} checked={userData.eye_concern.includes("dark circle")}/>Dark Circles & Puffiness</label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
               <button className="button_next" onClick ={() => changeStage()} disabled={userData.skin_concern.length < 1}>&#8594;</button>
@@ -664,6 +694,7 @@ function App() {
             <p className="opt">Please upload file smaller than 5MB </p>
             <input className="upload_img" type="file" accept="image/*" onChange ={(img) => handleImage(img.target.files[0])}/>
             {image && <img className="preview_image" src={image} alt="preview"/>}
+            
             <button onClick={() => {sendData(); changeStage()}}> Skip for now </button>
             <div className="button_container">
               {userData.routine === "no_routine" &&  <button className="button_previous" onClick={()=> changePreviousStage(7)}> &#8592; </button>}
@@ -674,7 +705,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} user_name={user_name} userConcern={userConcern} userSkintype={userSkintype} handlePage={handlePage} />}
+        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} user_name={user_name} userConcern={userConcern} userSkintype={userSkintype} eyeConcern={eyeConcern} handlePage={handlePage} />}
     </div>
   )
 }

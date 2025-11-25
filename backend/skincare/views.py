@@ -460,6 +460,7 @@ def processdata(request):
                         count += 1
 
         if profile.eye_concern:
+            print(f"eye concern: {profile.eye_concern}")
             for row in eye_list: 
                 if profile.pregnant and "avoid pregnancy" in row.product_target:
                     continue
@@ -604,6 +605,7 @@ def processdata(request):
         #query products rec from db after filter and saving from above
         get_product_recs = UserProduct.objects.filter(user=request.user)
         product_recs_dict = UserProductSerializer(get_product_recs, many=True)
+        print(f"product rec: {product_recs_dict}")
 
         #query user's skin profile
         skin_profile = UserProfile.objects.get(user=request.user)
@@ -611,9 +613,9 @@ def processdata(request):
         
         if get_img_obj: 
             images = ImageSerializer(get_img_obj, many=True)
-            return Response ({"message": "success", "image": images.data, "product_recs": product_recs_dict.data, "user_skin_profile": user_skin_profile}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": images.data, "product_recs": product_recs_dict.data, "user_skin_profile": user_skin_profile.data}, status=status.HTTP_200_OK)
         else:
-            return Response ({"message": "success", "image": None, "product_recs" : product_recs_dict.data, "user_skin_profile": user_skin_profile}, status=status.HTTP_200_OK)
+            return Response ({"message": "success", "image": None, "product_recs" : product_recs_dict.data, "user_skin_profile": user_skin_profile.data}, status=status.HTTP_200_OK)
     
     #if USER IS NOT LOGGED IN
     else:
@@ -1157,12 +1159,15 @@ def processdata(request):
 
 
         #create dict to store user's skin profile 
-        skin_profile = {"username": "", "skin_concern": [], "skintype": ""}
+        skin_profile = {"username": "", "skin_concern": [], "skintype": "", "eye_concern": []}
 
         skin_profile["username"] = user_name
         skin_profile["skin_concern"] = user_skinconcern
         skin_profile["skintype"] = user_skintype
-                
+
+        if user_eyeconcern: 
+            skin_profile["eye_concern"] = user_eyeconcern
+
         if img_file: 
             return Response({"message": "success", "image": img_file, "cleanser": off_cleanser, "toner": off_toner, "serum": off_serum, "moisturiser": off_moisturiser, "sunscreen": off_sunscreen, "eye": off_eye, "cleansing_oil": off_oil_cleanser, "micellar_water": off_micellar_water, "user_skin_profile": skin_profile}, status = status.HTTP_200_OK)
         else: 
@@ -1178,7 +1183,7 @@ def getImage(request):
     get_product_recs = UserProduct.objects.filter(user=request.user)
     product_recs_dict = UserProductSerializer(get_product_recs, many=True)
     
-    return Response({"message": "success", "image": image_dict.data, "skininfo": info_dict, "product_recs": product_recs_dict.data}, status=status.HTTP_200_OK)
+    return Response({"message": "success", "image": image_dict.data, "skininfo": info_dict.data, "product_recs": product_recs_dict.data}, status=status.HTTP_200_OK)
 
 
 

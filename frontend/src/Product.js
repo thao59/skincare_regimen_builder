@@ -2,7 +2,7 @@ import {useState} from "react";
 import "./Product.css"
 
 
-function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcleanser, micellarwater, user_name, userConcern, userSkintype, handlePage})
+function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcleanser, micellarwater, user_name, userConcern, userSkintype, eyeConcern, handlePage})
 {
 
     const product_list = {
@@ -95,7 +95,6 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             product_list.eye.high.push(item); 
         }
     }
-    console.log(product_list.eye);
 
     for (const item of sunscreen)
     {
@@ -145,6 +144,15 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
         }
     }
 
+    console.log(product_list.cleanser);
+    console.log(product_list.toner);
+    console.log(product_list.serum);
+    console.log(product_list.moisturiser);
+    console.log(product_list.eye);
+    console.log(product_list.sunscreen);
+    console.log(product_list.oilcleanser);
+    console.log(product_list.micellarwater);
+
     //capitalise the first letter of key 
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     const URL = "http://localhost:8000";
@@ -169,6 +177,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
     const Icon = {"am" : sunIcon, "pm": moonIcon, "am_pm": bothIcon};
 
+    console.log(eyeConcern);
 
 
     return (
@@ -176,13 +185,14 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             <div className="info_left">
                 <div className="profile">
                     <h2 className="result_title">Hi {user_name}, here are your regimen results.</h2>
-                    <p className="skin_title">SKIN TYPE: {cap(userSkintype)}</p>
+                    <p className="skin_title">SKIN TYPE: <span className="skintype">{cap(userSkintype)}</span></p>
                     <p className="concern_title">CONCERNS</p>
                     <ul>
                         {userConcern.map(x => (
                             <li className="list">{cap(x)}</li>
                         ))}
                     </ul>
+                    {eyeConcern && eyeConcern.length === 1 ? <p className="concern_title">EYE CONCERNS: <span className="skintype">{cap(eyeConcern.join(","))}</span></p> : <p className="concern_title">EYE CONCERNS: <span>{cap(eyeConcern.join(","))}</span></p>}
                     <p className="return_button" onClick={() => handlePage("home")}>Retake survey &#8594;</p>
                 </div>
                 <img className="skincare_img" src="/images/2_39dcafaf-18fa-4aff-9292-918c7b5c22c6.webp" alt="skincare"/>

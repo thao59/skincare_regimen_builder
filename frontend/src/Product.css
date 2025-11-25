@@ -191,6 +191,13 @@
 .concern_title, .skin_title
 {
     margin-left: 2rem; 
+    font-weight: 700;
+}
+
+.skintype
+{
+    font-weight: 300;
+    color: #212529;
 }
 
 .list 
