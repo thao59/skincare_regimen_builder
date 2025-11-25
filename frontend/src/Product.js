@@ -2,7 +2,7 @@ import {useState} from "react";
 import "./Product.css"
 
 
-function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcleanser, micellarwater, user_name, userConcern, handlePage})
+function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcleanser, micellarwater, user_name, userConcern, userSkintype, handlePage})
 {
 
     const product_list = {
@@ -176,6 +176,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             <div className="info_left">
                 <div className="profile">
                     <h2 className="result_title">Hi {user_name}, here are your regimen results.</h2>
+                    <p className="skin_title">SKIN TYPE: {cap(userSkintype)}</p>
                     <p className="concern_title">CONCERNS</p>
                     <ul>
                         {userConcern.map(x => (
@@ -191,6 +192,8 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
             <div className="customisation">
                 <h2 className="result_title">Customised for You.</h2>
+                <p className="disclaimer">Below are recommended products tailored to your skin concerns and routine</p>
+                <p className="disclaimer">*Always patch test new products before full application.</p>
                 <div className="button_cont">
                     <button onClick={() => handleTime("am")}  className={`am_button ${time === "am" ? "active" : ""}`}>
                         {Icon.am}

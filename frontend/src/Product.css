@@ -188,7 +188,7 @@
 
 }
 
-.concern_title
+.concern_title, .skin_title
 {
     margin-left: 2rem; 
 }
@@ -205,6 +205,7 @@
     width: 500px;
     margin-left: 4rem;
     gap: 2rem;
+    margin-top: 1rem;
 }
 
 .am_button
@@ -309,4 +310,11 @@
     cursor: pointer;
     text-decoration: underline;
     font-size: 1.1rem;
+}
+
+.disclaimer
+{
+    font-size: 0.8rem;
+    margin-left: 2rem;
+    margin-bottom: 0;
 }

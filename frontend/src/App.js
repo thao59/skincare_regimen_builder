@@ -48,8 +48,6 @@ function App() {
         setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0})
       }
   }
-  console.log("Site: ", page);
-  console.log("Page: ", stage);
 
   //save user's information 
   const[userData, setUserData] = useState({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0})
@@ -58,7 +56,6 @@ function App() {
     if(userName)
     {
       setUserData({...userData, name: userName});
-      console.log(userName);
     }
     else 
     {
@@ -75,12 +72,10 @@ function App() {
     if (userData.skin_concern.includes(concern))
     { 
       setUserData({...userData, skin_concern: userData.skin_concern.filter(type=>type !== concern)});
-      console.log("unchecked skin type: ", userData.skin_concern);
     }
     else 
     {
       setUserData({...userData, skin_concern: [...userData.skin_concern, concern]});
-      console.log("checked skin type: ", userData.skin_concern);
     }
   } 
 
@@ -104,12 +99,10 @@ function App() {
     if (bool === "no")
     {
       setUserData({...userData, pregnant: false}); 
-      console.log("pregnant: ", userData.pregnant);
     }
     else 
     {
       setUserData({...userData, pregnant: true}); 
-      console.log("pregnant: ", userData.pregnant);
     }
   } 
 
@@ -124,12 +117,10 @@ function App() {
         if(userData.routine === "no_routine")
         {
           setUserData({...userData, products_type: [...userData.products_type, product], routine: ""});
-          console.log("checked products: ", product);
         }
         else 
         {
           setUserData({...userData, products_type: [...userData.products_type, product]});
-          console.log("checked products: ", userData.products_type);
         }
       }
   }
@@ -184,7 +175,6 @@ function App() {
   const handleAge = (userAge) => {
       //filter out age 18 and above 
       setUserData({...userData, age: userAge});
-      console.log("user's age: ", userData.age); 
   }
 
   const handleAdvancedUser = (statement) => {
@@ -208,9 +198,10 @@ function App() {
 
   const[imageArray, setImageArray] = useState(null);
   const[user_name, setUsername] = useState(""); 
-  const[userConcern, setConcern] = useState([])
+  const[userConcern, setConcern] = useState([]);
+  const[userSkintype, setUserSkintype] = useState("");
   const[retrieveData, setRetrieveData] = useState(null);
-  const image_group ={}
+  const image_group ={};
   const[cleanser, setCleanser] = useState([]); 
   const[toner, setToner] = useState([]);
   const[serum, setSerum] = useState([]);
@@ -219,6 +210,8 @@ function App() {
   const[eye, setEye] = useState([]);
   const[oilcleanser, setOilcleanser] = useState([]);
   const[micellarwater, setMicellarwater] = useState([]); 
+
+  console.log("token: ", token);
 
   //fetch user data to Django 
   const sendData = async() => {
@@ -349,23 +342,15 @@ function App() {
             setOilcleanser(cleansing_oil_array);
           }
 
-          //set name and skin concerns 
+          //set name and skin concerns, skin types
           const get_name = data.user_skin_profile.username;
           setUsername(get_name);
 
           const get_skinConcern = data.user_skin_profile.skin_concern;
           setConcern(get_skinConcern);
-          console.log("skin concern: ", get_skinConcern);
 
-          console.log("cleanser: ", data.cleanser);
-          console.log("toner: ", data.toner);
-          console.log("serum: ", data.serum);
-          console.log("moisturiser: ", data.moisturiser);
-          console.log("sunscreen: ", data.sunscreen);
-          console.log("eye: ", data.eye);
-          console.log("oilcleanser: ", data.cleansing_oil);
-          console.log("micellawater: ", data.micellar_water);
-        
+          const get_skinType = data.user_skin_profile.skintype; 
+          setUserSkintype(get_skinType);
         }
 
         changeStage(13);
@@ -377,7 +362,6 @@ function App() {
       }
     }
   }
-  console.log("skin concern: ", userConcern);
 
   const[imageFile, setImageFile] = useState(null);
   const[image, setImage] = useState(null);
@@ -690,7 +674,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} user_name={user_name} userConcern={userConcern} handlePage={handlePage} />}
+        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} user_name={user_name} userConcern={userConcern} userSkintype={userSkintype} handlePage={handlePage} />}
     </div>
   )
 }

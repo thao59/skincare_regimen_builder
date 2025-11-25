@@ -599,7 +599,7 @@ def processdata(request):
                         count += 1
                 
         #query img objects
-        get_img_obj = user.image_profile.order_by("-datetime").all()
+        get_img_obj = get_user.info.image_profile.order_by("-datetime").all()
 
         #query products rec from db after filter and saving from above
         get_product_recs = UserProduct.objects.filter(user=request.user)
@@ -1157,13 +1157,11 @@ def processdata(request):
 
 
         #create dict to store user's skin profile 
-        skin_profile = {"username": "", "skin_concern": []}
+        skin_profile = {"username": "", "skin_concern": [], "skintype": ""}
 
         skin_profile["username"] = user_name
         skin_profile["skin_concern"] = user_skinconcern
-
-        print(f"skin concern: {skin_profile["skin_concern"]}")
-
+        skin_profile["skintype"] = user_skintype
                 
         if img_file: 
             return Response({"message": "success", "image": img_file, "cleanser": off_cleanser, "toner": off_toner, "serum": off_serum, "moisturiser": off_moisturiser, "sunscreen": off_sunscreen, "eye": off_eye, "cleansing_oil": off_oil_cleanser, "micellar_water": off_micellar_water, "user_skin_profile": skin_profile}, status = status.HTTP_200_OK)
