@@ -40,13 +40,18 @@ function App() {
   const[image, setImage] = useState(null);
   const[page, setPage] = useState("");
   
-  const handlePage = (site) => {
+  const handlePage = async(site) => {
       if (site === "login" || site === "signup" || site === "home" ||site ==="profile")
       {
         setPage(site); 
         changeStage(0);
         setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0})
         setImage(null);
+
+        if (site === "profile")
+        {
+          await get_data();
+        }
       }
   }
 
@@ -477,7 +482,7 @@ function App() {
           const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
           setMoisturiser(moist_cat);
 
-          if (data.user_skin_profile.skin_concern.includes("acne"))
+          if (data.user_skin_profile.skin_concern.includes("acne") || (data.user_skin_profile.skin_concern.includes("sensitive")))
           {
             const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
             setSunscreen(sunscreen_cat);

@@ -323,3 +323,69 @@
     margin-left: 2rem;
     margin-bottom: 0;
 }
+
+.price_list
+{
+    display: flex;
+    gap: 2rem;
+    justify-content: center;
+}
+
+#price
+{
+    width: auto;
+    height: 48px;
+    padding: 1rem 1.7rem;
+    border: none;
+    border-radius: 2rem;
+    font-size: 0.8rem;
+}
+
+.all_price
+{
+    color: rgb(76, 71, 71);
+}
+
+.all_price.active
+{
+    background-color: #070707d5;
+    color: white;
+}
+
+.low_price
+{
+    background-color: #d5f4e6;
+    color: #526058;
+}
+
+.low_price.active
+{
+    background-color: #237650;
+    color: white;
+}
+
+.mid_price
+{
+    background-color: #fff3cd;
+    color: #585246;
+}
+
+.mid_price.active
+{
+    background-color: #7f6b29;
+    color: white;
+}
+
+.high_price
+{
+    background-color: #fadbd8;
+    color: white;
+}
+
+.high_price.active
+{
+    background-color: #75312a;
+    color: white;
+}
+
+

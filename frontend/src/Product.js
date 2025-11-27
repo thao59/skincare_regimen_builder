@@ -179,6 +179,11 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
     console.log(eyeConcern);
 
+    const[button, setButton] = useState("all");
+    const handleButton = (string) => 
+    {
+        setButton(string);
+    }
 
     return (
         <div className="product_page">
@@ -216,13 +221,23 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                 </div>
             </div>
 
+            <div className="price_list">
+                <button id="price" onClick={() => handleButton("all")} className={`all_price ${button === "all" ? "active" : ""}`}> All prices </button>
+                <button id="price" onClick={() => handleButton("low")} className={`low_price ${button === "low" ? "active" : ""}`}> Under $40</button>
+                <button id="price" onClick={() => handleButton("mid")} className={`mid_price ${button === "mid" ? "active" : ""}`}>$40 - $80</button>
+                <button id="price" onClick={() => handleButton("high")} className={`high_price ${button === "high" ? "active" : ""}`}>Over $80</button>
+            </div>
+
             {Object.entries(product_list).map(([key, value]) =>
             (
                 <div key={key} className="product_cat">
-                    {(value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0  > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{cap(key)}</h2>}
-                    {/* loop through each category(high,mid,low) and display */}
+                    {button === "all" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{cap(key)}</h2>}
+                    {button === "low" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+                    {button === "mid" && (value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+                    {button === "high" && (value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+
                     <div className="product_row">
-                        {value.low.length > 0 && value.low.map(x => {
+                        {(button === "all" || button === "low") && value.low.length > 0 && value.low.map(x => {
                             if (x.product_time === time || x.product_time === "am_pm")
                             {
                                 return(
@@ -242,12 +257,12 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                             }
                             return null;
                         })}
-                        {value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 && <p className="divider"></p>}
+                        {button ==="all" && value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 && <p className="divider"></p>}
                     </div>
 
 
                     <div className="product_row">
-                        {value.mid.length > 0 && value.mid.map(x => {
+                        {(button === "all" || button === "mid") && value.mid.length > 0 && value.mid.map(x => {
                             if (x.product_time === time || x.product_time === "am_pm")
                             {
                                 return (
@@ -267,11 +282,11 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                             }
                             return null;
                         })}
-                        {value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0  && <p className="divider"></p>}
+                        {button ==="all" && value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0  && <p className="divider"></p>}
                     </div>
 
                     <div className="product_row">
-                        {value.high.length > 0 && value.high.map(x => {
+                        {(button === "all" || button === "high") && value.high.length > 0 && value.high.map(x => {
                              if (x.product_time === time || x.product_time === "am_pm")
                              {
                                 return (
