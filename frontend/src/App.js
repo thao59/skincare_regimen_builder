@@ -35,9 +35,9 @@ function App() {
     {
       setStage(count);
     }
-    
   }
-  
+
+  const[image, setImage] = useState(null);
   const[page, setPage] = useState("");
   
   const handlePage = (site) => {
@@ -46,6 +46,7 @@ function App() {
         setPage(site); 
         changeStage(0);
         setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0})
+        setImage(null);
       }
   }
 
@@ -239,26 +240,7 @@ function App() {
         
         //process data if user is logged in
         if (data.product_recs)
-        {
-          //if user uploaded photo, loops through image array and group them according to date 
-          if (data.image.length > 0)
-          {
-            for (const i of data.image)
-              {
-                let date = new Date(i.datetime).toLocaleDateString();
-                if (image_group[date])
-                {
-                  //.push adding items to array
-                  image_group[date].push(i);
-                }
-                else 
-                {
-                  image_group[date] = [i];
-                }
-              }
-            setImageArray(image_group);
-          }
-          
+        {       
           //group and save products according to types 
           const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
 
@@ -273,7 +255,7 @@ function App() {
           const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
           setMoisturiser(moist_cat);
 
-          if (data.user_skin_profile.skin_concern.includes("acne"))
+          if (data.user_skin_profile.skin_concern.includes("acne") || data.user_skin_profile.skin_concern.includes("sensitive") )
           {
             const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
             setSunscreen(sunscreen_cat);
@@ -394,7 +376,6 @@ function App() {
   console.log(micellarwater);
 
   const[imageFile, setImageFile] = useState(null);
-  const[image, setImage] = useState(null);
 
   //function to read uploaded img 
   const handleImage = (file) => {
@@ -441,9 +422,8 @@ function App() {
     if (response.ok)
     {
       console.log("Status: ", data.message); 
-      
-      //navigate user to product rec page  
-      changeStage(13);
+      //send user's survey to backend if image has processed successfully 
+      await sendData(); 
     }
     else 
     {
@@ -466,7 +446,7 @@ function App() {
           setRetrieveData(data.skininfo);
 
           //if image, loops through image array and group them according to date 
-          if (data.image.length > 0)
+          if (data.image?.length > 0)
           {
             for (const i of data.image)
               {
@@ -484,30 +464,52 @@ function App() {
             setImageArray(image_group);
           }
 
-          //filter products into categories and assign them to variables
-          const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser"); 
+          const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
+
           setCleanser(cleanser_cat);
 
-          const toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner");
+          const toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner").map(x => x.product);
           setToner(toner_cat);
 
-          const serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum");
+          const serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum").map(x => x.product);
           setSerum(serum_cat);
 
-          const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser");
+          const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
           setMoisturiser(moist_cat);
 
-          const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "sunscreen");
-          setSunscreen(sunscreen_cat);
+          if (data.user_skin_profile.skin_concern.includes("acne"))
+          {
+            const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
+            setSunscreen(sunscreen_cat);
+          }
 
-          const eye_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser");
+          else 
+          {
+            const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "chemical sunscreen").map(x => x.product);
+            setSunscreen(sunscreen_cat);
+          }
+
+          const eye_cat = data.product_recs.filter(x=> x.product.product_cat === "eye").map(x => x.product);
           setEye(eye_cat);
 
-          const micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water");
+          const micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water").map(x => x.product);
           setMicellarwater(micellarwater_cat);
 
-          const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser");
+          const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
           setOilcleanser(cleansingoil_cat);
+
+          //set name and skin concerns, skintype
+          const get_name = data.user_skin_profile.username;
+          setUsername(get_name);
+
+          const get_skinConcern = data.user_skin_profile.skin_concern;
+          setConcern(get_skinConcern);
+
+          const get_skinType = data.user_skin_profile.skintype; 
+          setUserSkintype(get_skinType);
+
+          const get_eyeConcern = data.user_skin_profile.eye_concern;
+          setEyeConcern(get_eyeConcern);
       }
       else 
       {
@@ -620,7 +622,7 @@ function App() {
               <div className="button_container">
                 <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
                 {(userData.products_type.length < 1 && userData.routine === "") && <button disabled ={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
-                {userData.routine === "no_routine" && <button className="button_next" onClick={() => changeStage(12)} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
+                {userData.routine === "no_routine" && <button className="button_next" onClick={() => token? changeStage(12): sendData()} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
                 {userData.products_type.length > 0 && <button className="button_next" onClick={() => changeStage()} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
               </div>
             
@@ -635,7 +637,7 @@ function App() {
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
               {userData.active_use === null && <button disabled={userData.active_use === null}>&#8594;</button>}
-              {userData.active_use === false && <button className="button_next" onClick={() => {changeStage(12)}} disabled={userData.active_use === null}>&#8594;</button> }
+              {userData.active_use === false && <button className="button_next" onClick={() => token? changeStage(12): sendData()} disabled={userData.active_use === null}>&#8594;</button> }
               {userData.active_use === true && <button className="button_next" onClick={() => changeStage()} disabled={userData.active_use === null}>&#8594;</button>}
             </div>
           </div>
@@ -682,7 +684,8 @@ function App() {
             <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)} checked={userData.no_products === 6}/> Advanced (6+ products) </label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button onClick={() => changeStage()} disabled={userData.no_products === 0}>&#8594;</button>
+              {token ? <button onClick={() => changeStage()} disabled={userData.no_products === 0}>&#8594;</button> : <button onClick={() => sendData()} disabled={userData.no_products === 0}>&#8594;</button>}
+
             </div>
 
           </div>
@@ -694,13 +697,12 @@ function App() {
             <p className="opt">Please upload file smaller than 5MB </p>
             <input className="upload_img" type="file" accept="image/*" onChange ={(img) => handleImage(img.target.files[0])}/>
             {image && <img className="preview_image" src={image} alt="preview"/>}
-            
             <button onClick={() => {sendData(); changeStage()}}> Skip for now </button>
             <div className="button_container">
               {userData.routine === "no_routine" &&  <button className="button_previous" onClick={()=> changePreviousStage(7)}> &#8592; </button>}
               {userData.active_use === false &&  <button className="button_previous" onClick={()=> changePreviousStage(8)}> &#8592; </button>}
               {userData.no_products !== 0 &&  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>}
-              <button onClick={() => {handleSendImage(); changeStage()}} disabled={!image}> Upload photo </button>
+              <button onClick={() => {handleSendImage()}} disabled={!image}> Upload photo </button>
             </div>
           </div>
         )}  

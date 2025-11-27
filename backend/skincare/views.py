@@ -7,7 +7,6 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.decorators import permission_classes 
 from rest_framework.permissions import IsAuthenticated 
 from .serializers import ImageSerializer, ProfileSerializer, ProductSerializer, UserProductSerializer
-import base64  
 
 # Create your views here.
 @api_view(["POST"])
@@ -81,8 +80,6 @@ def processdata(request):
     user_advanced_use = request.data["advanced_user"]
     user_no_products = request.data["no_products"]
 
-    img_file = None
-
     #check if user uploads photo
     if "image_file" in request.FILES:
         get_image = request.FILES["image_file"]
@@ -94,7 +91,7 @@ def processdata(request):
             if get_image.size > 5*1024*1024: 
                 return Response({"error": "Image exceeds 5MB"}, status = status.HTTP_400_BAD_REQUEST)
             
-            #if user is logged in
+            #check if user is logged in
             if request.user.is_authenticated: 
                 #get UserProfile instance
                 user = request.user.info
@@ -106,15 +103,6 @@ def processdata(request):
                 except Exception as e:
                     print(f"Image saved unsuccessfully, error: {e}")
                     return Response({"error": "Image saved unsuccessfully"})
-            
-            #if user is not logged in
-            else: 
-                #this step is for not logged in user (convert binary img to based 64 strings and send back to frontend for display)
-                #detect image type 
-                img_type = get_image.content_type 
-                convert_img = base64.b64encode(get_image.read()).decode("utf-8")
-                img_file = f"data: {img_type};base64,{convert_img}"
-                print(f"image file: {img_file}")
 
     #query product list according to category 
     cleanser_list = Products.objects.filter(product_cat = "cleanser")
@@ -598,9 +586,6 @@ def processdata(request):
                     if count < 3: 
                         UserProduct.objects.create(user=request.user, product=row)
                         count += 1
-                
-        #query img objects
-        get_img_obj = get_user.info.image_profile.order_by("-datetime").all()
 
         #query products rec from db after filter and saving from above
         get_product_recs = UserProduct.objects.filter(user=request.user)
@@ -611,11 +596,7 @@ def processdata(request):
         skin_profile = UserProfile.objects.get(user=request.user)
         user_skin_profile = ProfileSerializer(skin_profile)
         
-        if get_img_obj: 
-            images = ImageSerializer(get_img_obj, many=True)
-            return Response ({"message": "success", "image": images.data, "product_recs": product_recs_dict.data, "user_skin_profile": user_skin_profile.data}, status=status.HTTP_200_OK)
-        else:
-            return Response ({"message": "success", "image": None, "product_recs" : product_recs_dict.data, "user_skin_profile": user_skin_profile.data}, status=status.HTTP_200_OK)
+        return Response ({"message": "success", "product_recs" : product_recs_dict.data, "user_skin_profile": user_skin_profile.data}, status=status.HTTP_200_OK)
     
     #if USER IS NOT LOGGED IN
     else:
@@ -1168,10 +1149,7 @@ def processdata(request):
         if user_eyeconcern: 
             skin_profile["eye_concern"] = user_eyeconcern
 
-        if img_file: 
-            return Response({"message": "success", "image": img_file, "cleanser": off_cleanser, "toner": off_toner, "serum": off_serum, "moisturiser": off_moisturiser, "sunscreen": off_sunscreen, "eye": off_eye, "cleansing_oil": off_oil_cleanser, "micellar_water": off_micellar_water, "user_skin_profile": skin_profile}, status = status.HTTP_200_OK)
-        else: 
-            return Response ({"message": "success", "image": img_file, "cleanser": off_cleanser, "toner": off_toner, "serum": off_serum, "moisturiser": off_moisturiser, "sunscreen": off_sunscreen, "eye": off_eye, "cleansing_oil": off_oil_cleanser, "micellar_water": off_micellar_water, "user_skin_profile": skin_profile}, status=status.HTTP_200_OK)
+        return Response ({"message": "success", "cleanser": off_cleanser, "toner": off_toner, "serum": off_serum, "moisturiser": off_moisturiser, "sunscreen": off_sunscreen, "eye": off_eye, "cleansing_oil": off_oil_cleanser, "micellar_water": off_micellar_water, "user_skin_profile": skin_profile}, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
