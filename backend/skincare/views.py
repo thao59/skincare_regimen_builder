@@ -115,14 +115,14 @@ def processdata(request):
     oil_cleanser_list = Products.objects.filter(product_cat="oil cleanser")
     micellar_water_list = Products.objects.filter(product_cat = "micellar water")
 
-    cleanser = {"high_score": [], "mid_score": [], "low_score": []}
-    toner = {"high_score": [], "mid_score": [], "low_score": []}
-    serum = {"high_score": [], "mid_score": [], "low_score": []}
-    moisturiser = {"high_score": [], "mid_score": [], "low_score": []}
-    sunscreen = {"high_score": [], "mid_score": [], "low_score": []}
-    eye = {"high_score": [], "mid_score": [], "low_score": []}
-    oil_cleanser = {"high_score": [], "mid_score": [], "low_score": []}
-    micellar_water = {"high_score": [], "mid_score": [], "low_score": []}
+    cleanser = {"high_score": [], "mid_score": []}
+    toner = {"high_score": [], "mid_score": []}
+    serum = {"high_score": [], "mid_score": []}
+    moisturiser = {"high_score": [], "mid_score": []}
+    sunscreen = {"high_score": [], "mid_score": []}
+    eye = {"high_score": [], "mid_score": []}
+    oil_cleanser = {"high_score": [], "mid_score": []}
+    micellar_water = {"high_score": [], "mid_score": []}
 
     off_cleanser = []
     off_toner = []
@@ -172,16 +172,12 @@ def processdata(request):
                 score += 1
             if any(item in row.product_target for item in profile.skin_concern):
                 score += 1
-            if "all skin types" in row.product_target:
-                score += 1
             
             # rank products according to scores 
-            if score == 3:
+            if score == 2:
                 cleanser["high_score"].append(row)
-            elif score == 2:
-                cleanser["mid_score"].append(row)
             elif score == 1:
-                cleanser["low_score"].append(row)
+                cleanser["mid_score"].append(row)
 
         #initiate product count
         count = 0
@@ -204,14 +200,6 @@ def processdata(request):
                 else:
                     break
 
-        if count < 3 and cleanser["low_score"]: 
-            for row in cleanser["low_score"]:
-                if count < 3: 
-                    UserProduct.objects.create(user=request.user, product=row)
-                    count += 1
-                else:
-                    break
-
         for row in toner_list: 
             # if user is pregnant and product is marked avoid pregnancy then skip that product
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -225,16 +213,12 @@ def processdata(request):
                 score += 1
             if any(item in row.product_target for item in profile.skin_concern):
                 score += 1
-            if "all skin types" in row.product_target:
-                score += 1
             
             # rank products according to scores 
-            if score == 3:
+            if score == 2:
                 toner["high_score"].append(row)
-            elif score == 2:
-                toner["mid_score"].append(row)
             elif score == 1:
-                toner["low_score"].append(row)
+                toner["mid_score"].append(row)
 
         #initiate product count
         count = 0
@@ -253,12 +237,6 @@ def processdata(request):
                     UserProduct.objects.create(user=request.user, product=row)
                     count += 1
 
-        if count < 3 and toner["low_score"]: 
-            for row in toner["low_score"]:
-                if count < 3: 
-                    UserProduct.objects.create(user=request.user, product=row)
-                    count += 1
-
         for row in serum_list: 
             # if user is pregnant and product is marked avoid pregnancy then skip that product
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -272,16 +250,12 @@ def processdata(request):
                 score += 1
             if any(item in row.product_target for item in profile.skin_concern):
                 score += 1
-            if "all skin types" in row.product_target:
-                score += 1
             
             # rank products according to scores 
-            if score == 3:
+            if score == 2:
                 serum["high_score"].append(row)
-            elif score == 2:
-                serum["mid_score"].append(row)
             elif score == 1:
-                serum["low_score"].append(row)
+                serum["mid_score"].append(row)
 
         #initiate product count
         count = 0
@@ -300,12 +274,6 @@ def processdata(request):
                     UserProduct.objects.create(user=request.user, product=row)
                     count += 1
 
-        if count < 3 and serum["low_score"]: 
-            for row in serum["low_score"]:
-                if count < 3: 
-                    UserProduct.objects.create(user=request.user, product=row)
-                    count += 1
-
         for row in moisturiser_list: 
             # if user is pregnant and product is marked avoid pregnancy then skip that product
             if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -319,16 +287,12 @@ def processdata(request):
                 score += 1
             if any(item in row.product_target for item in profile.skin_concern):
                 score += 1
-            if "all skin types" in row.product_target:
-                score += 1
             
             # rank products according to scores 
-            if score == 3:
+            if score == 2:
                 moisturiser["high_score"].append(row)
-            elif score == 2:
-                moisturiser["mid_score"].append(row)
             elif score == 1:
-                moisturiser["low_score"].append(row)
+                moisturiser["mid_score"].append(row)
 
         #initiate product count
         count = 0
@@ -347,12 +311,6 @@ def processdata(request):
                     UserProduct.objects.create(user=request.user, product=row)
                     count += 1
 
-        if count < 3 and moisturiser["low_score"]: 
-            for row in moisturiser["low_score"]:
-                if count < 3: 
-                    UserProduct.objects.create(user=request.user, product=row)
-                    count += 1
-
         #if acne is the concern, only loop through physcial sunscreen list
         if "acne" in profile.skin_concern or "sensitive" in profile.skin_concern:   
             for row in physical_sunscreen_list: 
@@ -367,16 +325,12 @@ def processdata(request):
                     score += 1
                 if any(item in row.product_target for item in profile.skin_concern):
                     score += 1
-                if "all skin types" in row.product_target:
-                    score += 1
                 
                 # rank products according to scores 
-                if score == 3:
+                if score == 2:
                     sunscreen["high_score"].append(row)
-                elif score == 2:
-                    sunscreen["mid_score"].append(row)
                 elif score == 1:
-                    sunscreen["low_score"].append(row)
+                    sunscreen["mid_score"].append(row)
 
             #initiate product count
             count = 0
@@ -391,12 +345,6 @@ def processdata(request):
 
             if count < 3 and sunscreen["mid_score"]: 
                 for row in sunscreen["mid_score"]:
-                    if count < 3: 
-                        UserProduct.objects.create(user=request.user, product=row)
-                        count += 1
-
-            if count < 3 and sunscreen["low_score"]: 
-                for row in sunscreen["low_score"]:
                     if count < 3: 
                         UserProduct.objects.create(user=request.user, product=row)
                         count += 1
@@ -413,16 +361,12 @@ def processdata(request):
                     score += 1
                 if any(item in row.product_target for item in profile.skin_concern):
                     score += 1
-                if "all skin types" in row.product_target:
-                    score += 1
                 
                 # rank products according to scores 
-                if score == 3:
+                if score == 2:
                     sunscreen["high_score"].append(row)
-                elif score == 2:
-                    sunscreen["mid_score"].append(row)
                 elif score == 1:
-                    sunscreen["low_score"].append(row)
+                    sunscreen["mid_score"].append(row)
 
             #initiate product count
             count = 0
@@ -437,12 +381,6 @@ def processdata(request):
 
             if count < 3 and sunscreen["mid_score"]: 
                 for row in sunscreen["mid_score"]:
-                    if count < 3: 
-                        UserProduct.objects.create(user=request.user, product=row)
-                        count += 1
-
-            if count < 3 and sunscreen["low_score"]: 
-                for row in sunscreen["low_score"]:
                     if count < 3: 
                         UserProduct.objects.create(user=request.user, product=row)
                         count += 1
@@ -463,12 +401,10 @@ def processdata(request):
                     score += 1
                 
                 # rank products according to scores 
-                if score == 3:
+                if score == 2:
                     eye["high_score"].append(row)
-                elif score == 2:
-                    eye["mid_score"].append(row)
                 elif score == 1:
-                    eye["low_score"].append(row)
+                    eye["mid_score"].append(row)
 
             #initiate product count
             count = 0
@@ -483,12 +419,6 @@ def processdata(request):
 
             if count < 3 and eye["mid_score"]: 
                 for row in eye["mid_score"]:
-                    if count < 3: 
-                        UserProduct.objects.create(user=request.user, product=row)
-                        count += 1
-
-            if count < 3 and eye["low_score"]: 
-                for row in eye["low_score"]:
                     if count < 3: 
                         UserProduct.objects.create(user=request.user, product=row)
                         count += 1
@@ -507,16 +437,12 @@ def processdata(request):
                     score += 1
                 if any(item in row.product_target for item in profile.skin_concern):
                     score += 1
-                if "all skin types" in row.product_target:
-                    score += 1
                 
                 # rank products according to scores 
-                if score == 3:
+                if score == 2:
                     micellar_water["high_score"].append(row)
-                elif score == 2:
-                    micellar_water["mid_score"].append(row)
                 elif score == 1:
-                    micellar_water["low_score"].append(row)
+                    micellar_water["mid_score"].append(row)
 
             #initiate product count
             count = 0
@@ -534,12 +460,6 @@ def processdata(request):
                     if count < 3: 
                         UserProduct.objects.create(user=request.user, product=row)
                         count += 1
-
-            if count < 3 and micellar_water["low_score"]: 
-                for row in micellar_water["low_score"]:
-                    if count < 3: 
-                        UserProduct.objects.create(user=request.user, product=row)
-                        count += 1
         else: 
             for row in oil_cleanser_list:
                 if profile.pregnant and "avoid pregnancy" in row.product_target:
@@ -553,16 +473,12 @@ def processdata(request):
                     score += 1
                 if any(item in row.product_target for item in profile.skin_concern):
                     score += 1
-                if "all skin types" in row.product_target:
-                    score += 1
                 
                 # rank products according to scores 
-                if score == 3:
+                if score == 2:
                     oil_cleanser["high_score"].append(row)
-                elif score == 2:
-                    oil_cleanser["mid_score"].append(row)
                 elif score == 1:
-                    oil_cleanser["low_score"].append(row)
+                    oil_cleanser["mid_score"].append(row)
 
             #initiate product count
             count = 0
@@ -577,12 +493,6 @@ def processdata(request):
 
             if count < 3 and oil_cleanser["mid_score"]: 
                 for row in oil_cleanser["mid_score"]:
-                    if count < 3: 
-                        UserProduct.objects.create(user=request.user, product=row)
-                        count += 1
-
-            if count < 3 and oil_cleanser["low_score"]: 
-                for row in oil_cleanser["low_score"]:
                     if count < 3: 
                         UserProduct.objects.create(user=request.user, product=row)
                         count += 1
@@ -612,8 +522,6 @@ def processdata(request):
                 score += 1
             if any(item in row.product_target for item in user_skinconcern):
                 score += 1
-            if "all skin types" in row.product_target:
-                score += 1
             
             #build a product dict 
             add_product = {
@@ -624,18 +532,17 @@ def processdata(request):
                 "product_link": row.product_link, 
                 "product_img": row.product_img.url, 
                 "product_target": row.product_target,
+                "skintypes" : row.skintypes,
                 "product_des": row.product_des,
                 "product_time" : row.product_time,
                 }
             print(f"cleanser score: {score}")
 
             # rank and append products according to scores 
-            if score == 3:
+            if score == 2:
                 cleanser["high_score"].append(add_product)
-            elif score == 2:
-                cleanser["mid_score"].append(add_product)
             elif score == 1:
-                cleanser["low_score"].append(add_product)
+                cleanser["mid_score"].append(add_product)
             
         count = 0
 
@@ -654,13 +561,6 @@ def processdata(request):
                     count += 1
                     print(f"count: {count}")
 
-        if count < 3 and cleanser["low_score"]:
-            for row in cleanser["low_score"]:
-                if count < 3:
-                    off_cleanser.append(row)
-                    count += 1
-                    print(f"count: {count}")
-                
         for row in toner_list: 
             if user_pregnant and "avoid pregnancy" in row.product_target:
                 continue
@@ -673,8 +573,6 @@ def processdata(request):
                 score += 1
             if any(item in row.product_target for item in user_skinconcern):
                 score += 1
-            if "all skin types" in row.product_target:
-                score += 1
 
             #build a product dict 
             add_product = {
@@ -685,18 +583,17 @@ def processdata(request):
                 "product_link": row.product_link, 
                 "product_img": row.product_img.url, 
                 "product_target": row.product_target,
+                "skintypes" : row.skintypes,
                 "product_des": row.product_des,
                 "product_time" : row.product_time,
                 }
             print(f"toner: {score}")
 
             # rank and append products according to scores 
-            if score == 3:
+            if score == 2:
                 toner["high_score"].append(add_product)
-            elif score == 2:
-                toner["mid_score"].append(add_product)
             elif score == 1:
-                toner["low_score"].append(add_product)
+                toner["mid_score"].append(add_product)
         
         count = 0
         if toner["high_score"]:
@@ -713,13 +610,6 @@ def processdata(request):
                     count += 1
                     print(f"count: {count}")
 
-        if count < 3 and toner["low_score"]:
-            for row in toner["low_score"]:
-                if count < 3:
-                    off_toner.append(row)
-                    count += 1
-                    print(f"count: {count}")
-
         for row in serum_list: 
             if user_pregnant and "avoid pregnancy" in row.product_target:
                 continue
@@ -731,8 +621,6 @@ def processdata(request):
                 score += 1
             if any(item in row.product_target for item in user_skinconcern):
                 score += 1
-            if "all skin types" in row.product_target:
-                score += 1
 
             #build a product dict 
             add_product = {
@@ -743,18 +631,17 @@ def processdata(request):
                 "product_link": row.product_link, 
                 "product_img": row.product_img.url, 
                 "product_target": row.product_target,
+                "skintypes" : row.skintypes,
                 "product_des": row.product_des,
                 "product_time" : row.product_time,
                 }
             print(f"serum score: {score}")
 
             # rank and append products according to scores 
-            if score == 3:
+            if score == 2:
                 serum["high_score"].append(add_product)
-            elif score == 2:
-                serum["mid_score"].append(add_product)
             elif score == 1:
-                serum["low_score"].append(add_product)
+                serum["mid_score"].append(add_product)
 
         count = 0    
         if serum["high_score"]:
@@ -766,13 +653,6 @@ def processdata(request):
         
         if count < 3 and serum["mid_score"]:
             for row in serum["mid_score"]:
-                if count < 3:
-                    off_serum.append(row)
-                    count += 1
-                    print(f"count: {count}")
-
-        if count < 3 and serum["low_score"]:
-            for row in serum["low_score"]:
                 if count < 3:
                     off_serum.append(row)
                     count += 1
@@ -790,8 +670,6 @@ def processdata(request):
                 score += 1
             if any(item in row.product_target for item in user_skinconcern):
                 score += 1
-            if "all skin types" in row.product_target:
-                score += 1
 
             #build a product dict 
             add_product = {
@@ -802,18 +680,17 @@ def processdata(request):
                 "product_link": row.product_link, 
                 "product_img": row.product_img.url, 
                 "product_target": row.product_target,
+                "skintypes" : row.skintypes,
                 "product_des": row.product_des,
                 "product_time" : row.product_time,
                 }
             print(f"moisturiser score: {score}")
 
             # rank and append products according to scores 
-            if score == 3:
+            if score == 2:
                 moisturiser["high_score"].append(add_product)
-            elif score == 2:
-                moisturiser["mid_score"].append(add_product)
             elif score == 1:
-                moisturiser["low_score"].append(add_product)
+                moisturiser["mid_score"].append(add_product)
         
         count = 0
         if moisturiser["high_score"]:
@@ -825,13 +702,6 @@ def processdata(request):
         
         if count < 3 and moisturiser["mid_score"]:
             for row in moisturiser["mid_score"]:
-                if count < 3:
-                    off_moisturiser.append(row)
-                    count += 1
-                    print(f"count: {count}")
-
-        if count < 3 and moisturiser["low_score"]:
-            for row in moisturiser["low_score"]:
                 if count < 3:
                     off_moisturiser.append(row)
                     count += 1
@@ -850,8 +720,6 @@ def processdata(request):
                     score += 1
                 if any(item in row.product_target for item in user_skinconcern):
                     score += 1
-                if "all skin types" in row.product_target:
-                    score += 1
 
                 #build a product dict 
                 add_product = {
@@ -862,18 +730,17 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "skintypes" : row.skintypes,
                     "product_des": row.product_des,
                     "product_time" : row.product_time,
                     }
                 print(f"physical sunscreen score: {score}")
 
                 # rank and append products according to scores 
-                if score == 3:
+                if score == 2:
                     sunscreen["high_score"].append(add_product)
-                elif score == 2:
-                    sunscreen["mid_score"].append(add_product)
                 elif score == 1:
-                    sunscreen["low_score"].append(add_product)
+                    sunscreen["mid_score"].append(add_product)
             
             count = 0          
             if sunscreen["high_score"]:
@@ -889,14 +756,6 @@ def processdata(request):
                         off_sunscreen.append(row)
                         count += 1
                         print(f"count: {count}")
-
-            if count < 3 and sunscreen["low_score"]:
-                for row in sunscreen["low_score"]:
-                    if count < 3:
-                        off_sunscreen.append(row)
-                        count += 1
-                        print(f"count: {count}")
-
         else:
             for row in chemical_sunscreen_list: 
                 if user_pregnant and "avoid pregnancy" in row.product_target:
@@ -910,8 +769,6 @@ def processdata(request):
                     score += 1
                 if any(item in row.product_target for item in user_skinconcern):
                     score += 1
-                if "all skin types" in row.skintypes:
-                    score += 1
 
                 #build a product dict 
                 add_product = {
@@ -922,18 +779,17 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "skintypes" : row.skintypes,
                     "product_des": row.product_des,
                     "product_time" : row.product_time,
                     }
                 print(f"sunscreen score: {score}")
 
                 # rank and append products according to scores 
-                if score == 3:
+                if score == 2:
                     sunscreen["high_score"].append(add_product)
-                elif score == 2:
-                    sunscreen["mid_score"].append(add_product)
                 elif score == 1:
-                    sunscreen["low_score"].append(add_product)
+                    sunscreen["mid_score"].append(add_product)
             
             count = 0      
             if sunscreen["high_score"]:
@@ -945,13 +801,6 @@ def processdata(request):
             
             if count < 3 and sunscreen["mid_score"]:
                 for row in sunscreen["mid_score"]:
-                    if count < 3:
-                        off_sunscreen.append(row)
-                        count += 1
-                        print(f"count: {count}")
-
-            if count < 3 and sunscreen["low_score"]:
-                for row in sunscreen["low_score"]:
                     if count < 3:
                         off_sunscreen.append(row)
                         count += 1
@@ -971,8 +820,6 @@ def processdata(request):
                     score += 1
                 if any(item in row.product_target for item in user_eyeconcern):
                     score += 1
-                if "all skin types" in row.skintypes:
-                    score += 1
 
                 #build a product dict 
                 add_product = {
@@ -983,18 +830,17 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "skintypes" : row.skintypes,
                     "product_des": row.product_des,
                     "product_time" : row.product_time,
                     }
                 print(f"eye score: {score}")
 
                 # rank and append products according to scores 
-                if score == 3:
+                if score == 2:
                     eye["high_score"].append(add_product)
-                elif score == 2:
-                    eye["mid_score"].append(add_product)
                 elif score == 1:
-                    eye["low_score"].append(add_product)
+                    eye["mid_score"].append(add_product)
             
             count = 0     
             if eye["high_score"]:
@@ -1006,13 +852,6 @@ def processdata(request):
             
             if count < 3 and eye["mid_score"]:
                 for row in eye["mid_score"]:
-                    if count < 3:
-                        off_eye.append(row)
-                        count += 1
-                        print(f"count: {count}")
-
-            if count < 3 and eye["low_score"]:
-                for row in eye["low_score"]:
                     if count < 3:
                         off_eye.append(row)
                         count += 1
@@ -1031,8 +870,6 @@ def processdata(request):
                     score += 1
                 if any(item in row.product_target for item in user_skinconcern):
                     score += 1
-                if "all skin types" in row.product_target:
-                    score += 1
 
                 #build a product dict 
                 add_product = {
@@ -1043,18 +880,17 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "skintypes" : row.skintypes,
                     "product_des": row.product_des,
                     "product_time" : row.product_time,
                     }
                 print(f"micellar water score: {score}")
 
                 # rank and append products according to scores 
-                if score == 3:
+                if score == 2:
                     micellar_water["high_score"].append(add_product)
-                elif score == 2:
-                    micellar_water["mid_score"].append(add_product)
                 elif score == 1:
-                    micellar_water["low_score"].append(add_product)
+                    micellar_water["mid_score"].append(add_product)
             
             count = 0
             if micellar_water["high_score"]:
@@ -1070,14 +906,6 @@ def processdata(request):
                         off_micellar_water.append(row)
                         count += 1
                         print(f"count: {count}")
-
-            if count < 3 and micellar_water["low_score"]:
-                for row in micellar_water["low_score"]:
-                    if count < 3:
-                        off_micellar_water.append(row)
-                        count += 1
-                        print(f"count: {count}")
-
         else: 
             for row in oil_cleanser_list:
                 if user_pregnant and "avoid pregnancy" in row.product_target:
@@ -1091,8 +919,6 @@ def processdata(request):
                     score += 1
                 if any(item in row.product_target for item in user_skinconcern):
                     score += 1
-                if "all skin types" in row.product_target:
-                    score += 1
 
                 #build a product dict 
                 add_product = {
@@ -1103,18 +929,17 @@ def processdata(request):
                     "product_link": row.product_link, 
                     "product_img": row.product_img.url, 
                     "product_target": row.product_target,
+                    "skintypes" : row.skintypes,
                     "product_des": row.product_des,
                     "product_time" : row.product_time,
                     }
                 print(f"cleansing oil score: {score}")
 
                 # rank and append products according to scores 
-                if score == 3:
+                if score == 2:
                     oil_cleanser["high_score"].append(add_product)
-                elif score == 2:
-                    oil_cleanser["mid_score"].append(add_product)
                 elif score == 1:
-                    oil_cleanser["low_score"].append(add_product)
+                    oil_cleanser["mid_score"].append(add_product)
             
             count = 0    
             if oil_cleanser["high_score"]:
@@ -1130,14 +955,6 @@ def processdata(request):
                         off_oil_cleanser.append(row)
                         count += 1
                         print(f"count: {count}")
-
-            if count < 3 and oil_cleanser["low_score"]:
-                for row in oil_cleanser["low_score"]:
-                    if count < 3:
-                        off_oil_cleanser.append(row)
-                        count += 1
-                        print(f"count: {count}")
-
 
         #create dict to store user's skin profile 
         skin_profile = {"username": "", "skin_concern": [], "skintype": "", "eye_concern": []}
@@ -1156,7 +973,8 @@ def processdata(request):
 def getImage(request):
     user = request.user.info
     user_photo = user.image_profile
-    image_dict = ImageSerializer(user_photo)
+    image_dict = ImageSerializer(user_photo, many=True)
+    print(f"image: {user_photo}")
     info_dict = ProfileSerializer(user)
     get_product_recs = UserProduct.objects.filter(user=request.user)
     product_recs_dict = UserProductSerializer(get_product_recs, many=True)

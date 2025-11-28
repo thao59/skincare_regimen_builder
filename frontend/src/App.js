@@ -482,12 +482,11 @@ function App() {
           const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
           setMoisturiser(moist_cat);
 
-          if (data.user_skin_profile.skin_concern.includes("acne") || (data.user_skin_profile.skin_concern.includes("sensitive")))
+          if (data.skininfo.skin_concern.includes("acne") || (data.skininfo.skin_concern.includes("sensitive")))
           {
             const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
             setSunscreen(sunscreen_cat);
           }
-
           else 
           {
             const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "chemical sunscreen").map(x => x.product);
@@ -504,16 +503,16 @@ function App() {
           setOilcleanser(cleansingoil_cat);
 
           //set name and skin concerns, skintype
-          const get_name = data.user_skin_profile.username;
+          const get_name = data.skininfo.username;
           setUsername(get_name);
 
-          const get_skinConcern = data.user_skin_profile.skin_concern;
+          const get_skinConcern = data.skininfo.skin_concern;
           setConcern(get_skinConcern);
 
-          const get_skinType = data.user_skin_profile.skintype; 
+          const get_skinType = data.skininfo.skintype; 
           setUserSkintype(get_skinType);
 
-          const get_eyeConcern = data.user_skin_profile.eye_concern;
+          const get_eyeConcern = data.skininfo.eye_concern;
           setEyeConcern(get_eyeConcern);
       }
       else 
@@ -521,7 +520,7 @@ function App() {
         console.log("error");
       }
     }
-
+    console.log(user_name);
   return (
     <div className="App">
         <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout} retrieveData={get_data}/>
@@ -576,7 +575,7 @@ function App() {
           <label><input type="checkbox" onChange={() => handleConcern("dehydrated")} checked={userData.skin_concern.includes("dehydrated")}/> Dehydrated</label>
           <label><input type="checkbox" onChange={() => handleConcern("dryness")} checked={userData.skin_concern.includes("dryness")}/> Dry</label>
           <label><input type="checkbox" onChange={() => handleConcern("pores")} checked={userData.skin_concern.includes("pores")}/> Large pores </label> 
-          <label><input type="checkbox" onChange={() => handleConcern("sensitive")} checked={userData.skin_concern.includes("sensitive")}/> Sensitive/Redness </label>
+          <label><input type="checkbox" onChange={() => handleConcern("sensitive")} checked={userData.skin_concern.includes("sensitive")}/> Sensitive/Redness</label>
           <label><input type="checkbox" onChange={() => handleConcern("dullness")} checked={userData.skin_concern.includes("dullness")}/> Dullness</label>
           <label><input type="checkbox" onChange={() => handleConcern("texture")} checked={userData.skin_concern.includes("texture")}/> Uneven texture</label>
           <div className="button_container">
@@ -591,8 +590,10 @@ function App() {
           <div className="labels_container">
             <h2 className="question">Do you have any eye area concerns?</h2>
             <p className="note">Select all that apply</p>
-            <label><input type="checkbox" onChange={()=> handleEyeConcern("aging")} checked={userData.eye_concern.includes("aging")}/>Fine Lines and Wrinkles</label>
-            <label><input type="checkbox" onChange={()=> handleEyeConcern("dark circle")} checked={userData.eye_concern.includes("dark circle")}/>Dark Circles & Puffiness</label>
+            <label><input type="checkbox" onChange={()=> handleEyeConcern("wrinkles")} checked={userData.eye_concern.includes("wrinkles")}/>Fine Lines and Wrinkles</label>
+            <label><input type="checkbox" onChange={()=> handleEyeConcern("dark circles")}  checked={userData.eye_concern.includes("dark circles")}/>Dark Circles</label>
+            <label><input type="checkbox" onChange={()=> handleEyeConcern("puffiness")}  checked={userData.eye_concern.includes("puffiness")}/>Puffiness</label>
+            <label><input type="checkbox" onChange={()=> handleEyeConcern("dryness")}  checked={userData.eye_concern.includes("dryness")}/>Puffiness</label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
               <button className="button_next" onClick ={() => changeStage()} disabled={userData.skin_concern.length < 1}>&#8594;</button>

@@ -15,7 +15,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class ProductSerializer(serializers.ModelSerializer): 
     class Meta: 
         model = Products 
-        fields = ["product_name", "product_brand", "product_cat", "product_target", "product_price", "product_link", "product_img", "product_des", "product_time"]
+        fields = ["product_name", "product_brand", "product_cat", "product_target", "skintypes" "product_price", "product_link", "product_img", "product_des", "product_time"]
 
 class UserProductSerializer(serializers.ModelSerializer):
     product = ProductSerializer()
