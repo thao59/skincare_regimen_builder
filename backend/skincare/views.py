@@ -957,7 +957,7 @@ def processdata(request):
                         print(f"count: {count}")
 
         #create dict to store user's skin profile 
-        skin_profile = {"username": "", "skin_concern": [], "skintype": "", "eye_concern": []}
+        skin_profile = {"username": "", "skin_concern": [], "skintype": "", "eye_concern": [], "no_products": 0}
 
         skin_profile["username"] = user_name
         skin_profile["skin_concern"] = user_skinconcern
@@ -965,6 +965,9 @@ def processdata(request):
 
         if user_eyeconcern: 
             skin_profile["eye_concern"] = user_eyeconcern
+        
+        if user_no_products:
+            skin_profile["no_products"] = user_no_products
 
         return Response ({"message": "success", "cleanser": off_cleanser, "toner": off_toner, "serum": off_serum, "moisturiser": off_moisturiser, "sunscreen": off_sunscreen, "eye": off_eye, "cleansing_oil": off_oil_cleanser, "micellar_water": off_micellar_water, "user_skin_profile": skin_profile}, status=status.HTTP_200_OK)
 

@@ -204,10 +204,7 @@ function App() {
   const token = localStorage.getItem("access"); 
 
   const[imageArray, setImageArray] = useState(null);
-  const[user_name, setUsername] = useState(""); 
-  const[userConcern, setConcern] = useState([]);
-  const[userSkintype, setUserSkintype] = useState("");
-  const[eyeConcern, setEyeConcern] = useState([]);
+  const[skinProfile, setSkinProfile] = useState(null);
   const[retrieveData, setRetrieveData] = useState(null);
   const image_group ={};
   const[cleanser, setCleanser] = useState([]); 
@@ -281,18 +278,8 @@ function App() {
           const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
           setOilcleanser(cleansingoil_cat);
 
-          //set name and skin concerns, skintype
-          const get_name = data.user_skin_profile.username;
-          setUsername(get_name);
-
           const get_skinConcern = data.user_skin_profile.skin_concern;
-          setConcern(get_skinConcern);
-
-          const get_skinType = data.user_skin_profile.skintype; 
-          setUserSkintype(get_skinType);
-
-          const get_eyeConcern = data.user_skin_profile.eye_concern;
-          setEyeConcern(get_eyeConcern);
+          setSkinProfile(get_skinConcern);
         }
 
         //process data if user is not logged in
@@ -333,7 +320,6 @@ function App() {
             const eye_array = Object.values(data.eye).flat();
             setEye(eye_array);
           }
-           
 
           if(data.micellar_water)
           {
@@ -347,18 +333,8 @@ function App() {
             setOilcleanser(cleansing_oil_array);
           }
 
-          //set name and skin concerns, skin types
-          const get_name = data.user_skin_profile.username;
-          setUsername(get_name);
-
-          const get_skinConcern = data.user_skin_profile.skin_concern;
-          setConcern(get_skinConcern);
-
-          const get_skinType = data.user_skin_profile.skintype; 
-          setUserSkintype(get_skinType);
-
-          const get_eyeConcern = data.user_skin_profile.eye_concern;
-          setEyeConcern(get_eyeConcern);
+          const get_skinConcern = data.user_skin_profile;
+          setSkinProfile(get_skinConcern);
         }
 
         changeStage(13);
@@ -502,32 +478,21 @@ function App() {
           const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
           setOilcleanser(cleansingoil_cat);
 
-          //set name and skin concerns, skintype
-          const get_name = data.skininfo.username;
-          setUsername(get_name);
-
-          const get_skinConcern = data.skininfo.skin_concern;
-          setConcern(get_skinConcern);
-
-          const get_skinType = data.skininfo.skintype; 
-          setUserSkintype(get_skinType);
-
-          const get_eyeConcern = data.skininfo.eye_concern;
-          setEyeConcern(get_eyeConcern);
+          const get_skinConcern = data.user_skin_profile.skin_concern;
+          setSkinProfile(get_skinConcern);
       }
       else 
       {
         console.log("error");
       }
     }
-    console.log(user_name);
   return (
     <div className="App">
         <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout} retrieveData={get_data}/>
         {page === "login" && <Login resetSite={handlePage}/>}
         {page === "signup" && <Signup resetSite={handlePage}/>}
         {page === "home" && stage === 0 && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
-        {page === "profile" && <Profile imageArray={imageArray} username={user_name} retrieveData={retrieveData}/>}
+        {page === "profile" && <Profile imageArray={imageArray} skinProfile={skinProfile} retrieveData={retrieveData}/>}
         {stage === 1 && (
           <div className="labels_container">
             <h1 className="title"> My Skincare Routine Tracker</h1>
@@ -553,11 +518,11 @@ function App() {
           <div className="labels_container">
             <h2 className="question">What is your skin type?</h2>
             <p className="note">Select the answer that fits you best.</p>
-            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("oily")} checked={userData.skin_type === "oily"}/>Oily</label>
-            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("dry")} checked={userData.skin_type === "dry"}/>Dry</label>
-            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("balanced")} checked={userData.skin_type === "balanced"}/>Balanced</label>
-            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("combination")} checked={userData.skin_type === "combination"}/>Combination</label>
-            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("sensitive")} checked={userData.skin_type === "sensitive"}/>Sensitive</label>
+            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("oily")} checked={userData.skin_type === "oily"}/> Oily</label>
+            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("dry")} checked={userData.skin_type === "dry"}/> Dry</label>
+            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("balanced")} checked={userData.skin_type === "balanced"}/> Balanced</label>
+            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("combination")} checked={userData.skin_type === "combination"}/> Combination</label>
+            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("sensitive")} checked={userData.skin_type === "sensitive"}/> Sensitive</label>
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
               <button className="button_next" onClick ={() => changeStage()} disabled={!userData.skin_type}>&#8594;</button>
@@ -713,7 +678,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} user_name={user_name} userConcern={userConcern} userSkintype={userSkintype} eyeConcern={eyeConcern} handlePage={handlePage} />}
+        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} skinProfile={skinProfile} handlePage={handlePage} />}
     </div>
   )
 }

@@ -2,7 +2,7 @@ import {useState} from "react";
 import "./Product.css"
 
 
-function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcleanser, micellarwater, user_name, userConcern, userSkintype, eyeConcern, handlePage})
+function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcleanser, micellarwater, skinProfile, handlePage})
 {
 
     const product_list = {
@@ -156,7 +156,6 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
     //capitalise the first letter of key 
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     const URL = "http://localhost:8000";
-    console.log("skin concern: ", userConcern);
 
     //when am/pm button is clicked, displayed products marked as am/pm
     const [time, setTime] = useState("am")
@@ -177,8 +176,6 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
     const Icon = {"am" : sunIcon, "pm": moonIcon, "am_pm": bothIcon};
 
-    console.log(eyeConcern);
-
     const[button, setButton] = useState("all");
     const handleButton = (string) => 
     {
@@ -189,15 +186,15 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
         <div className="product_page">
             <div className="info_left">
                 <div className="profile">
-                    <h2 className="result_title">Hi {user_name}, here are your regimen results.</h2>
-                    <p className="skin_title">SKIN TYPE: <span className="skintype">{cap(userSkintype)}</span></p>
+                    <h2 className="result_title">Hi {skinProfile.username}, here are your regimen results.</h2>
+                    <p className="skin_title">SKIN TYPE: <span className="skintype">{cap(skinProfile.skintype)}</span></p>
                     <p className="concern_title">CONCERNS</p>
                     <ul>
-                        {userConcern.map(x => (
+                        {skinProfile.skin_concern.map(x => (
                             <li className="list">{cap(x)}</li>
                         ))}
-                    </ul>
-                    {eyeConcern && eyeConcern.length === 1 ? <p className="concern_title">EYE CONCERNS: <span className="skintype">{cap(eyeConcern.join(", "))}</span></p> : <p className="concern_title">EYE CONCERNS: <span>{eyeConcern.map(x => cap(x)).join(",")}</span></p>}
+                    </ul> 
+                    {skinProfile.eye_concern && skinProfile.eye_concern.length === 1 ? <p className="concern_title">EYE CONCERNS: <span className="skintype">{cap(skinProfile.eye_concern)}</span></p> : <p className="concern_title">EYE CONCERNS: <span className="skintype">{skinProfile.eye_concern.map(x => cap(x)).join(", ")}</span></p>}
                     <p className="return_button" onClick={() => handlePage("home")}>Retake survey &#8594;</p>
                 </div>
                 <img className="skincare_img" src="/images/2_39dcafaf-18fa-4aff-9292-918c7b5c22c6.webp" alt="skincare"/>
@@ -229,89 +226,271 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
             </div>
 
             {Object.entries(product_list).map(([key, value]) =>
-            (
-                <div key={key} className="product_cat">
-                    {button === "all" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{cap(key)}</h2>}
-                    {button === "low" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
-                    {button === "mid" && (value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
-                    {button === "high" && (value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+            {
+                {/* recommend products based on user's preferred number of products */}
+                if (skinProfile.no_products && skinProfile.no_products === 3)
+                {
+                    if(key === "cleanser" || key === "moisturiser" || key === "sunscreen")
+                        return (
+                            <div key={key} className="product_cat">
+                                {button === "all" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{cap(key)}</h2>}
+                                {button === "low" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+                                {button === "mid" && (value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+                                {button === "high" && (value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+        
+                                <div className="product_row">
+                                    {(button === "all" || button === "low") && value.low.length > 0 && value.low.map(x => {
+                                        if (x.product_time === time || x.product_time === "am_pm")
+                                        {
+                                            return(
+                                                <div key={x.product_name} className="product_display">
+                                                    <p className="class_affordable">Affordable</p>
+                                                    <p className="product_brand">{x.product_brand} </p>
+                                                    <p className="product_name">{x.product_name} </p>
+                                                    <p>{Icon[x.product_time]}</p>
+                                                    <div className="img_container">
+                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                    </div>
+                                                    <p className="product_price">${x.product_price}</p>
+                                                    {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                    <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                                    <p className="product_des">{x.product_des}</p>
+                                                    <a className="shop_button" href={x.product_link}>Shop now</a>
+                                                </div>)
+                                        }
+                                        return null;
+                                    })}
+                                    {button ==="all" && value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 && <p className="divider"></p>}
+                                </div>
+        
+        
+                                <div className="product_row">
+                                    {(button === "all" || button === "mid") && value.mid.length > 0 && value.mid.map(x => {
+                                        if (x.product_time === time || x.product_time === "am_pm")
+                                        {
+                                            return (
+                                                <div key={x.product_name} className="product_display"> 
+                                                <p className="class_mid">Mid-Range</p>
+                                                <p className="product_brand">{x.product_brand} </p>
+                                                <p className="product_name">{x.product_name} </p>
+                                                <p>{Icon[x.product_time]}</p>
+                                                <div className="img_container">
+                                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                </div>
+                                                <p className="product_price">${x.product_price}</p>
+                                                {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                                <p className="product_des">{x.product_des}</p>
+                                                <a className="shop_button" href={x.product_link}>Shop now </a> 
+                                            </div>)
+                                        } 
+                                        return null;
+                                    })}
+                                    {button ==="all" && value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0  && <p className="divider"></p>}
+                                </div>
+        
+                                <div className="product_row">
+                                    {(button === "all" || button === "high") && value.high.length > 0 && value.high.map(x => {
+                                        if (x.product_time === time || x.product_time === "am_pm")
+                                        {
+                                            return (
+                                                <div key={x.product_name} className="product_display">
+                                                    <p className="class_premium">Premium</p>
+                                                    <p className="product_brand">{x.product_brand} </p>
+                                                    <p className="product_name">{x.product_name} </p>
+                                                    <p>{Icon[x.product_time]}</p>
+                                                    <div className="img_container">
+                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                    </div>
+                                                    <p className="product_price">${x.product_price}</p>
+                                                    {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                    <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                                    <p className="product_des">{x.product_des}</p>
+                                                    <a className="shop_button" href={x.product_link}> Shop now </a> 
+                                                </div>)
+                                        }
+                                        return null;
+                                    })}
+                                </div>
+                            </div>
+                        )
+                }
 
-                    <div className="product_row">
-                        {(button === "all" || button === "low") && value.low.length > 0 && value.low.map(x => {
-                            if (x.product_time === time || x.product_time === "am_pm")
-                            {
-                                return(
-                                    <div key={x.product_name} className="product_display">
-                                        <p className="class_affordable">Affordable</p>
-                                        <p className="product_brand">{x.product_brand} </p>
-                                        <p className="product_name">{x.product_name} </p>
-                                        <p>{Icon[x.product_time]}</p>
-                                        <div className="img_container">
-                                            <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                                        </div>
-                                        <p className="product_price">${x.product_price}</p>
-                                        {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
-                                        <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
-                                        <p className="product_des">{x.product_des}</p>
-                                        <a className="shop_button" href={x.product_link}>Shop now</a>
-                                    </div>)
-                            }
-                            return null;
-                        })}
-                        {button ==="all" && value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 && <p className="divider"></p>}
-                    </div>
+                else if (skinProfile.no_products && skinProfile.no_products === 5)
+                {
+                    if (key !== "toner")
+                    {
+                        return (
+                            <div key={key} className="product_cat">
+                                {button === "all" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{cap(key)}</h2>}
+                                {button === "low" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+                                {button === "mid" && (value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+                                {button === "high" && (value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+        
+                                <div className="product_row">
+                                    {(button === "all" || button === "low") && value.low.length > 0 && value.low.map(x => {
+                                        if (x.product_time === time || x.product_time === "am_pm")
+                                        {
+                                            return(
+                                                <div key={x.product_name} className="product_display">
+                                                    <p className="class_affordable">Affordable</p>
+                                                    <p className="product_brand">{x.product_brand} </p>
+                                                    <p className="product_name">{x.product_name} </p>
+                                                    <p>{Icon[x.product_time]}</p>
+                                                    <div className="img_container">
+                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                    </div>
+                                                    <p className="product_price">${x.product_price}</p>
+                                                    {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                    <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                                    <p className="product_des">{x.product_des}</p>
+                                                    <a className="shop_button" href={x.product_link}>Shop now</a>
+                                                </div>)
+                                        }
+                                        return null;
+                                    })}
+                                    {button ==="all" && value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 && <p className="divider"></p>}
+                                </div>
+        
+        
+                                <div className="product_row">
+                                    {(button === "all" || button === "mid") && value.mid.length > 0 && value.mid.map(x => {
+                                        if (x.product_time === time || x.product_time === "am_pm")
+                                        {
+                                            return (
+                                                <div key={x.product_name} className="product_display"> 
+                                                <p className="class_mid">Mid-Range</p>
+                                                <p className="product_brand">{x.product_brand} </p>
+                                                <p className="product_name">{x.product_name} </p>
+                                                <p>{Icon[x.product_time]}</p>
+                                                <div className="img_container">
+                                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                </div>
+                                                <p className="product_price">${x.product_price}</p>
+                                                {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                                <p className="product_des">{x.product_des}</p>
+                                                <a className="shop_button" href={x.product_link}>Shop now </a> 
+                                            </div>)
+                                        } 
+                                        return null;
+                                    })}
+                                    {button ==="all" && value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0  && <p className="divider"></p>}
+                                </div>
+        
+                                <div className="product_row">
+                                    {(button === "all" || button === "high") && value.high.length > 0 && value.high.map(x => {
+                                        if (x.product_time === time || x.product_time === "am_pm")
+                                        {
+                                            return (
+                                                <div key={x.product_name} className="product_display">
+                                                    <p className="class_premium">Premium</p>
+                                                    <p className="product_brand">{x.product_brand} </p>
+                                                    <p className="product_name">{x.product_name} </p>
+                                                    <p>{Icon[x.product_time]}</p>
+                                                    <div className="img_container">
+                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                    </div>
+                                                    <p className="product_price">${x.product_price}</p>
+                                                    {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                    <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                                    <p className="product_des">{x.product_des}</p>
+                                                    <a className="shop_button" href={x.product_link}> Shop now </a> 
+                                                </div>)
+                                        }
+                                        return null;
+                                    })}
+                                </div>
+                            </div>
+                        )
+                    }
+                }
+                else
+                {
+                    return(
+                        <div key={key} className="product_cat">
+                            {button === "all" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{cap(key)}</h2>}
+                            {button === "low" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+                            {button === "mid" && (value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+                            {button === "high" && (value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
 
+                            <div className="product_row">
+                                {(button === "all" || button === "low") && value.low.length > 0 && value.low.map(x => {
+                                    if (x.product_time === time || x.product_time === "am_pm")
+                                    {
+                                        return(
+                                            <div key={x.product_name} className="product_display">
+                                                <p className="class_affordable">Affordable</p>
+                                                <p className="product_brand">{x.product_brand} </p>
+                                                <p className="product_name">{x.product_name} </p>
+                                                <p>{Icon[x.product_time]}</p>
+                                                <div className="img_container">
+                                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                </div>
+                                                <p className="product_price">${x.product_price}</p>
+                                                {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                                <p className="product_des">{x.product_des}</p>
+                                                <a className="shop_button" href={x.product_link}>Shop now</a>
+                                            </div>)
+                                    }
+                                    return null;
+                                })}
+                                {button ==="all" && value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 && <p className="divider"></p>}
+                            </div>
 
-                    <div className="product_row">
-                        {(button === "all" || button === "mid") && value.mid.length > 0 && value.mid.map(x => {
-                            if (x.product_time === time || x.product_time === "am_pm")
-                            {
-                                return (
-                                    <div key={x.product_name} className="product_display"> 
-                                    <p className="class_mid">Mid-Range</p>
-                                    <p className="product_brand">{x.product_brand} </p>
-                                    <p className="product_name">{x.product_name} </p>
-                                    <p>{Icon[x.product_time]}</p>
-                                    <div className="img_container">
-                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                                    </div>
-                                    <p className="product_price">${x.product_price}</p>
-                                    {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
-                                    <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
-                                    <p className="product_des">{x.product_des}</p>
-                                    <a className="shop_button" href={x.product_link}>Shop now </a> 
-                                </div>)
-                            } 
-                            return null;
-                        })}
-                        {button ==="all" && value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0  && <p className="divider"></p>}
-                    </div>
+                            <div className="product_row">
+                                {(button === "all" || button === "mid") && value.mid.length > 0 && value.mid.map(x => {
+                                    if (x.product_time === time || x.product_time === "am_pm")
+                                    {
+                                        return (
+                                            <div key={x.product_name} className="product_display"> 
+                                            <p className="class_mid">Mid-Range</p>
+                                            <p className="product_brand">{x.product_brand} </p>
+                                            <p className="product_name">{x.product_name} </p>
+                                            <p>{Icon[x.product_time]}</p>
+                                            <div className="img_container">
+                                                <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                            </div>
+                                            <p className="product_price">${x.product_price}</p>
+                                            {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                            <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                            <p className="product_des">{x.product_des}</p>
+                                            <a className="shop_button" href={x.product_link}>Shop now </a> 
+                                        </div>)
+                                    } 
+                                    return null;
+                                })}
+                                {button ==="all" && value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0  && <p className="divider"></p>}
+                            </div>
 
-                    <div className="product_row">
-                        {(button === "all" || button === "high") && value.high.length > 0 && value.high.map(x => {
-                             if (x.product_time === time || x.product_time === "am_pm")
-                             {
-                                return (
-                                    <div key={x.product_name} className="product_display">
-                                        <p className="class_premium">Premium</p>
-                                        <p className="product_brand">{x.product_brand} </p>
-                                        <p className="product_name">{x.product_name} </p>
-                                        <p>{Icon[x.product_time]}</p>
-                                        <div className="img_container">
-                                            <img className="img_rec" src={`${URL}${x.product_img}`}/>
-                                        </div>
-                                        <p className="product_price">${x.product_price}</p>
-                                        {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
-                                        <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
-                                        <p className="product_des">{x.product_des}</p>
-                                        <a className="shop_button" href={x.product_link}> Shop now </a> 
-                                    </div>)
-                             }
-                             return null;
-                            })}
-                    </div>
-                </div>
-            ))}
+                            <div className="product_row">
+                                {(button === "all" || button === "high") && value.high.length > 0 && value.high.map(x => {
+                                    if (x.product_time === time || x.product_time === "am_pm")
+                                    {
+                                        return (
+                                            <div key={x.product_name} className="product_display">
+                                                <p className="class_premium">Premium</p>
+                                                <p className="product_brand">{x.product_brand} </p>
+                                                <p className="product_name">{x.product_name} </p>
+                                                <p>{Icon[x.product_time]}</p>
+                                                <div className="img_container">
+                                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                </div>
+                                                <p className="product_price">${x.product_price}</p>
+                                                {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
+                                                <p className="product_des">{x.product_des}</p>
+                                                <a className="shop_button" href={x.product_link}> Shop now </a> 
+                                            </div>)
+                                    }
+                                    return null;
+                                })}
+                            </div>
+                        </div>
+                    )
+                }
+            })}
         </div>
     )
 }
