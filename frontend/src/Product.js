@@ -197,7 +197,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                             <li className="list">{cap(x)}</li>
                         ))}
                     </ul>
-                    {eyeConcern && eyeConcern.length === 1 ? <p className="concern_title">EYE CONCERNS: <span className="skintype">{cap(eyeConcern.join(","))}</span></p> : <p className="concern_title">EYE CONCERNS: <span>{cap(eyeConcern.join(","))}</span></p>}
+                    {eyeConcern && eyeConcern.length === 1 ? <p className="concern_title">EYE CONCERNS: <span className="skintype">{cap(eyeConcern.join(", "))}</span></p> : <p className="concern_title">EYE CONCERNS: <span>{eyeConcern.map(x => cap(x)).join(",")}</span></p>}
                     <p className="return_button" onClick={() => handlePage("home")}>Retake survey &#8594;</p>
                 </div>
                 <img className="skincare_img" src="/images/2_39dcafaf-18fa-4aff-9292-918c7b5c22c6.webp" alt="skincare"/>
@@ -250,7 +250,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                         </div>
                                         <p className="product_price">${x.product_price}</p>
-                                        <p className="product_skintype">Skin type: {x.skintypes}</p>
+                                        {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
                                         <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                         <p className="product_des">{x.product_des}</p>
                                         <a className="shop_button" href={x.product_link}>Shop now</a>
@@ -276,12 +276,12 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                                         <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                     </div>
                                     <p className="product_price">${x.product_price}</p>
-                                    <p className="product_skintype">Skin type: {x.skintypes}</p>
+                                    {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
                                     <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                     <p className="product_des">{x.product_des}</p>
                                     <a className="shop_button" href={x.product_link}>Shop now </a> 
                                 </div>)
-                            }
+                            } 
                             return null;
                         })}
                         {button ==="all" && value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0  && <p className="divider"></p>}
@@ -301,7 +301,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                         </div>
                                         <p className="product_price">${x.product_price}</p>
-                                        <p className="product_skintype">Skin type: {x.skintypes}</p>
+                                        {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
                                         <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                         <p className="product_des">{x.product_des}</p>
                                         <a className="shop_button" href={x.product_link}> Shop now </a> 

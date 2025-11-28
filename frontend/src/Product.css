@@ -46,14 +46,14 @@
     font-weight: 700;
 }
 
-.product_target
+.product_target, .product_skintype
 {
     color:#7f8c8d;
     font-style: italic;
     font-size: 0.8rem;
 }
 
-.product_des, .product_skintype
+.product_des
 {
     text-align: left;
     font-size: 0.95rem;
