@@ -16,7 +16,7 @@ function App() {
   const changeStage = (count = 1) => {
     if (count === 1)
     {
-      setStage(stage + count);
+      setStage(prev => prev + count);
     }
     else 
     {
@@ -28,7 +28,7 @@ function App() {
   const changePreviousStage = (count = 1) => {
     if (count === 1)
     {
-      setStage(stage - count);
+      setStage(prev => prev - count);
     }
 
     else 
@@ -39,13 +39,17 @@ function App() {
 
   const[image, setImage] = useState(null);
   const[page, setPage] = useState("");
-  
+  const[userData, setUserData] = useState({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
+  const resetUserData = () => {
+    setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
+  }  
+
   const handlePage = async(site) => {
       if (site === "login" || site === "signup" || site === "home" ||site ==="profile")
       {
         setPage(site); 
         changeStage(0);
-        setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0})
+        resetUserData();
         setImage(null);
 
         if (site === "profile")
@@ -55,33 +59,30 @@ function App() {
       }
   }
 
-  //save user's information 
-  const[userData, setUserData] = useState({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0})
-
   const handleName = (userName) => {
     if(userName)
     {
-      setUserData({...userData, name: userName});
+      setUserData(prev => ({...prev, name: userName}));
     }
     else 
     {
-      setUserData({...userData, name: ""});
+      setUserData(prev => ({...prev, name: ""}));
     }
   }
 
   const handleSkinType = (type) => {
-      setUserData({...userData, skin_type: type}); 
+      setUserData(prev => ({...prev, skin_type: type})); 
   }
 
   const handleConcern = (concern) =>  {
     //Remove concern if already selected (toggle)
     if (userData.skin_concern.includes(concern))
     { 
-      setUserData({...userData, skin_concern: userData.skin_concern.filter(type=>type !== concern)});
+      setUserData( prev => ({...prev, skin_concern: prev.skin_concern.filter(type => type !== concern)}));
     }
     else 
     {
-      setUserData({...userData, skin_concern: [...userData.skin_concern, concern]});
+      setUserData(prev => ({...prev, skin_concern: [...prev.skin_concern, concern]}));
     }
   } 
 
@@ -92,11 +93,11 @@ function App() {
     {
       if (userData.eye_concern.includes(eyeConcern))
         {
-          setUserData({...userData, eye_concern: userData.eye_concern.filter(x => x !== eyeConcern)});
+          setUserData(prev => ({...prev, eye_concern: prev.eye_concern.filter(x => x !== eyeConcern)}));
         }
       else
         {
-          setUserData({...userData, eye_concern: [...userData.eye_concern, eyeConcern]});
+          setUserData(prev => ({...prev, eye_concern: [...prev.eye_concern, eyeConcern]}));
         }
     }
   }
@@ -104,29 +105,30 @@ function App() {
   const handlePregnant = (bool) => {
     if (bool === "no")
     {
-      setUserData({...userData, pregnant: false}); 
+      setUserData(prev => ({...prev, pregnant: false}));
+        
     }
     else 
     {
-      setUserData({...userData, pregnant: true}); 
+      setUserData(prev => ({...prev, pregnant: true})); 
     }
   } 
 
   const handleProductsType = (product) => {
     if (userData.products_type.includes(product))
       {
-        setUserData({...userData, products_type: userData.products_type.filter(x => x !== product)}); 
+        setUserData(prev => ({...prev, products_type: prev.products_type.filter(x => x !== product)})); 
       }
     else 
       {
         //if "I don't have a routine" is checked, uncheck it first before handling the array
         if(userData.routine === "no_routine")
         {
-          setUserData({...userData, products_type: [...userData.products_type, product], routine: ""});
+          setUserData(prev => ({...prev, products_type: [...prev.products_type, product], routine: ""}));
         }
         else 
         {
-          setUserData({...userData, products_type: [...userData.products_type, product]});
+          setUserData(prev => ({...prev, products_type: [...prev.products_type, product]}));
         }
       }
   }
@@ -137,7 +139,7 @@ function App() {
         //clear field (uncheck the button on second click)
         if(userData.routine === statement)
         {
-          setUserData({...userData, routine: ""});
+          setUserData(prev => ({...prev, routine: ""}));
         }
 
         else
@@ -146,11 +148,11 @@ function App() {
           //set active_use to null in case user goes to q8 and go back to 7 to check "I dont have a routine" which will cause two back arrows on p12
           if(userData.products_type.length > 0)
             {
-              setUserData({...userData, products_type: [], routine: statement, active_use: null});
+              setUserData(prev => ({...prev, products_type: [], routine: statement, active_use: null}));
             }
           else 
           {
-            setUserData({...userData, routine: statement, active_use: null});
+            setUserData(prev => ({...prev, routine: statement, active_use: null}));
           }
         }
       }
@@ -160,36 +162,36 @@ function App() {
   const handleActive = (bool) => {
     if (bool === "no")
     {
-      setUserData({...userData, active_use: false}); 
+      setUserData(prev => ({...prev, active_use: false})); 
     }
     else 
     {
-      setUserData({...userData, active_use: true}); 
+      setUserData(prev => ({...prev, active_use: true})); 
     }
   }
 
   const handleActiveUsage = (ingre) => {
     if (userData.activeIngre.includes(ingre)) 
     {
-      setUserData({...userData, activeIngre: userData.activeIngre.filter(x => x !== ingre)});
+      setUserData(prev => ({...prev, activeIngre: prev.activeIngre.filter(x => x !== ingre)}));
     }
     else 
     {
-      setUserData({...userData, activeIngre: [...userData.activeIngre, ingre]}); 
+      setUserData(prev => ({...prev, activeIngre: [...prev.activeIngre, ingre]})); 
     }
   }
 
   const handleAge = (userAge) => {
       //filter out age 18 and above 
-      setUserData({...userData, age: userAge});
+      setUserData(prev => ({...prev, age: userAge}));
   }
 
   const handleAdvancedUser = (statement) => {
-    setUserData({...userData, advanced_user: statement}); 
+    setUserData(prev => ({...prev, advanced_user: statement})); 
   }
 
   const handleNoProducts = (no) => {
-    setUserData({...userData, no_products: no}); 
+    setUserData(prev => ({...prev, no_products: no})); 
   }
 
   //delete all saved info, set page to 0, navigate back to home page after logging out
@@ -198,29 +200,37 @@ function App() {
     localStorage.removeItem("refresh");
     localStorage.removeItem("access"); 
     handlePage("home");
-    setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
+    resetUserData();
   }
-
-  const token = localStorage.getItem("access"); 
 
   const[imageArray, setImageArray] = useState(null);
   const[skinProfile, setSkinProfile] = useState(null);
-  const[retrieveData, setRetrieveData] = useState(null);
   const image_group ={};
-  const[cleanser, setCleanser] = useState([]); 
-  const[toner, setToner] = useState([]);
-  const[serum, setSerum] = useState([]);
-  const[moisturiser, setMoisturiser] = useState([]);
-  const[sunscreen, setSunscreen] = useState([]); 
-  const[eye, setEye] = useState([]);
-  const[oilcleanser, setOilcleanser] = useState([]);
-  const[micellarwater, setMicellarwater] = useState([]); 
+  const [product_list, setProduct_list] = useState({
+    "cleanser": {"high": [], "mid": [], "low": []}, 
+    "toner": {"high": [], "mid": [], "low": []}, 
+    "serum": {"high": [], "mid": [], "low": []}, 
+    "moisturiser": {"high": [], "mid": [], "low": []}, 
+    "eye": {"high": [], "mid": [], "low": []}, 
+    "sunscreen": {"high": [], "mid": [], "low": []}, 
+    "oilcleanser": {"high": [], "mid": [], "low": []}, 
+    "micellarwater": {"high": [], "mid": [], "low": []},
+  });
+  const copyList = {...product_list};
+  let cleanser_cat;
+  let toner_cat;
+  let serum_cat;
+  let moist_cat;
+  let sunscreen_cat;
+  let eye_cat;
+  let micellarwater_cat;
+  let cleansingoil_cat;
 
-  console.log("token: ", token);
+  const token = localStorage.getItem("access");
 
   //fetch user data to Django 
   const sendData = async() => {
-    if (userData.routine === "no_routine" || userData.active_use === false || userData.no_products !== 0 )
+    if (userData.no_products !== 0)
     {
       const option_headers = {
         method : "POST", 
@@ -229,7 +239,7 @@ function App() {
       };
 
       //if user is logged in, send data with token
-      if (token)
+      if(token)
       {
         option_headers.headers.Authorization = `Bearer ${token}`; 
       }
@@ -244,41 +254,26 @@ function App() {
         if (data.product_recs)
         {       
           //group and save products according to types 
-          const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
-
-          setCleanser(cleanser_cat);
-
-          const toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner").map(x => x.product);
-          setToner(toner_cat);
-
-          const serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum").map(x => x.product);
-          setSerum(serum_cat);
-
-          const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
-          setMoisturiser(moist_cat);
+          cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
+          toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner").map(x => x.product);
+          serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum").map(x => x.product);
+          moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
 
           if (data.user_skin_profile.skin_concern.includes("acne") || data.user_skin_profile.skin_concern.includes("sensitive") )
           {
-            const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
-            setSunscreen(sunscreen_cat);
+            sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
           }
 
           else 
           {
-            const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "chemical sunscreen").map(x => x.product);
-            setSunscreen(sunscreen_cat);
+            sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "chemical sunscreen").map(x => x.product);
           }
 
-          const eye_cat = data.product_recs.filter(x=> x.product.product_cat === "eye").map(x => x.product);
-          setEye(eye_cat);
-
-          const micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water").map(x => x.product);
-          setMicellarwater(micellarwater_cat);
-
-          const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
-          setOilcleanser(cleansingoil_cat);
-
-          const get_skinConcern = data.user_skin_profile.skin_concern;
+          eye_cat = data.product_recs.filter(x=> x.product.product_cat === "eye").map(x => x.product);
+          micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water").map(x => x.product);
+          cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
+          
+          const get_skinConcern = data.user_skin_profile;
           setSkinProfile(get_skinConcern);
         }
 
@@ -287,56 +282,175 @@ function App() {
         {
           if(data.cleanser)
           {
-            const cleanser_array = Object.values(data.cleanser).flat();
-            setCleanser(cleanser_array);
+            cleanser_cat = Object.values(data.cleanser).flat();
           }
         
           if(data.toner)
           {
-            const toner_array = Object.values(data.toner).flat();
-            setToner(toner_array);
+            toner_cat = Object.values(data.toner).flat();
           }
             
           if(data.serum)
           {
-            const serum_array = Object.values(data.serum).flat();
-            setSerum(serum_array);
+            serum_cat = Object.values(data.serum).flat();
           }
           
           if(data.moisturiser)
           {
-            const moisturiser_array = Object.values(data.moisturiser).flat();
-            setMoisturiser(moisturiser_array);
+            moist_cat = Object.values(data.moisturiser).flat();
           }
             
           if(data.sunscreen)
           {
-            const sunscreen_array = Object.values(data.sunscreen).flat();
-            setSunscreen(sunscreen_array);
+            sunscreen_cat = Object.values(data.sunscreen).flat();
           }
 
           if(data.eye)
           {
-            const eye_array = Object.values(data.eye).flat();
-            setEye(eye_array);
+            eye_cat = Object.values(data.eye).flat();
           }
 
           if(data.micellar_water)
           {
-            const micellar_water_array = Object.values(data.micellar_water).flat();
-            setMicellarwater(micellar_water_array);
+            micellarwater_cat = Object.values(data.micellar_water).flat();
           }
           
           if(data.cleansing_oil)
           {
-            const cleansing_oil_array = Object.values(data.cleansing_oil).flat();
-            setOilcleanser(cleansing_oil_array);
+            cleansingoil_cat = Object.values(data.cleansing_oil).flat();
           }
-
           const get_skinConcern = data.user_skin_profile;
           setSkinProfile(get_skinConcern);
         }
+          //categorise producr based on prices 
+          for (const item of cleanser_cat)
+            {
+                if (item.product_price < 40) 
+                {
+                    copyList.cleanser.low.push(item);
+                }  
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                    copyList.cleanser.mid.push(item);
+                }
+                else
+                {
+                    copyList.cleanser.high.push(item); 
+                }
+            }
 
+            for (const item of toner_cat)
+            {
+                if (item.product_price < 40)
+                {
+                    copyList.toner.low.push(item);
+                } 
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                    copyList.toner.mid.push(item);
+                }
+                else 
+                {
+                    copyList.toner.high.push(item); 
+                }
+            }
+
+            for (const item of serum_cat)
+            {
+                if (item.product_price < 40)
+                {
+                    copyList.serum.low.push(item);
+                }
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                    copyList.serum.mid.push(item);
+                }
+                else 
+                {
+                    copyList.serum.high.push(item); 
+                }
+            }
+
+            for (const item of moist_cat)
+            {
+                if (item.product_price < 40)
+                {
+                    copyList.moisturiser.low.push(item);
+                } 
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                    copyList.moisturiser.mid.push(item);
+                }
+                else 
+                {
+                    copyList.moisturiser.high.push(item); 
+                }
+            }
+
+            for (const item of eye_cat)
+            {
+                if (item.product_price < 40)
+                {
+                    copyList.eye.low.push(item);
+                }  
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                    copyList.eye.mid.push(item);
+                }
+                else 
+                {
+                  copyList.eye.high.push(item); 
+                }
+            }
+
+            for (const item of sunscreen_cat)
+            {
+                if (item.product_price < 40)
+                {
+                    copyList.sunscreen.low.push(item);
+                }  
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                    copyList.sunscreen.mid.push(item);
+                }
+                else 
+                {
+                    copyList.sunscreen.high.push(item); 
+                }
+            }
+
+            for (const item of cleansingoil_cat)
+            {
+                if (item.product_price < 40)
+                {
+                    copyList.oilcleanser.low.push(item);
+                }   
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                    copyList.oilcleanser.mid.push(item);
+                }
+                else 
+                {
+                    copyList.oilcleanser.high.push(item); 
+                }
+            }
+            for (const item of micellarwater_cat)
+            {
+                if (item.product_price < 40)
+                {
+                    copyList.micellarwater.low.push(item);
+                }
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                    copyList.micellarwater.mid.push(item);
+                }
+                else 
+                {
+                    copyList.micellarwater.high.push(item); 
+                }
+            }
+        setProduct_list(copyList);
+        console.log(product_list);
         changeStage(13);
       }
 
@@ -345,16 +459,8 @@ function App() {
         console.log(data.error);
       }
     }
-  }
 
-  console.log(cleanser);
-  console.log(toner);
-  console.log(serum);
-  console.log(moisturiser);
-  console.log(eye);
-  console.log(sunscreen);
-  console.log(oilcleanser);
-  console.log(micellarwater);
+  }
 
   const[imageFile, setImageFile] = useState(null);
 
@@ -422,9 +528,7 @@ function App() {
       if (response.ok)
       {
           console.log(data.message); 
-
-          //extract skininfo and save in retrieveData
-          setRetrieveData(data.skininfo);
+          setSkinProfile(data.skininfo);
 
           //if image, loops through image array and group them according to date 
           if (data.image?.length > 0)
@@ -445,54 +549,167 @@ function App() {
             setImageArray(image_group);
           }
 
-          const cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
-
-          setCleanser(cleanser_cat);
-
-          const toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner").map(x => x.product);
-          setToner(toner_cat);
-
-          const serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum").map(x => x.product);
-          setSerum(serum_cat);
-
-          const moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
-          setMoisturiser(moist_cat);
-
+          cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
+          toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner").map(x => x.product);
+          serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum").map(x => x.product);
+          moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
+          
           if (data.skininfo.skin_concern.includes("acne") || (data.skininfo.skin_concern.includes("sensitive")))
           {
-            const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
-            setSunscreen(sunscreen_cat);
+            sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
           }
           else 
           {
-            const sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "chemical sunscreen").map(x => x.product);
-            setSunscreen(sunscreen_cat);
+            sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "chemical sunscreen").map(x => x.product);
           }
 
-          const eye_cat = data.product_recs.filter(x=> x.product.product_cat === "eye").map(x => x.product);
-          setEye(eye_cat);
+          eye_cat = data.product_recs.filter(x=> x.product.product_cat === "eye").map(x => x.product);
+          micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water").map(x => x.product);
+          cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
 
-          const micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water").map(x => x.product);
-          setMicellarwater(micellarwater_cat);
-
-          const cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
-          setOilcleanser(cleansingoil_cat);
-
-          const get_skinConcern = data.user_skin_profile.skin_concern;
-          setSkinProfile(get_skinConcern);
+          for (const item of cleanser_cat)
+            {
+                if (item.product_price < 40) 
+                {
+                    copyList.cleanser.low.push(item);
+                }  
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                    copyList.cleanser.mid.push(item);
+                }
+                else
+                {
+                    copyList.cleanser.high.push(item); 
+                }
+            }
+        
+            for (const item of toner_cat)
+            {
+                if (item.product_price < 40)
+                {
+                  copyList.toner.low.push(item);
+                } 
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                  copyList.toner.mid.push(item);
+                }
+                else 
+                {
+                  copyList.toner.high.push(item); 
+                }
+            }
+        
+            for (const item of serum_cat)
+            {
+                if (item.product_price < 40)
+                {
+                  copyList.serum.low.push(item);
+                }
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                  copyList.serum.mid.push(item);
+                }
+                else 
+                {
+                  copyList.serum.high.push(item); 
+                }
+            }
+        
+            for (const item of moist_cat)
+            {
+                if (item.product_price < 40)
+                {
+                  copyList.moisturiser.low.push(item);
+                } 
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                  copyList.moisturiser.mid.push(item);
+                }
+                else 
+                {
+                  copyList.moisturiser.high.push(item); 
+                }
+            }
+        
+            for (const item of eye_cat)
+            {
+                if (item.product_price < 40)
+                {
+                  copyList.eye.low.push(item);
+                }  
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                  copyList.eye.mid.push(item);
+                }
+                else 
+                {
+                  copyList.eye.high.push(item); 
+                }
+            }
+        
+            for (const item of sunscreen_cat)
+            {
+                if (item.product_price < 40)
+                {
+                  copyList.sunscreen.low.push(item);
+                }  
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                  copyList.sunscreen.mid.push(item);
+                }
+                else 
+                {
+                  copyList.sunscreen.high.push(item); 
+                }
+            }
+        
+            for (const item of cleansingoil_cat)
+            {
+                if (item.product_price < 40)
+                {
+                  copyList.oilcleanser.low.push(item);
+                }   
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                  copyList.oilcleanser.mid.push(item);
+                }
+                else 
+                {
+                  copyList.oilcleanser.high.push(item); 
+                }
+            }
+        
+            for (const item of micellarwater_cat)
+            {
+                if (item.product_price < 40)
+                {
+                  copyList.micellarwater.low.push(item);
+                }
+                else if (item.product_price >= 40 && item.product_price <= 80)
+                {
+                  copyList.micellarwater.mid.push(item);
+                }
+                else 
+                {
+                  copyList.micellarwater.high.push(item); 
+                }
+            }
+        setProduct_list(copyList);
       }
       else 
       {
         console.log("error");
       }
     }
+    console.log();
+
   return (
     <div className="App">
-        <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout} retrieveData={get_data}/>
+        <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout}/>
         {page === "login" && <Login resetSite={handlePage}/>}
         {page === "signup" && <Signup resetSite={handlePage}/>}
         {page === "home" && stage === 0 && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
-        {page === "profile" && <Profile imageArray={imageArray} skinProfile={skinProfile} retrieveData={retrieveData}/>}
+        {page === "profile" && <Profile imageArray={imageArray} skinProfile={skinProfile} product_list={product_list} handlePage={handlePage}/>}
         {stage === 1 && (
           <div className="labels_container">
             <h1 className="title"> My Skincare Routine Tracker</h1>
@@ -593,7 +810,7 @@ function App() {
               <div className="button_container">
                 <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
                 {(userData.products_type.length < 1 && userData.routine === "") && <button disabled ={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
-                {userData.routine === "no_routine" && <button className="button_next" onClick={() => token? changeStage(12): sendData()} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
+                {userData.routine === "no_routine" && <button className="button_next" onClick={() => token? changeStage(12): changeStage(11)} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
                 {userData.products_type.length > 0 && <button className="button_next" onClick={() => changeStage()} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
               </div>
             
@@ -608,7 +825,7 @@ function App() {
             <div className="button_container">
               <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
               {userData.active_use === null && <button disabled={userData.active_use === null}>&#8594;</button>}
-              {userData.active_use === false && <button className="button_next" onClick={() => token? changeStage(12): sendData()} disabled={userData.active_use === null}>&#8594;</button> }
+              {userData.active_use === false && <button className="button_next" onClick={() => token? changeStage(12): changeStage(11)} disabled={userData.active_use === null}>&#8594;</button> }
               {userData.active_use === true && <button className="button_next" onClick={() => changeStage()} disabled={userData.active_use === null}>&#8594;</button>}
             </div>
           </div>
@@ -654,9 +871,10 @@ function App() {
             <label><input type="radio" name="no_products" onChange={() => handleNoProducts(5)} checked={userData.no_products === 5}/> Essentials (4-5 products)</label>
             <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)} checked={userData.no_products === 6}/> Advanced (6+ products) </label>
             <div className="button_container">
-              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+              {userData.advanced_user !== "" && <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>}
+              {userData.routine === "no_routine" &&  <button className="button_previous" onClick={()=> changePreviousStage(7)}> &#8592; </button>}
+              {userData.active_use === false &&  <button className="button_previous" onClick={()=> changePreviousStage(8)}> &#8592; </button>}
               {token ? <button onClick={() => changeStage()} disabled={userData.no_products === 0}>&#8594;</button> : <button onClick={() => sendData()} disabled={userData.no_products === 0}>&#8594;</button>}
-
             </div>
 
           </div>
@@ -678,7 +896,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec cleanser={cleanser} toner={toner} serum={serum} moisturiser={moisturiser} eye={eye} sunscreen={sunscreen} oilcleanser={oilcleanser} micellarwater={micellarwater} skinProfile={skinProfile} handlePage={handlePage} />}
+        {stage === 13 && <Productrec product_list={product_list} skinProfile={skinProfile} handlePage={handlePage} />}
     </div>
   )
 }

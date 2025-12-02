@@ -2,148 +2,8 @@ import {useState} from "react";
 import "./Product.css"
 
 
-function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcleanser, micellarwater, skinProfile, handlePage})
+function Productrec({product_list, skinProfile, handlePage})
 {
-
-    const product_list = {
-        "cleanser": {"high": [], "mid": [], "low": []}, 
-        "toner": {"high": [], "mid": [], "low": []}, 
-        "serum": {"high": [], "mid": [], "low": []}, 
-        "moisturiser": {"high": [], "mid": [], "low": []}, 
-        "eye": {"high": [], "mid": [], "low": []}, 
-        "sunscreen": {"high": [], "mid": [], "low": []}, 
-        "oilcleanser": {"high": [], "mid": [], "low": []}, 
-        "micellarwater": {"high": [], "mid": [], "low": []},
-    }
-
-    for (const item of cleanser)
-    {
-        if (item.product_price < 40) 
-        {
-            product_list.cleanser.low.push(item);
-        }  
-        else if (item.product_price >= 40 && item.product_price <= 80)
-        {
-            product_list.cleanser.mid.push(item);
-        }
-        else
-        {
-            product_list.cleanser.high.push(item); 
-        }
-    }
-
-    for (const item of toner)
-    {
-        if (item.product_price < 40)
-        {
-            product_list.toner.low.push(item);
-        } 
-        else if (item.product_price >= 40 && item.product_price <= 80)
-        {
-            product_list.toner.mid.push(item);
-        }
-        else 
-        {
-            product_list.toner.high.push(item); 
-        }
-    }
-
-    for (const item of serum)
-    {
-        if (item.product_price < 40)
-        {
-            product_list.serum.low.push(item);
-        }
-        else if (item.product_price >= 40 && item.product_price <= 80)
-        {
-            product_list.serum.mid.push(item);
-        }
-        else 
-        {
-            product_list.serum.high.push(item); 
-        }
-    }
-
-    for (const item of moisturiser)
-    {
-        if (item.product_price < 40)
-        {
-            product_list.moisturiser.low.push(item);
-        } 
-        else if (item.product_price >= 40 && item.product_price <= 80)
-        {
-            product_list.moisturiser.mid.push(item);
-        }
-        else 
-        {
-            product_list.moisturiser.high.push(item); 
-        }
-    }
-
-    for (const item of eye)
-    {
-        if (item.product_price < 40)
-        {
-            product_list.eye.low.push(item);
-        }  
-        else if (item.product_price >= 40 && item.product_price <= 80)
-        {
-            product_list.eye.mid.push(item);
-        }
-        else 
-        {
-            product_list.eye.high.push(item); 
-        }
-    }
-
-    for (const item of sunscreen)
-    {
-        if (item.product_price < 40)
-        {
-            product_list.sunscreen.low.push(item);
-        }  
-        else if (item.product_price >= 40 && item.product_price <= 80)
-        {
-            product_list.sunscreen.mid.push(item);
-        }
-        else 
-        {
-            product_list.sunscreen.high.push(item); 
-        }
-    }
-
-    for (const item of oilcleanser)
-    {
-        if (item.product_price < 40)
-        {
-            product_list.oilcleanser.low.push(item);
-        }   
-        else if (item.product_price >= 40 && item.product_price <= 80)
-        {
-            product_list.oilcleanser.mid.push(item);
-        }
-        else 
-        {
-            product_list.oilcleanser.high.push(item); 
-        }
-    }
-
-    for (const item of micellarwater)
-    {
-        if (item.product_price < 40)
-        {
-            product_list.micellarwater.low.push(item);
-        }
-        else if (item.product_price >= 40 && item.product_price <= 80)
-        {
-            product_list.micellarwater.mid.push(item);
-        }
-        else 
-        {
-            product_list.micellarwater.high.push(item); 
-        }
-    }
-
     console.log(product_list.cleanser);
     console.log(product_list.toner);
     console.log(product_list.serum);
@@ -152,6 +12,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
     console.log(product_list.sunscreen);
     console.log(product_list.oilcleanser);
     console.log(product_list.micellarwater);
+    console.log(skinProfile);
 
     //capitalise the first letter of key 
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
@@ -186,7 +47,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
         <div className="product_page">
             <div className="info_left">
                 <div className="profile">
-                    <h2 className="result_title">Hi {skinProfile.username}, here are your regimen results.</h2>
+                    <h2 className="result_title">Hi {cap(skinProfile.username)}, here are your regimen results.</h2>
                     <p className="skin_title">SKIN TYPE: <span className="skintype">{cap(skinProfile.skintype)}</span></p>
                     <p className="concern_title">CONCERNS</p>
                     <ul>
@@ -194,7 +55,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                             <li className="list">{cap(x)}</li>
                         ))}
                     </ul> 
-                    {skinProfile.eye_concern && skinProfile.eye_concern.length === 1 ? <p className="concern_title">EYE CONCERNS: <span className="skintype">{cap(skinProfile.eye_concern)}</span></p> : <p className="concern_title">EYE CONCERNS: <span className="skintype">{skinProfile.eye_concern.map(x => cap(x)).join(", ")}</span></p>}
+                    {skinProfile.eye_concern && skinProfile.eye_concern.length === 1 ? <p className="concern_title">EYE CONCERNS: <span className="skintype">{cap(skinProfile.eye_concern[0])}</span></p> : <p className="concern_title">EYE CONCERNS: <span className="skintype">{skinProfile.eye_concern.map(x => cap(x)).join(", ")}</span></p>}
                     <p className="return_button" onClick={() => handlePage("home")}>Retake survey &#8594;</p>
                 </div>
                 <img className="skincare_img" src="/images/2_39dcafaf-18fa-4aff-9292-918c7b5c22c6.webp" alt="skincare"/>
@@ -204,8 +65,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
 
             <div className="customisation">
                 <h2 className="result_title">Customised for You.</h2>
-                <p className="disclaimer">Below are recommended products tailored to your skin concerns and routine</p>
-                <p className="disclaimer">*Always patch test new products before full application.</p>
+                <p className="disclaimer">⚠️ Note: Some active ingredients (like retinol, AHAs, BHAs) are photosensitising and should only be used at night, or with SPF during the day. Always patch test new products and consult with a dermatologist if unsure.</p>
                 <div className="button_cont">
                     <button onClick={() => handleTime("am")}  className={`am_button ${time === "am" ? "active" : ""}`}>
                         {Icon.am}
@@ -314,6 +174,7 @@ function Productrec({cleanser, toner, serum, moisturiser, eye, sunscreen, oilcle
                                 </div>
                             </div>
                         )
+                    return null;
                 }
 
                 else if (skinProfile.no_products && skinProfile.no_products === 5)

@@ -553,6 +553,7 @@ def processdata(request):
                     off_cleanser.append(row)
                     count += 1
                     print(f"count: {count}")
+                    print(f"how many counts left: {3-count}")
         
         if count < 3 and cleanser["mid_score"]:
             for row in cleanser["mid_score"]:
@@ -560,6 +561,7 @@ def processdata(request):
                     off_cleanser.append(row)
                     count += 1
                     print(f"count: {count}")
+                    print(f"how many counts left: {3-count}")
 
         for row in toner_list: 
             if user_pregnant and "avoid pregnancy" in row.product_target:
@@ -980,6 +982,7 @@ def getImage(request):
     print(f"image: {user_photo}")
     info_dict = ProfileSerializer(user)
     get_product_recs = UserProduct.objects.filter(user=request.user)
+    print(f"product rec: {get_product_recs}")
     product_recs_dict = UserProductSerializer(get_product_recs, many=True)
     
     return Response({"message": "success", "image": image_dict.data, "skininfo": info_dict.data, "product_recs": product_recs_dict.data}, status=status.HTTP_200_OK)

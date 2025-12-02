@@ -48,9 +48,11 @@
 .skininfo_display 
 {
     text-align: left;
-    margin-left: 3rem;
     display: grid;
+    max-width: 800px;
+    margin: 0 auto;
     grid-template-columns: 1fr 1fr;
+    padding: 0 3rem; 
 }
 
 .skincare_img
