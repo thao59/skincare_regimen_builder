@@ -140,3 +140,9 @@ CORS_ALLOWED_ORIGINS = [
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR/ "media"
 
+import os 
+from dotenv import load_dotenv 
+
+load_dotenv()
+ANTHROPIC_API_KEY = os.environment.get("ANTHROPIC_API_KEY")
+
