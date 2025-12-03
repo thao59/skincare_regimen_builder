@@ -988,6 +988,9 @@ def getImage(request):
     
     return Response({"message": "success", "image": image_dict.data, "skininfo": info_dict.data, "product_recs": product_recs_dict.data}, status=status.HTTP_200_OK)
 
+def chatbox (request): 
+    pass 
+
 
 
 

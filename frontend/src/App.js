@@ -38,7 +38,7 @@ function App() {
   }
 
   const[image, setImage] = useState(null);
-  const[page, setPage] = useState("");
+  const[page, setPage] = useState("home");
   const[userData, setUserData] = useState({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
   const resetUserData = () => {
     setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
@@ -710,6 +710,7 @@ function App() {
         {page === "signup" && <Signup resetSite={handlePage}/>}
         {page === "home" && stage === 0 && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
         {page === "profile" && <Profile imageArray={imageArray} skinProfile={skinProfile} product_list={product_list} handlePage={handlePage}/>}
+        {page === ""}
         {stage === 1 && (
           <div className="labels_container">
             <h1 className="title"> My Skincare Routine Tracker</h1>
