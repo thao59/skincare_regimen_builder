@@ -54,3 +54,22 @@ class UserProduct(models.Model):
 
     def __str__(self):
         return f"User: {self.user} Rec: {self.product}"
+    
+class Conversation (models.Model):
+    user = models.ForeignKey(User, on_delete= models.CASCADE, related_name="conversations")
+    created_at = models.DateTimeField (auto_now_add=True)
+    updated_at = models.DateTimeField (auto_now=True)
+    
+    def __str__(self):
+        return f"User: {self.user} - date: {self.created_at}"
+
+class Message(models.Model):
+    conversation = models.ForeignKey(Conversation, on_delete=models.CASCADE, related_name="messages")
+    content = models.TextField ()
+    role = models.CharField (max_length = 20, choices = [("user", "User"), ("assistant", "Assistant")])
+
+    def __str__(self):
+        return f"Text: {self.content}"
+
+
+
