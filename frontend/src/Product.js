@@ -185,7 +185,7 @@ function Productrec({product_list, skinProfile, handlePage})
 
                 else if (skinProfile.no_products && skinProfile.no_products === 5)
                 {
-                    if (key !== "toner")
+                    if (key !== "toner" && key !== "eye")
                     {
                         return (
                             <div key={key} className="product_cat">

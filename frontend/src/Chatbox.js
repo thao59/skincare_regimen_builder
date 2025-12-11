@@ -47,7 +47,8 @@ function Chatbox () {
     const handleNewChat = () => {
         setNewSession(false);
     }
-    
+    console.log("loading: ", loading);
+
     const token = localStorage.getItem("access"); 
     const sendMsg = async() => {
         setLoading(true);

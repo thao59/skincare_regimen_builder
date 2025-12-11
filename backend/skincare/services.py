@@ -19,7 +19,15 @@ class ClaudeService:
         return response.content[0].text
     
     def get_personalised_response(self, user_message, user_profile, user_product_rec):
+        if user_profile["no_products"] == 3:
+            instruction = "Only recommend cleanser, moisturiser and sunscreen"
+        elif user_profile["no_products"] == 5:
+            instruction = "Recommend any products except toner products and eye products"
+        else:
+            instruction = "Recommend all products"
+
         prompt = f"""You are a skincare expert. Provide personalised advice based on user's profile.
+        {instruction}
         User's profile: {user_profile}
         User's product recommendation: {user_product_rec}
         Only answer question when asked. Be short all the time

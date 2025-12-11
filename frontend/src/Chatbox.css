@@ -220,7 +220,7 @@
 
 .ai_msg_loading
 {
-    color: white;
+    color: black;
     display: flex;
     justify-content: flex-start;
 }
