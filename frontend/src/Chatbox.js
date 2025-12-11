@@ -59,6 +59,7 @@ function Chatbox () {
 
         const option_headers = {
             method: "POST", 
+            credentials: "include",
             headers: {"Content-type": "application/json"}, 
             body: JSON.stringify({message: send_content, messageId: msgId}), 
         }

@@ -234,6 +234,7 @@ function App() {
     {
       const option_headers = {
         method : "POST", 
+        credentials: "include",
         headers : {"Content-Type": "application/json",},
         body: JSON.stringify(userData),
       };
@@ -466,7 +467,6 @@ function App() {
         console.log("Error: ", response.status);
       }
     }
-
   }
 
   const[imageFile, setImageFile] = useState(null);

@@ -142,7 +142,6 @@ def processdata(request):
     #create temp id for user
     if not request.session.session_key:
         request.session.create()
-        request.session.save() 
     
     print(f"id: {request.session.session_key}")
     request.session["skinprofile"] = user_profile
@@ -151,6 +150,34 @@ def processdata(request):
     
     create = Recommendation()
     products_rec = create.get_rec(user_profile)
+
+    #float all products'price before saving to session as JSON cant serialise decimals 
+    for row in products_rec["off_cleanser"]:
+        row["product_price"] = float(row["product_price"])
+    
+    for row in products_rec["off_toner"]:
+        row["product_price"] = float(row["product_price"])
+    
+    for row in products_rec["off_serum"]:
+        row["product_price"] = float(row["product_price"])
+
+    for row in products_rec["off_moisturiser"]:
+        row["product_price"] = float(row["product_price"])
+    
+    for row in products_rec["off_sunscreen"]:
+        row["product_price"] = float(row["product_price"])
+    
+    for row in products_rec["off_eye"]:
+        row["product_price"] = float(row["product_price"])
+    
+    for row in products_rec["off_oil_cleanser"]:
+        row["product_price"] = float(row["product_price"])
+
+    for row in products_rec["off_micellar_water"]:
+        row["product_price"] = float(row["product_price"])
+
+    request.session["product_rec"]= products_rec
+    print(f"product rec: {request.session["product_rec"]}")
     return Response ({"product_recs": products_rec, "user_skin_profile": user_profile}, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
@@ -210,11 +237,12 @@ def chatbox (request):
         print(f"user profile: {user_profile}")
         if not user_profile:
             return Response({"error": "Session has expired. Please complete the survey again"}, status=status.HTTP_400_BAD_REQUEST)
+        products = request.session["product_rec"]
+        print(f"product rec: {products}")
         
         service = ClaudeService()
-        response = service.get_rec(user_profile)
+        response = service.get_personalised_response(get_message["message"], user_profile, products)
         return Response ({"reply": response, "msgID": consId}, status= status.HTTP_200_OK)
-
 
 
 
