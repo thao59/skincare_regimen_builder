@@ -1,5 +1,6 @@
 import {useState} from "react";
 import "./Product.css"
+import Chatbox from "./Chatbox";
 
 
 function Productrec({product_list, skinProfile, handlePage})
@@ -41,6 +42,11 @@ function Productrec({product_list, skinProfile, handlePage})
     const handleButton = (string) => 
     {
         setButton(string);
+    }
+
+    const [msgbox, setMsgbox] = useState(false); 
+    const handleMsg = () => {
+        setMsgbox(true);
     }
 
     return (
@@ -352,6 +358,7 @@ function Productrec({product_list, skinProfile, handlePage})
                     )
                 }
             })}
+            <Chatbox/>
         </div>
     )
 }

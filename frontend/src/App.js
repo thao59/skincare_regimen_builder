@@ -248,10 +248,10 @@ function App() {
       const data = await response.json(); 
       if (response.ok)
       {
-        console.log(data.message, response.status) 
+        console.log(response.status) 
         
         //process data if user is logged in
-        if (data.product_recs)
+        if (token)
         {       
           //group and save products according to types 
           cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
@@ -278,46 +278,46 @@ function App() {
         }
 
         //process data if user is not logged in
-        else 
+        else
         {
-          if(data.cleanser)
+          if(data.product_recs.off_cleanser)
           {
-            cleanser_cat = Object.values(data.cleanser).flat();
+            cleanser_cat = data.product_recs.off_cleanser;
           }
         
-          if(data.toner)
+          if(data.product_recs.off_toner)
           {
-            toner_cat = Object.values(data.toner).flat();
+            toner_cat = data.product_recs.off_toner;
           }
             
-          if(data.serum)
+          if(data.product_recs.off_serum)
           {
-            serum_cat = Object.values(data.serum).flat();
+            serum_cat = data.product_recs.off_serum;
           }
           
-          if(data.moisturiser)
+          if(data.product_recs.off_moisturiser)
           {
-            moist_cat = Object.values(data.moisturiser).flat();
+            moist_cat = data.product_recs.off_moisturiser;
           }
             
-          if(data.sunscreen)
+          if(data.product_recs.off_sunscreen)
           {
-            sunscreen_cat = Object.values(data.sunscreen).flat();
+            sunscreen_cat = data.product_recs.off_sunscreen;
           }
 
-          if(data.eye)
+          if(data.product_recs.off_eye)
           {
-            eye_cat = Object.values(data.eye).flat();
+            eye_cat = data.product_recs.off_eye;
           }
 
-          if(data.micellar_water)
+          if(data.product_recs.off_micellar_water)
           {
-            micellarwater_cat = Object.values(data.micellar_water).flat();
+            micellarwater_cat = data.product_recs.off_micellar_water;
           }
           
-          if(data.cleansing_oil)
+          if(data.product_recs.off_oil_cleanser)
           {
-            cleansingoil_cat = Object.values(data.cleansing_oil).flat();
+            cleansingoil_cat = data.product_recs.off_oil_cleanser;
           }
           const get_skinConcern = data.user_skin_profile;
           setSkinProfile(get_skinConcern);
@@ -419,35 +419,42 @@ function App() {
                 }
             }
 
-            for (const item of cleansingoil_cat)
+            if (cleansingoil_cat)
             {
-                if (item.product_price < 40)
+              for (const item of cleansingoil_cat)
                 {
-                    copyList.oilcleanser.low.push(item);
-                }   
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                    copyList.oilcleanser.mid.push(item);
-                }
-                else 
-                {
-                    copyList.oilcleanser.high.push(item); 
+                  if (item.product_price < 40)
+                  {
+                      copyList.oilcleanser.low.push(item);
+                  }   
+                  else if (item.product_price >= 40 && item.product_price <= 80)
+                  {
+                      copyList.oilcleanser.mid.push(item);
+                  }
+                  else 
+                  {
+                      copyList.oilcleanser.high.push(item); 
+                  }
                 }
             }
-            for (const item of micellarwater_cat)
+
+            if (micellarwater_cat)
             {
-                if (item.product_price < 40)
+              for (const item of micellarwater_cat)
                 {
-                    copyList.micellarwater.low.push(item);
-                }
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                    copyList.micellarwater.mid.push(item);
-                }
-                else 
-                {
-                    copyList.micellarwater.high.push(item); 
-                }
+                  if (item.product_price < 40)
+                  {
+                      copyList.micellarwater.low.push(item);
+                  }
+                  else if (item.product_price >= 40 && item.product_price <= 80)
+                  {
+                      copyList.micellarwater.mid.push(item);
+                  }
+                  else 
+                  {
+                      copyList.micellarwater.high.push(item); 
+                  }
+              }
             }
         setProduct_list(copyList);
         console.log(product_list);
@@ -456,7 +463,7 @@ function App() {
 
       else
       {
-        console.log(data.error);
+        console.log("Error: ", response.status);
       }
     }
 
@@ -514,7 +521,7 @@ function App() {
     }
     else 
     {
-      console.log("Error: ", data.error);
+      console.log("Error: ", response.status);
     }
   }
 
@@ -527,7 +534,7 @@ function App() {
       const data = await response.json(); 
       if (response.ok)
       {
-          console.log(data.message); 
+          console.log(response.status); 
           setSkinProfile(data.skininfo);
 
           //if image, loops through image array and group them according to date 
@@ -698,7 +705,7 @@ function App() {
       }
       else 
       {
-        console.log("error");
+        console.log("Error: ", response.status);
       }
     }
     console.log();
@@ -897,7 +904,7 @@ function App() {
           </div>
         )}  
 
-        {stage === 13 && <Productrec product_list={product_list} skinProfile={skinProfile} handlePage={handlePage} />}
+        {stage === 13 && <Productrec product_list={product_list} skinProfile={skinProfile} handlePage={handlePage}/>}
     </div>
   )
 }

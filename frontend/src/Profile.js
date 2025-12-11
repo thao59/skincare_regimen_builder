@@ -412,9 +412,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage})
                     }
                 })}
             </div>
-        <p className="question_bar" onClick={() => handleMsg()}>💬  Ask questions</p>
-        {msgbox === true && <Chatbox/>}
-        
+            <Chatbox/> 
     </>)
 }
 export default Profile;
