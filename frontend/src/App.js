@@ -232,6 +232,17 @@ function App() {
   const sendData = async() => {
     if (userData.no_products !== 0)
     {
+      //reset product_list before fetching 
+      setProduct_list({
+        cleanser: {high: [], mid: [], low: []}, 
+        toner: {high: [], mid: [], low: []}, 
+        serum: {high: [], mid: [], low: []}, 
+        moisturiser: {high: [], mid: [], low: []}, 
+        eye: {high: [], mid: [], low: []}, 
+        sunscreen: {high: [], mid: [], low: []}, 
+        oilcleanser: {high: [], mid: [], low: []}, 
+        micellarwater: {high: [], mid: [], low: []},
+      });
       const option_headers = {
         method : "POST", 
         credentials: "include",
@@ -758,14 +769,16 @@ function App() {
         
         {stage === 4 && (
           <div className="labels_container">
-          <h2 className="question"> Identify top 3 concerns </h2>
+          <h2 className="question"> Identify your top 4 concerns </h2>
           <label><input type="checkbox" onChange={() => handleConcern("acne")} checked={userData.skin_concern.includes("acne")}/> Acne</label>
+          <label><input type="checkbox" onChange={() => handleConcern("congestion")} checked={userData.skin_concern.includes("congestion")}/> Congestion</label>
           <label><input type="checkbox" onChange={() => handleConcern("aging")} checked={userData.skin_concern.includes("aging")}/> Aging</label>
           <label><input type="checkbox" onChange={() => handleConcern("pigmentation")} checked={userData.skin_concern.includes("pigmentation")}/> Dark spots/Hyperpigmentation</label>
           <label><input type="checkbox" onChange={() => handleConcern("dehydrated")} checked={userData.skin_concern.includes("dehydrated")}/> Dehydrated</label>
           <label><input type="checkbox" onChange={() => handleConcern("dryness")} checked={userData.skin_concern.includes("dryness")}/> Dry</label>
           <label><input type="checkbox" onChange={() => handleConcern("pores")} checked={userData.skin_concern.includes("pores")}/> Large pores </label> 
-          <label><input type="checkbox" onChange={() => handleConcern("sensitive")} checked={userData.skin_concern.includes("sensitive")}/> Sensitive/Redness</label>
+          <label><input type="checkbox" onChange={() => handleConcern("sensitive")} checked={userData.skin_concern.includes("sensitive")}/> Sensitive</label>
+          <label><input type="checkbox" onChange={() => handleConcern("redness")} checked={userData.skin_concern.includes("redness")}/> Redness</label>
           <label><input type="checkbox" onChange={() => handleConcern("dullness")} checked={userData.skin_concern.includes("dullness")}/> Dullness</label>
           <label><input type="checkbox" onChange={() => handleConcern("texture")} checked={userData.skin_concern.includes("texture")}/> Uneven texture</label>
           <div className="button_container">

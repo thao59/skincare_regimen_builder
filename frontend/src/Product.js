@@ -99,10 +99,10 @@ function Productrec({product_list, skinProfile, handlePage})
                     if(key === "cleanser" || key === "moisturiser" || key === "sunscreen")
                         return (
                             <div key={key} className="product_cat">
-                                {button === "all" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{cap(key)}</h2>}
-                                {button === "low" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
-                                {button === "mid" && (value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
-                                {button === "high" && (value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+                                {button === "all" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{key === "oilcleanser"? "Oil Cleanser": key === "micellarwater"? "Micellar Water": cap(key)}</h2>}
+                                {button === "low" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{key === "oilcleanser"? "Oil Cleanser": key === "micellarwater"? "Micellar Water": cap(key)}</h2>}
+                                {button === "mid" && (value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{key === "oilcleanser"? "Oil Cleanser": key === "micellarwater"? "Micellar Water": cap(key)}</h2>}
+                                {button === "high" && (value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{key === "oilcleanser"? "Oil Cleanser": key === "micellarwater"? "Micellar Water": cap(key)}</h2>}
         
                                 <div className="product_row">
                                     {(button === "all" || button === "low") && value.low.length > 0 && value.low.map(x => {
@@ -189,10 +189,10 @@ function Productrec({product_list, skinProfile, handlePage})
                     {
                         return (
                             <div key={key} className="product_cat">
-                                {button === "all" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{cap(key)}</h2>}
-                                {button === "low" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
-                                {button === "mid" && (value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
-                                {button === "high" && (value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{cap(key)}</h2>}
+                                {button === "all" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{key === "oilcleanser"? "Oil Cleanser": key === "micellarwater"? "Micellar Water": cap(key)}</h2>}
+                                {button === "low" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{key === "oilcleanser"? "Oil Cleanser": key === "micellarwater"? "Micellar Water": cap(key)}</h2>}
+                                {button === "mid" && (value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{key === "oilcleanser"? "Oil Cleanser" : key === "micellarwater"? "Micellar Water": cap(key)}</h2>}
+                                {button === "high" && (value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0) && <h2 className="category">{key === "oilcleanser"? "Oil Cleanser" : key === "micellarwater"? "Micellar Water": cap(key)}</h2>}
         
                                 <div className="product_row">
                                     {(button === "all" || button === "low") && value.low.length > 0 && value.low.map(x => {

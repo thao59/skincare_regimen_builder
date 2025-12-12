@@ -32,6 +32,7 @@ class ClaudeService:
         User's product recommendation: {user_product_rec}
         Only answer question when asked. Be short all the time
         When answering questions: 
+        - Use Australian spelling 
         - Taking their skin profile and product recommendation into account 
         - Explain the reasons behind recommend these products 
         - Be concise, short and informative """
