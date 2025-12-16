@@ -5,16 +5,10 @@ __pycache__/
 *.so
 .Python
 *.log
-media/
 
 #Django specific
 backend/media/
 backend/db.sqlite3
-
-#virtual env
-env/
-.env 
-venv/
 
 # Node
 node_modules/
@@ -28,6 +22,8 @@ frontend/build/
 # Environment variables
 .env
 .env.local
+env/
+venv/
 
 # IDE
 .vscode/
