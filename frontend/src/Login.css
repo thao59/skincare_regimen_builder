@@ -1,15 +1,60 @@
-.login_form 
+.login_page, .signup_page
 {
-    display: flex;
-    flex-direction: column;
     width: 100%;
-    align-items: center;
-    gap: 0.4rem;
+    display: flex;
+    justify-content: center;
 }
 
-.login_input
+.login_form, .signup_form
 {
-    width: 20%;
-    font-family: 'Georgia';
+    margin-top: 5rem;
+    padding-bottom: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    gap: 1rem;
+    background: linear-gradient(145deg, #fdfcfb 0%, #f1e4da 100%);
+    border-radius: 30px;
+}
+
+.login_input, .signup_input
+{
+    width: 60%;
+    height: 40px;
     font-size: 0.8rem;
+    padding: 0.4rem;
+    border-radius: 10px;
+    border: 1px solid #d4a574;
+}
+
+.login_input:focus
+{
+  border-color: #c9a782;
+  box-shadow: 0 0 0 4px rgba(201, 167, 130, 0.15);
+}
+
+.submit_button
+{
+    width: 60%;
+    height: 40px; 
+    border-radius: 10px;
+    background-color: rgba(202, 167, 131, 0.8);
+    border: none;
+    color: white;
+    font-weight: 500;
+}
+
+.submit_button.disabled
+{
+    background-color: rgba(226, 209, 191, 0.8);
+}
+
+.reminder button
+{
+    background-color: #f2e8e1;
+    border: none;
+    font-weight: 500;
+    color: #5a4a42;
 }

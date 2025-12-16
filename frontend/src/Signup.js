@@ -33,14 +33,14 @@ function Signup({resetSite}){
     }
 
     return(
-    <div>
-        <form className="login_form">
-            <p>Signup</p>
+    <div className="signup_page">
+        <form className="signup_form">
+            <p className="title">Signup</p>
             <input className="signup_input" onChange={(field) => handleUser(field.target.value, "email")} placeholder="Your email"/>
             <input className="signup_input" onChange={(field) => handleUser(field.target.value, "username")} placeholder="Username"/>
             <input className="signup_input" type="password" placeholder="Set your password" onChange={(field) => handleUser(field.target.value, "password")} />
             <input className="signup_input" type="password" placeholder="Confirm password" onChange={(field) => handleUser(field.target.value, "confirm_password")}/>
-            <button disabled={!userData.email || !userData.username || !userData.password || !userData.confirm_password} onClick={handleSubmit} type="button">Signup</button>
+            <button className={`submit_button ${!userData.email || !userData.username || !userData.password || !userData.confirm_password? "disabled":""}`} disabled={!userData.email || !userData.username || !userData.password || !userData.confirm_password} onClick={handleSubmit} type="button">Signup</button>
         </form>   
     </div>
     )

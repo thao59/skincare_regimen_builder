@@ -1,3 +1,4 @@
+import "./Navbar.css"
 
 function Navbar({onPageChange, resetStage, handleLogout}){
 

@@ -1,0 +1,50 @@
+.start_button
+{
+    width: 140px;
+    height: 50px;
+    border-radius: 10px;
+    background: #eedac5; 
+    border: 1px solid rgba(239, 184, 125, 0.5);
+    color: #5a4a42;
+    transition: all ease-in-out 0.3s;
+}
+
+.start_button:hover
+{
+    transform: translateY(-10px);
+    box-shadow: 4px 4px 20px rgba(155, 144, 144, 0.4), -4px -4px 20px rgba(155, 144, 144, 0.4);
+}
+
+.info_section
+{
+    margin-top: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+
+.info_container 
+{
+    padding: 2rem;
+    background-color: rgba(249, 248, 247, 0.9);
+    width: 40%;
+    border-radius: 30px;
+    border: 1px solid rgba(245, 217, 188, 0.5);
+    color: #af9182;
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+}
+
+.info_spec
+{
+    color: #5a4a42;
+    font-weight: 900;
+    font-size: 20px;
+}
+
+.info_icon
+{
+    font-size: 25px;
+}

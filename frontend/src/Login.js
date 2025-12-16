@@ -37,12 +37,13 @@ function Login({resetSite})
 
 
     return (
-        <div>
+        <div className="login_page">
             <form className="login_form">
-                <p>Login</p>
+                <p className="title">Login</p>
                 <input className="login_input" onChange={(field) => handleAccount(field.target.value, "username")} placeholder="Your email"/>
                 <input className="login_input" type="password" onChange={(field) => handleAccount(field.target.value, "password")} placeholder="Your password" />
-                <button disabled={!userAccount.username || !userAccount.password} onClick={() => {handleSubmit(); resetSite("hone")}} type="button">Login</button>
+                <button className={`submit_button ${!userAccount.username || !userAccount.password? "disabled": ""}`} disabled={!userAccount.username || !userAccount.password} onClick={() => {handleSubmit()}}>Login</button>
+                <p className="reminder"> Don't have an account? <button onClick={() => resetSite("signup")}>Sign up</button></p>
             </form>   
         </div>
     )
