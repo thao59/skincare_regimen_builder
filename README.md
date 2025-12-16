@@ -94,12 +94,12 @@ Uses Anthropic's Claude API to provide personalised skincare advice:
 
 
 ## Common Issues
-Issue: API requests fail with CORS error
+Issue: API requests fail with CORS error **
 Solution: Ensure `django-cors-headers` is installed and configured in `settings.py`
 
-Issue: Products not appearing in recommendations
+Issue: Products not appearing in recommendations **
 Solution: Check that product data matches expected format (skin types, concerns)
 
-Issue: Session not persisting for non-authenticated users
+Issue: Session not persisting for non-authenticated users **
 Solution: Verify `SESSION_COOKIE_HTTPONLY` and CORS credentials settings
 
