@@ -40,6 +40,17 @@ function App() {
   const[image, setImage] = useState(null);
   const[page, setPage] = useState("home");
   const[userData, setUserData] = useState({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
+  const [product_list, setProduct_list] = useState({
+    "cleanser": {"high": [], "mid": [], "low": []}, 
+    "toner": {"high": [], "mid": [], "low": []}, 
+    "serum": {"high": [], "mid": [], "low": []}, 
+    "moisturiser": {"high": [], "mid": [], "low": []}, 
+    "eye": {"high": [], "mid": [], "low": []}, 
+    "sunscreen": {"high": [], "mid": [], "low": []}, 
+    "oilcleanser": {"high": [], "mid": [], "low": []}, 
+    "micellarwater": {"high": [], "mid": [], "low": []},
+  });
+
   const resetUserData = () => {
     setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
   }  
@@ -51,6 +62,16 @@ function App() {
         changeStage(0);
         resetUserData();
         setImage(null);
+        setProduct_list({
+        cleanser: {high: [], mid: [], low: []}, 
+        toner: {high: [], mid: [], low: []}, 
+        serum: {high: [], mid: [], low: []}, 
+        moisturiser: {high: [], mid: [], low: []}, 
+        eye: {high: [], mid: [], low: []}, 
+        sunscreen: {high: [], mid: [], low: []}, 
+        oilcleanser: {high: [], mid: [], low: []}, 
+        micellarwater: {high: [], mid: [], low: []},
+      });
 
         if (site === "profile")
         {
@@ -206,16 +227,7 @@ function App() {
   const[imageArray, setImageArray] = useState(null);
   const[skinProfile, setSkinProfile] = useState(null);
   const image_group ={};
-  const [product_list, setProduct_list] = useState({
-    "cleanser": {"high": [], "mid": [], "low": []}, 
-    "toner": {"high": [], "mid": [], "low": []}, 
-    "serum": {"high": [], "mid": [], "low": []}, 
-    "moisturiser": {"high": [], "mid": [], "low": []}, 
-    "eye": {"high": [], "mid": [], "low": []}, 
-    "sunscreen": {"high": [], "mid": [], "low": []}, 
-    "oilcleanser": {"high": [], "mid": [], "low": []}, 
-    "micellarwater": {"high": [], "mid": [], "low": []},
-  });
+
   const copyList = {...product_list};
   let cleanser_cat;
   let toner_cat;
@@ -232,17 +244,6 @@ function App() {
   const sendData = async() => {
     if (userData.no_products !== 0)
     {
-      //reset product_list before fetching 
-      setProduct_list({
-        cleanser: {high: [], mid: [], low: []}, 
-        toner: {high: [], mid: [], low: []}, 
-        serum: {high: [], mid: [], low: []}, 
-        moisturiser: {high: [], mid: [], low: []}, 
-        eye: {high: [], mid: [], low: []}, 
-        sunscreen: {high: [], mid: [], low: []}, 
-        oilcleanser: {high: [], mid: [], low: []}, 
-        micellarwater: {high: [], mid: [], low: []},
-      });
       const option_headers = {
         method : "POST", 
         credentials: "include",
@@ -284,9 +285,9 @@ function App() {
           eye_cat = data.product_recs.filter(x=> x.product.product_cat === "eye").map(x => x.product);
           micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water").map(x => x.product);
           cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
-          
-          const get_skinConcern = data.user_skin_profile;
-          setSkinProfile(get_skinConcern);
+        
+          setSkinProfile(data.user_skin_profile);
+          console.log("User profile: ", skinProfile);
         }
 
         //process data if user is not logged in
@@ -331,143 +332,143 @@ function App() {
           {
             cleansingoil_cat = data.product_recs.off_oil_cleanser;
           }
-          const get_skinConcern = data.user_skin_profile;
-          setSkinProfile(get_skinConcern);
+          setSkinProfile(data.user_skin_profile);
         }
-          //categorise producr based on prices 
-          for (const item of cleanser_cat)
+        
+        //categorise producr based on prices 
+        for (const item of cleanser_cat)
+          {
+            if (item.product_price < 40) 
             {
-                if (item.product_price < 40) 
-                {
-                    copyList.cleanser.low.push(item);
-                }  
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                    copyList.cleanser.mid.push(item);
-                }
-                else
-                {
-                    copyList.cleanser.high.push(item); 
-                }
+              copyList.cleanser.low.push(item);
+            }  
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              copyList.cleanser.mid.push(item);
             }
-
-            for (const item of toner_cat)
+            else
             {
-                if (item.product_price < 40)
-                {
-                    copyList.toner.low.push(item);
-                } 
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                    copyList.toner.mid.push(item);
-                }
-                else 
-                {
-                    copyList.toner.high.push(item); 
-                }
+              copyList.cleanser.high.push(item); 
             }
+          }
 
-            for (const item of serum_cat)
+          for (const item of toner_cat)
+          {
+            if (item.product_price < 40)
             {
-                if (item.product_price < 40)
-                {
-                    copyList.serum.low.push(item);
-                }
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                    copyList.serum.mid.push(item);
-                }
-                else 
-                {
-                    copyList.serum.high.push(item); 
-                }
+              copyList.toner.low.push(item);
+            } 
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              copyList.toner.mid.push(item);
             }
-
-            for (const item of moist_cat)
+            else 
             {
-                if (item.product_price < 40)
-                {
-                    copyList.moisturiser.low.push(item);
-                } 
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                    copyList.moisturiser.mid.push(item);
-                }
-                else 
-                {
-                    copyList.moisturiser.high.push(item); 
-                }
+              copyList.toner.high.push(item); 
             }
+          }
 
-            for (const item of eye_cat)
+          for (const item of serum_cat)
+          {
+            if (item.product_price < 40)
             {
-                if (item.product_price < 40)
-                {
-                    copyList.eye.low.push(item);
-                }  
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                    copyList.eye.mid.push(item);
-                }
-                else 
-                {
-                  copyList.eye.high.push(item); 
-                }
+              copyList.serum.low.push(item);
             }
-
-            for (const item of sunscreen_cat)
+            else if (item.product_price >= 40 && item.product_price <= 80)
             {
-                if (item.product_price < 40)
-                {
-                    copyList.sunscreen.low.push(item);
-                }  
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                    copyList.sunscreen.mid.push(item);
-                }
-                else 
-                {
-                    copyList.sunscreen.high.push(item); 
-                }
+              copyList.serum.mid.push(item);
             }
-
-            if (cleansingoil_cat)
+            else 
             {
-              for (const item of cleansingoil_cat)
-                {
-                  if (item.product_price < 40)
-                  {
-                      copyList.oilcleanser.low.push(item);
-                  }   
-                  else if (item.product_price >= 40 && item.product_price <= 80)
-                  {
-                      copyList.oilcleanser.mid.push(item);
-                  }
-                  else 
-                  {
-                      copyList.oilcleanser.high.push(item); 
-                  }
-                }
+              copyList.serum.high.push(item); 
             }
+          }
 
-            if (micellarwater_cat)
+          for (const item of moist_cat)
+          {
+            if (item.product_price < 40)
             {
-              for (const item of micellarwater_cat)
-                {
-                  if (item.product_price < 40)
-                  {
-                      copyList.micellarwater.low.push(item);
-                  }
-                  else if (item.product_price >= 40 && item.product_price <= 80)
-                  {
-                      copyList.micellarwater.mid.push(item);
-                  }
-                  else 
-                  {
-                      copyList.micellarwater.high.push(item); 
-                  }
+              copyList.moisturiser.low.push(item);
+            } 
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              copyList.moisturiser.mid.push(item);
+            }
+            else 
+            {
+              copyList.moisturiser.high.push(item); 
+            }
+          }
+
+          for (const item of eye_cat)
+          {
+            if (item.product_price < 40)
+            {
+              copyList.eye.low.push(item);
+            }  
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              copyList.eye.mid.push(item);
+            }
+            else 
+            {
+              copyList.eye.high.push(item); 
+            }
+          }
+
+          for (const item of sunscreen_cat)
+          {
+            if (item.product_price < 40)
+            {
+              copyList.sunscreen.low.push(item);
+            }  
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              copyList.sunscreen.mid.push(item);
+            }
+            else 
+            {
+              copyList.sunscreen.high.push(item); 
+            }
+          }
+
+          if (cleansingoil_cat)
+          {
+            for (const item of cleansingoil_cat)
+            {
+              if (item.product_price < 40)
+              {
+                copyList.oilcleanser.low.push(item);
+              }   
+              else if (item.product_price >= 40 && item.product_price <= 80)
+              {
+                copyList.oilcleanser.mid.push(item);
+              }
+              else 
+              {
+                copyList.oilcleanser.high.push(item); 
               }
             }
+          }
+
+          if (micellarwater_cat)
+          {
+            for (const item of micellarwater_cat)
+            {
+              if (item.product_price < 40)
+              {
+                  copyList.micellarwater.low.push(item);
+              }
+              else if (item.product_price >= 40 && item.product_price <= 80)
+              {
+                  copyList.micellarwater.mid.push(item);
+              }
+              else 
+              {
+                  copyList.micellarwater.high.push(item); 
+              }
+            }
+          }
         setProduct_list(copyList);
         console.log(product_list);
         changeStage(13);
@@ -719,7 +720,6 @@ function App() {
         console.log("Error: ", response.status);
       }
     }
-    console.log();
 
   return (
     <div className="App">
@@ -733,191 +733,208 @@ function App() {
           <div className="labels_container">
             <h1 className="title"> My Skincare Routine Tracker</h1>
             <p> Track your skincare journey and get personalised recommendations!</p>
-            <h2 className="question">What's your name?</h2>
-            <input type="text" onChange={(field) => handleName(field.target.value)} value={userData.name}/>
-            <button className="button_next" onClick ={() => changeStage()} disabled={!userData.name}>&#8594;</button>
+            <div className="content_container">
+              <h2 className="question">What's your name?</h2>
+              <input className="input_field" type="text" onChange={(field) => handleName(field.target.value)} value={userData.name} placeholder="Enter your name"/>
+              {!userData.name? <button className="button_next disabled" disabled>&#8594;</button>: <button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
+            </div>
           </div>
         )}
         {stage === 2 && (
           <div className="labels_container">
-            <h2 className="question">How old are you? For better and more accurate result.</h2>
-            <input type="text" onChange={(field) => handleAge(field.target.value)} value={userData.age > 0 ? userData.age : ""}/>
-            <div className="button_container">
-              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button className="button_next" onClick ={() => changeStage()} disabled={userData.age < 12 || userData.age > 100 || isNaN(userData.age) }>&#8594;</button>
+            <div className="content_container">
+              <h2 className="question">How old are you?</h2>
+              <input className="input_field" type="text" onChange={(field) => handleAge(field.target.value)} value={userData.age > 0 ? userData.age : ""}/>
+              <div className="button_container">
+                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+                {userData.age < 12 || userData.age > 100 || isNaN(userData.age)? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
+              </div>
             </div>
-
           </div>
         )}
 
         {stage === 3 && (
           <div className="labels_container">
-            <h2 className="question">What is your skin type?</h2>
-            <p className="note">Select the answer that fits you best.</p>
-            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("oily")} checked={userData.skin_type === "oily"}/> Oily</label>
-            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("dry")} checked={userData.skin_type === "dry"}/> Dry</label>
-            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("balanced")} checked={userData.skin_type === "balanced"}/> Balanced</label>
-            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("combination")} checked={userData.skin_type === "combination"}/> Combination</label>
-            <label><input type="radio" name="skin_type" onChange={() => handleSkinType("sensitive")} checked={userData.skin_type === "sensitive"}/> Sensitive</label>
-            <div className="button_container">
-              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button className="button_next" onClick ={() => changeStage()} disabled={!userData.skin_type}>&#8594;</button>
-            </div>
-            
+            <div className="content_container">
+              <h2 className="question">What is your skin type?</h2>
+              <p className="note">Select the answer that fits you best.</p>
+              <label><input type="radio" name="skin_type" onChange={() => handleSkinType("oily")} checked={userData.skin_type === "oily"}/> Oily</label>
+              <label><input type="radio" name="skin_type" onChange={() => handleSkinType("dry")} checked={userData.skin_type === "dry"}/> Dry</label>
+              <label><input type="radio" name="skin_type" onChange={() => handleSkinType("balanced")} checked={userData.skin_type === "balanced"}/> Balanced</label>
+              <label><input type="radio" name="skin_type" onChange={() => handleSkinType("combination")} checked={userData.skin_type === "combination"}/> Combination</label>
+              <label><input type="radio" name="skin_type" onChange={() => handleSkinType("sensitive")} checked={userData.skin_type === "sensitive"}/> Sensitive</label>
+              <div className="button_container">
+                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+                {!userData.skin_type? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
+              </div>
+            </div> 
           </div>
         )}
         
         {stage === 4 && (
           <div className="labels_container">
-          <h2 className="question"> Identify your top 4 concerns </h2>
-          <label><input type="checkbox" onChange={() => handleConcern("acne")} checked={userData.skin_concern.includes("acne")}/> Acne</label>
-          <label><input type="checkbox" onChange={() => handleConcern("congestion")} checked={userData.skin_concern.includes("congestion")}/> Congestion</label>
-          <label><input type="checkbox" onChange={() => handleConcern("aging")} checked={userData.skin_concern.includes("aging")}/> Aging</label>
-          <label><input type="checkbox" onChange={() => handleConcern("pigmentation")} checked={userData.skin_concern.includes("pigmentation")}/> Dark spots/Hyperpigmentation</label>
-          <label><input type="checkbox" onChange={() => handleConcern("dehydrated")} checked={userData.skin_concern.includes("dehydrated")}/> Dehydrated</label>
-          <label><input type="checkbox" onChange={() => handleConcern("dryness")} checked={userData.skin_concern.includes("dryness")}/> Dry</label>
-          <label><input type="checkbox" onChange={() => handleConcern("pores")} checked={userData.skin_concern.includes("pores")}/> Large pores </label> 
-          <label><input type="checkbox" onChange={() => handleConcern("sensitive")} checked={userData.skin_concern.includes("sensitive")}/> Sensitive</label>
-          <label><input type="checkbox" onChange={() => handleConcern("redness")} checked={userData.skin_concern.includes("redness")}/> Redness</label>
-          <label><input type="checkbox" onChange={() => handleConcern("dullness")} checked={userData.skin_concern.includes("dullness")}/> Dullness</label>
-          <label><input type="checkbox" onChange={() => handleConcern("texture")} checked={userData.skin_concern.includes("texture")}/> Uneven texture</label>
-          <div className="button_container">
-            <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-            <button className="button_next" onClick ={() => changeStage()} disabled={userData.skin_concern.length < 1}>&#8594;</button>
-          </div>
-          
+            <div className="content_container">
+              <h2 className="question"> Identify your top 4 concerns </h2>
+              <label><input type="checkbox" onChange={() => handleConcern("acne")} checked={userData.skin_concern.includes("acne")}/> Acne</label>
+              <label><input type="checkbox" onChange={() => handleConcern("congestion")} checked={userData.skin_concern.includes("congestion")}/> Congestion</label>
+              <label><input type="checkbox" onChange={() => handleConcern("aging")} checked={userData.skin_concern.includes("aging")}/> Aging</label>
+              <label><input type="checkbox" onChange={() => handleConcern("pigmentation")} checked={userData.skin_concern.includes("pigmentation")}/> Dark spots/Hyperpigmentation</label>
+              <label><input type="checkbox" onChange={() => handleConcern("dehydrated")} checked={userData.skin_concern.includes("dehydrated")}/> Dehydrated</label>
+              <label><input type="checkbox" onChange={() => handleConcern("dryness")} checked={userData.skin_concern.includes("dryness")}/> Dry</label>
+              <label><input type="checkbox" onChange={() => handleConcern("pores")} checked={userData.skin_concern.includes("pores")}/> Large pores </label> 
+              <label><input type="checkbox" onChange={() => handleConcern("sensitive")} checked={userData.skin_concern.includes("sensitive")}/> Sensitive</label>
+              <label><input type="checkbox" onChange={() => handleConcern("redness")} checked={userData.skin_concern.includes("redness")}/> Redness</label>
+              <label><input type="checkbox" onChange={() => handleConcern("dullness")} checked={userData.skin_concern.includes("dullness")}/> Dullness</label>
+              <label><input type="checkbox" onChange={() => handleConcern("texture")} checked={userData.skin_concern.includes("texture")}/> Uneven texture</label>
+              <div className="button_container">
+                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+                {userData.skin_concern.length < 1? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
+              </div>
+            </div>  
         </div>
         )}
 
         {stage === 5 && (
           <div className="labels_container">
-            <h2 className="question">Do you have any eye area concerns?</h2>
-            <p className="note">Select all that apply</p>
-            <label><input type="checkbox" onChange={()=> handleEyeConcern("wrinkles")} checked={userData.eye_concern.includes("wrinkles")}/> Fine Lines and Wrinkles</label>
-            <label><input type="checkbox" onChange={()=> handleEyeConcern("dark circles")}  checked={userData.eye_concern.includes("dark circles")}/> Dark Circles</label>
-            <label><input type="checkbox" onChange={()=> handleEyeConcern("puffiness")}  checked={userData.eye_concern.includes("puffiness")}/> Puffiness</label>
-            <label><input type="checkbox" onChange={()=> handleEyeConcern("dryness")}  checked={userData.eye_concern.includes("dryness")}/> Dryness</label>
-            <div className="button_container">
-              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button className="button_next" onClick ={() => changeStage()} disabled={userData.skin_concern.length < 1}>&#8594;</button>
+            <div className="content_container">
+              <h2 className="question">Do you have any eye area concerns?</h2>
+              <p className="note">Select all that apply</p>
+              <label><input type="checkbox" onChange={()=> handleEyeConcern("wrinkles")} checked={userData.eye_concern.includes("wrinkles")}/> Fine Lines and Wrinkles</label>
+              <label><input type="checkbox" onChange={()=> handleEyeConcern("dark circles")}  checked={userData.eye_concern.includes("dark circles")}/> Dark Circles</label>
+              <label><input type="checkbox" onChange={()=> handleEyeConcern("puffiness")}  checked={userData.eye_concern.includes("puffiness")}/> Puffiness</label>
+              <label><input type="checkbox" onChange={()=> handleEyeConcern("dryness")}  checked={userData.eye_concern.includes("dryness")}/> Dryness</label>
+              <div className="button_container">
+                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+                {userData.skin_concern.length < 1? <button className="button_next disabled" disabled>&#8594;</button>:<button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
+              </div>
             </div>
-            
           </div>
         )}
 
         {stage === 6 && (
             <div className="labels_container">
-            <h2 className="question">Are you currently pregnant, breastfeeding, planning on getting pregnant or post-partum?</h2>
-            <label><input type="radio" name="pregnant" onChange={()=> handlePregnant("yes")} checked={userData.pregnant === true}/> Yes</label>
-            <label><input type="radio" name="pregnant" onChange={()=> handlePregnant("no")} checked={userData.pregnant === false} /> No</label>
-            <div className="button_container">
-              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button className="button_next" onClick={() => changeStage()} disabled={userData.pregnant === null}>&#8594;</button>
-            </div>
-            
+              <div className="content_container">
+                <h2 className="question">Are you currently pregnant, breastfeeding, planning on getting pregnant or post-partum?</h2>
+                <label><input type="radio" name="pregnant" onChange={()=> handlePregnant("yes")} checked={userData.pregnant === true}/> Yes</label>
+                <label><input type="radio" name="pregnant" onChange={()=> handlePregnant("no")} checked={userData.pregnant === false} /> No</label>
+                <div className="button_container">
+                  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+                  {userData.pregnant === null? <button className="button_next disabled" disabled>&#8594;</button>: <button className="button_next" onClick={() => changeStage()}>&#8594;</button>}
+                </div>
+              </div>
           </div>
         )}
                 
         {stage === 7 && (
           <div className="labels_container">
-            <h2 className="question"> Which products are you currently using in your routine? </h2>
-            <p className="note">Select all that apply.</p>
-              <label><input type="checkbox" onChange={() => handleProductsType("cleanser")} checked={userData.products_type.includes("cleanser")}/> Cleanser</label>
-              <label><input type="checkbox" onChange={() => handleProductsType("exfoliator")} checked={userData.products_type.includes("exfoliator")}/> Exfoliator</label>
-              <label><input type="checkbox" onChange={() => handleProductsType("toner")} checked={userData.products_type.includes("toner")}/> Toner</label>
-              <label><input type="checkbox" onChange={() => handleProductsType("serum")} checked={userData.products_type.includes("serum")}/> Serum</label>
-              <label><input type="checkbox" onChange={() => handleProductsType("moisturiser")} checked={userData.products_type.includes("moisturiser")}/> Moisturiser</label>
-              <label><input type="checkbox"  onChange={() => handleHavingRoutine("no_routine")} checked={userData.routine === "no_routine"} /> I don't have a skincare routine</label>
-              <div className="button_container">
-                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                {(userData.products_type.length < 1 && userData.routine === "") && <button disabled ={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
-                {userData.routine === "no_routine" && <button className="button_next" onClick={() => token? changeStage(12): changeStage(11)} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
-                {userData.products_type.length > 0 && <button className="button_next" onClick={() => changeStage()} disabled={userData.products_type.length < 1 && userData.routine === ""}>&#8594;</button>}
-              </div>
-            
+            <div className="content_container">
+              <h2 className="question"> Which products are you currently using in your routine? </h2>
+              <p className="note">Select all that apply.</p>
+                <label><input type="checkbox" onChange={() => handleProductsType("cleanser")} checked={userData.products_type.includes("cleanser")}/> Cleanser</label>
+                <label><input type="checkbox" onChange={() => handleProductsType("exfoliator")} checked={userData.products_type.includes("exfoliator")}/> Exfoliator</label>
+                <label><input type="checkbox" onChange={() => handleProductsType("toner")} checked={userData.products_type.includes("toner")}/> Toner</label>
+                <label><input type="checkbox" onChange={() => handleProductsType("serum")} checked={userData.products_type.includes("serum")}/> Serum</label>
+                <label><input type="checkbox" onChange={() => handleProductsType("moisturiser")} checked={userData.products_type.includes("moisturiser")}/> Moisturiser</label>
+                <label><input type="checkbox"  onChange={() => handleHavingRoutine("no_routine")} checked={userData.routine === "no_routine"} /> I don't have a skincare routine</label>
+                <div className="button_container">
+                  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+                  <button className={`button_next ${userData.products_type.length < 1 && userData.routine === ""? "disabled": ""}`} disabled={userData.products_type.length < 1 && userData.routine === ""} onClick={() => userData.routine === "no_routine"? changeStage(11): changeStage()}>&#8594;</button>
+                </div>
+            </div>        
           </div>
         )}
 
         {stage === 8 && userData.products_type.length > 0 && (
           <div className="labels_container">
-            <h2 className="question"> Are you using actives in your skincare routine? </h2>
-            <label><input type="radio" name="active" onChange={() => handleActive("yes")} checked={userData.active_use === true}/> Yes</label>
-            <label><input type="radio" name="active" onChange={() => handleActive("no")} checked={userData.active_use === false}/> No</label>
-            <div className="button_container">
-              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              {userData.active_use === null && <button disabled={userData.active_use === null}>&#8594;</button>}
-              {userData.active_use === false && <button className="button_next" onClick={() => token? changeStage(12): changeStage(11)} disabled={userData.active_use === null}>&#8594;</button> }
-              {userData.active_use === true && <button className="button_next" onClick={() => changeStage()} disabled={userData.active_use === null}>&#8594;</button>}
+            <div className="content_container">
+              <h2 className="question"> Are you using actives in your skincare routine? </h2>
+              <label><input type="radio" name="active" onChange={() => handleActive("yes")} checked={userData.active_use === true}/> Yes</label>
+              <label><input type="radio" name="active" onChange={() => handleActive("no")} checked={userData.active_use === false}/> No</label>
+              <div className="button_container">
+                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+                <button className={`button_next ${userData.active_use === null? "disabled": ""}`} disabled={userData.active_use === null} onClick={() => userData.active_use === false? changeStage(11): changeStage()}>&#8594;</button>
+              </div>
             </div>
           </div>
         )}
 
         { stage === 9 && userData.active_use === true && (
           <div className="labels_container">
-            <h2 className="question"> What actives are in your routine? </h2>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("vitaminC")} checked={userData.activeIngre.includes("vitaminC")}/> Vitamin C</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("niacinamide")} checked={userData.activeIngre.includes("niacinamide")}/> Niacinamide</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("bha")} checked={userData.activeIngre.includes("bha")}/> BHA</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("aha")} checked={userData.activeIngre.includes("aha")}/> AHA</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("pha")} checked={userData.activeIngre.includes("pha")}/> PHA</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("retinol")} checked={userData.activeIngre.includes("retinol")}/> Retinol</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("tretinoin")} checked={userData.activeIngre.includes("tretinoin")}/> Tretinoin </label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("azelaicAcid")} checked={userData.activeIngre.includes("azelaicAcid")}/> Azelaic Acid</label>
-            <label><input type="checkbox" onChange={() => handleActiveUsage("benzoylPeroxide")} checked={userData.activeIngre.includes("benzoylPeroxide")}/> Benzoyl Peroxide</label>
-            <div className="button_container">
-              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button className="button_next" onClick={() => changeStage()} disabled={userData.activeIngre.length < 1}>&#8594;</button>
+            <div className="content_container">
+              <h2 className="question"> What actives are in your routine? </h2>
+              <label><input type="checkbox" onChange={() => handleActiveUsage("vitaminC")} checked={userData.activeIngre.includes("vitaminC")}/> Vitamin C</label>
+              <label><input type="checkbox" onChange={() => handleActiveUsage("niacinamide")} checked={userData.activeIngre.includes("niacinamide")}/> Niacinamide</label>
+              <label><input type="checkbox" onChange={() => handleActiveUsage("bha")} checked={userData.activeIngre.includes("bha")}/> BHA</label>
+              <label><input type="checkbox" onChange={() => handleActiveUsage("aha")} checked={userData.activeIngre.includes("aha")}/> AHA</label>
+              <label><input type="checkbox" onChange={() => handleActiveUsage("pha")} checked={userData.activeIngre.includes("pha")}/> PHA</label>
+              <label><input type="checkbox" onChange={() => handleActiveUsage("retinol")} checked={userData.activeIngre.includes("retinol")}/> Retinol</label>
+              <label><input type="checkbox" onChange={() => handleActiveUsage("tretinoin")} checked={userData.activeIngre.includes("tretinoin")}/> Tretinoin </label>
+              <label><input type="checkbox" onChange={() => handleActiveUsage("azelaicAcid")} checked={userData.activeIngre.includes("azelaicAcid")}/> Azelaic Acid</label>
+              <label><input type="checkbox" onChange={() => handleActiveUsage("benzoylPeroxide")} checked={userData.activeIngre.includes("benzoylPeroxide")}/> Benzoyl Peroxide</label>
+              <div className="button_container">
+                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+                {userData.activeIngre.length < 1? <button className="button_next disabled">&#8594;</button> :<button className="button_next" onClick={() => changeStage()}>&#8594;</button>}
+              </div>
             </div>
-
           </div>
         )}
 
         {stage === 10 && (
           <div className="labels_container">
-            <h2 className="question"> Are you an experienced user of acids, retinoids and vitamin C?</h2>
-            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("beginner")} checked={userData.advanced_user === "beginner"}/> Beginner </label>
-            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("intermediate")} checked={userData.advanced_user === "intermediate"}/> Intermediate</label>
-            <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("advanced")} checked={userData.advanced_user === "advanced"}/> Advanced </label>
-            <div className="button_container">
-              <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-              <button onClick={() => changeStage()} disabled={userData.advanced_user === ""}>&#8594;</button>
+            <div className="content_container">
+              <h2 className="question"> Are you an experienced user of acids, retinoids and vitamin C?</h2>
+              <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("beginner")} checked={userData.advanced_user === "beginner"}/> Beginner </label>
+              <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("intermediate")} checked={userData.advanced_user === "intermediate"}/> Intermediate</label>
+              <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("advanced")} checked={userData.advanced_user === "advanced"}/> Advanced </label>
+              <div className="button_container">
+                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
+                {userData.advanced_user === ""? <button className="button_next disabled">&#8594;</button>: <button className="button_next" onClick={() => changeStage()}>&#8594;</button>}
+              </div>
             </div>
           </div>
         )}
 
         {stage === 11 && (
           <div className="labels_container">
-            <h2 className="question"> How many products do you prefer to have in your regimen?</h2>
-            <label><input type="radio" name="no_products" onChange={() => handleNoProducts(3)} checked={userData.no_products === 3}/> Simple (3 products) </label>
-            <label><input type="radio" name="no_products" onChange={() => handleNoProducts(5)} checked={userData.no_products === 5}/> Essentials (4-5 products)</label>
-            <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)} checked={userData.no_products === 6}/> Advanced (6+ products) </label>
-            <div className="button_container">
-              {userData.advanced_user !== "" && <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>}
-              {userData.routine === "no_routine" &&  <button className="button_previous" onClick={()=> changePreviousStage(7)}> &#8592; </button>}
-              {userData.active_use === false &&  <button className="button_previous" onClick={()=> changePreviousStage(8)}> &#8592; </button>}
-              {token ? <button onClick={() => changeStage()} disabled={userData.no_products === 0}>&#8594;</button> : <button onClick={() => sendData()} disabled={userData.no_products === 0}>&#8594;</button>}
-            </div>
+            <div className="content_container">
+              <h2 className="question"> How many products do you prefer to have in your regimen?</h2>
+              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(3)} checked={userData.no_products === 3}/> Simple (3 products) </label>
+              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(5)} checked={userData.no_products === 5}/> Essentials (4-5 products)</label>
+              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)} checked={userData.no_products === 6}/> Advanced (6+ products) </label>
+              <div className="button_container">
+                <button className="button_previous" onClick={() => {
+                  if(userData.advanced_user !== "")
+                    changePreviousStage()
+                  else if (userData.routine === "no_routine")
+                    changePreviousStage(7)
+                  else if (userData.active_use === false)
+                    changePreviousStage(8)  
+                }}>&#8592;</button>
+                  
 
+                <button className={`button_next ${userData.no_products === 0? "disabled": ""}`} onClick={() => token? changeStage(): sendData()}>&#8594;</button>
+              </div>
+            </div>
           </div>
         )} 
 
-        {(userData.routine === "no_routine" || userData.active_use === false || userData.no_products !== 0) && stage === 12 && (
+        {stage === 12 && (
           <div className="labels_container">
-            <h2 className="question">Upload photos of your skin <span className="opt">(optional)</span></h2>
-            <p className="opt">Please upload file smaller than 5MB </p>
-            <input className="upload_img" type="file" accept="image/*" onChange ={(img) => handleImage(img.target.files[0])}/>
-            {image && <img className="preview_image" src={image} alt="preview"/>}
-            <button onClick={() => {sendData(); changeStage()}}> Skip for now </button>
-            <div className="button_container">
-              {userData.routine === "no_routine" &&  <button className="button_previous" onClick={()=> changePreviousStage(7)}> &#8592; </button>}
-              {userData.active_use === false &&  <button className="button_previous" onClick={()=> changePreviousStage(8)}> &#8592; </button>}
-              {userData.no_products !== 0 &&  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>}
-              <button onClick={() => {handleSendImage()}} disabled={!image}> Upload photo </button>
+            <div className="content_container">
+              <h2 className="question">Upload photos of your skin <span className="opt">(optional)</span></h2>
+              <p className="opt">Please upload file smaller than 5MB </p>
+              <input className="upload_img" type="file" accept="image/*" onChange ={(img) => handleImage(img.target.files[0])}/>
+              {image && <img className="preview_image" src={image} alt="preview"/>}
+              <button className="photo_button" onClick={() => {sendData(); changeStage()}}> Skip for now </button>
+              <div className="button_container">
+                {userData.no_products !== 0 &&  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>}
+                <button className={`photo_button ${!image? "disabled": ""}`} onClick={() => {handleSendImage()}} disabled={!image}> Upload photo </button>
+              </div>
             </div>
           </div>
         )}  
 
-        {stage === 13 && <Productrec product_list={product_list} skinProfile={skinProfile} handlePage={handlePage}/>}
+        {(skinProfile && stage === 13) && <Productrec product_list={product_list} skinProfile={skinProfile} handlePage={handlePage}/>}
     </div>
   )
 }

@@ -1,14 +1,25 @@
+html
+{
+  height: 100%;
+  background-color: linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%);
+
+}
+
 body
 {
-  background-color: #F8F6F4;
-  color: #2C2C2C;
+  color: #5a4a42;
+  height: 100%;
 }
 
 .title
 {
-  color: #C9A962;
-  font-weight: 600;
+  margin: 7rem;
+  margin-bottom: 3rem;
+  font-size: 3rem;
+  font-weight: 900;
+  color: #5a4a42; 
   letter-spacing: 1px;
+  font-family: 'Playfair Display', serif;
 }
 
 .question
@@ -30,6 +41,7 @@ p
 
 .App {
   text-align: center;
+  width: 100%;
 }
 
 label 
@@ -41,12 +53,55 @@ label
 
 .labels_container 
 {
+  margin-top: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-  width:100%;
+  width: 100%;
+}
+
+.content_container
+{
+  margin-top: 3rem;
+  background-color: #f5f0eb;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  max-height: 700px;
+  padding: 3rem;
+  max-width: 70%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  justify-content: center;
+  align-items: center;
+  color: #5a4a42;
+  border-radius: 40px;
+  border: 2px solid #e8ddd0;
+}
+
+.input_field
+{
+  background: #ffffff;
+  border: 2px solid #e8ddd0; 
+  border-radius: 10px;
+  height: 50px;
+  width: 250px;
+  padding: 0.4rem;
+  color: #5D4037;
+  transition: all ease-in-out 0.2s;
+}
+
+.input_field:focus
+{
+  border: 2px solid #c9a782; 
+  box-shadow:  0 0 0 4px rgba(201, 167, 130, 0.15);
+}
+
+.input_field:active
+{
+  border: 2px solid #c9a782; 
+  box-shadow:  0 0 0 4px rgba(201, 167, 130, 0.15);
 }
 
 .button_container 
@@ -54,6 +109,31 @@ label
   display: flex;
   justify-content: space-between;
   width: 80%;
+}
+
+.button_next, .button_previous
+{
+  background: #c9a782; 
+  color: white;
+  border-radius: 50px;
+  width: 50px;
+  height: 35px;
+  border: none;
+}
+
+.photo_button
+{
+  background: #c9a782; 
+  border: none;
+  border-radius: 10px;
+  height: 30px;
+  width: 120px;
+  color: #5a4a42;
+}
+
+.button_next.disabled, .photo_button.disabled
+{
+  background: #e2c8ac;
 }
 
 .opt 

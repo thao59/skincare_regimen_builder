@@ -55,11 +55,11 @@ def processdata(request):
     user_name = request.data["name"]
     if not user_name:
         return Response({"error": "Missing value"}, status= status.HTTP_400_BAD_REQUEST)
-    
+
     user_age = request.data["age"]
     if not user_age:
         return Response({"error": "Missing value"}, status = status.HTTP_400_BAD_REQUEST)
-    
+
     user_skintype = request.data["skin_type"]
     if not user_skintype: 
         return Response({"error": "missing value"}, status = status.HTTP_400_BAD_REQUEST)
@@ -71,7 +71,7 @@ def processdata(request):
     user_pregnant = request.data["pregnant"]
     if user_pregnant is None: 
         return Response({"error": "Missing value"}, status=status.HTTP_400_BAD_REQUEST)
-    
+
     #no check valid value for optional fields 
     user_eyeconcern = request.data["eye_concern"]
     user_products_type = request.data["products_type"]
@@ -80,6 +80,8 @@ def processdata(request):
     user_activeIngre = request.data["activeIngre"]
     user_advanced_use = request.data["advanced_user"]
     user_no_products = request.data["no_products"]
+
+    get_image = None 
 
     #check if user uploads photo
     if "image_file" in request.FILES:
@@ -92,18 +94,18 @@ def processdata(request):
             if get_image.size > 5*1024*1024: 
                 return Response({"error": "Image exceeds 5MB"}, status = status.HTTP_400_BAD_REQUEST)
             
-            #check if user is logged in
-            if request.user.is_authenticated: 
-                #get UserProfile instance
-                user = request.user.info
-                
-                #save imgs to db 
-                try:
-                    save_image = UserImage.objects.create(userinfo = user, image = get_image)
-                    print(f"Save image successfully: {save_image}")
-                except Exception as e:
-                    print(f"Image saved unsuccessfully, error: {e}")
-                    return Response({"error": "Image saved unsuccessfully"})
+    #check if user is logged in
+    if request.user.is_authenticated: 
+        #get UserProfile instance
+        user = request.user.info
+        
+        if get_image: 
+            try:
+                save_image = UserImage.objects.create(userinfo = user, image = get_image)
+                print(f"Save image successfully: {save_image}")
+            except Exception as e:
+                print(f"Image saved unsuccessfully, error: {e}")
+                return Response({"error": "Image saved unsuccessfully"})
 
     #if USER IS LOGGED IN
     if request.user.is_authenticated:
@@ -133,52 +135,52 @@ def processdata(request):
         get_rec = Recommendation()
         products_rec = get_rec.get_login_rec(get_user, profile) 
         user_skin_profile = ProfileSerializer(profile)
-        
         return Response ({"product_recs" : products_rec.data, "user_skin_profile": user_skin_profile.data}, status=status.HTTP_200_OK)
     
-    #if USER IS NOT LOGGED IN
-    user_profile = {"username": user_name, "age": user_age, "skintype": user_skintype, "skin_concern": user_skinconcern, "pregnant": user_pregnant, "eye_concern": user_eyeconcern, "products_type":  user_products_type, "routine": user_routine, "active_use": user_active_use, "active_ingre": user_activeIngre, "advanced_active_use": user_advanced_use, "no_products": user_no_products}
+    else: 
+        #if USER IS NOT LOGGED IN
+        user_profile = {"username": user_name, "age": user_age, "skintype": user_skintype, "skin_concern": user_skinconcern, "pregnant": user_pregnant, "eye_concern": user_eyeconcern, "products_type":  user_products_type, "routine": user_routine, "active_use": user_active_use, "active_ingre": user_activeIngre, "advanced_active_use": user_advanced_use, "no_products": user_no_products}
+        
+        #create temp id for user
+        if not request.session.session_key:
+            request.session.create()
     
-    #create temp id for user
-    if not request.session.session_key:
-        request.session.create()
-    
-    print(f"id: {request.session.session_key}")
-    request.session["skinprofile"] = user_profile
-    print(f"userprofile: {request.session["skinprofile"]}")
-    request.session.modified = True
-    
-    create = Recommendation()
-    products_rec = create.get_rec(user_profile)
+        print(f"id: {request.session.session_key}")
+        request.session["skinprofile"] = user_profile
+        print(f"userprofile: {request.session["skinprofile"]}")
+        request.session.modified = True
+        
+        create = Recommendation()
+        products_rec = create.get_rec(user_profile)
 
-    #float all products'price before saving to session as JSON cant serialise decimals 
-    for row in products_rec["off_cleanser"]:
-        row["product_price"] = float(row["product_price"])
-    
-    for row in products_rec["off_toner"]:
-        row["product_price"] = float(row["product_price"])
-    
-    for row in products_rec["off_serum"]:
-        row["product_price"] = float(row["product_price"])
+        #float all products'price before saving to session as JSON cant serialise decimals 
+        for row in products_rec["off_cleanser"]:
+            row["product_price"] = float(row["product_price"])
+        
+        for row in products_rec["off_toner"]:
+            row["product_price"] = float(row["product_price"])
+        
+        for row in products_rec["off_serum"]:
+            row["product_price"] = float(row["product_price"])
 
-    for row in products_rec["off_moisturiser"]:
-        row["product_price"] = float(row["product_price"])
-    
-    for row in products_rec["off_sunscreen"]:
-        row["product_price"] = float(row["product_price"])
-    
-    for row in products_rec["off_eye"]:
-        row["product_price"] = float(row["product_price"])
-    
-    for row in products_rec["off_oil_cleanser"]:
-        row["product_price"] = float(row["product_price"])
+        for row in products_rec["off_moisturiser"]:
+            row["product_price"] = float(row["product_price"])
+        
+        for row in products_rec["off_sunscreen"]:
+            row["product_price"] = float(row["product_price"])
+        
+        for row in products_rec["off_eye"]:
+            row["product_price"] = float(row["product_price"])
+        
+        for row in products_rec["off_oil_cleanser"]:
+            row["product_price"] = float(row["product_price"])
 
-    for row in products_rec["off_micellar_water"]:
-        row["product_price"] = float(row["product_price"])
+        for row in products_rec["off_micellar_water"]:
+            row["product_price"] = float(row["product_price"])
 
-    request.session["product_rec"]= products_rec
-    print(f"product rec: {request.session["product_rec"]}")
-    return Response ({"product_recs": products_rec, "user_skin_profile": user_profile}, status=status.HTTP_200_OK)
+        request.session["product_rec"]= products_rec
+        print(f"product rec: {request.session["product_rec"]}")
+        return Response ({"product_recs": products_rec, "user_skin_profile": user_profile}, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
@@ -209,7 +211,6 @@ def chatbox (request):
         #create new conversation or just update old one 
         if not consId:  
             user_conver = Conversation.objects.create(user= user)
-            print(f"active conver: {user_conver}")
         else: 
             user_conver = Conversation.objects.get(id = consId, user =user)
             user_conver.save()
@@ -234,11 +235,10 @@ def chatbox (request):
                 consId = request.session.session_key
 
         user_profile = request.session.get("skinprofile")
-        print(f"user profile: {user_profile}")
+
         if not user_profile:
             return Response({"error": "Session has expired. Please complete the survey again"}, status=status.HTTP_400_BAD_REQUEST)
         products = request.session["product_rec"]
-        print(f"product rec: {products}")
         
         service = ClaudeService()
         response = service.get_personalised_response(get_message["message"], user_profile, products)
