@@ -83,7 +83,7 @@ def processdata(request):
 
     get_image = None 
 
-    #check if user uploads photo
+        #check if user uploads photo
     if "image_file" in request.FILES:
         get_image = request.FILES["image_file"]
     
@@ -93,25 +93,12 @@ def processdata(request):
             #ensure img < 5MB 
             if get_image.size > 5*1024*1024: 
                 return Response({"error": "Image exceeds 5MB"}, status = status.HTTP_400_BAD_REQUEST)
-            
-    #check if user is logged in
-    if request.user.is_authenticated: 
-        #get UserProfile instance
-        user = request.user.info
-        
-        if get_image: 
-            try:
-                save_image = UserImage.objects.create(userinfo = user, image = get_image)
-                print(f"Save image successfully: {save_image}")
-            except Exception as e:
-                print(f"Image saved unsuccessfully, error: {e}")
-                return Response({"error": "Image saved unsuccessfully"})
 
-    #if USER IS LOGGED IN
+    get_user = None
+    get_image = None 
+
     if request.user.is_authenticated:
-        #get user instance 
-        get_user = request.user 
-
+        get_user = request.user
         #save data if new profile. If there's an existing profile, modify fields 
         profile, created = UserProfile.objects.update_or_create(
             user = get_user, 
@@ -129,8 +116,17 @@ def processdata(request):
                 "advanced_active_use": user_advanced_use, 
                 "no_products": user_no_products,
             })
+            
+        if get_image: 
+            try:
+                save_image = UserImage.objects.create(userinfo = profile, image = get_image)
+                print(f"Save image successfully: {save_image}")
+            except Exception as e:
+                print(f"Image saved unsuccessfully, error: {e}")
+                return Response({"error": "Image saved unsuccessfully"})
+        
         #detele the old recommendation and only saving the latest
-        UserProduct.objects.filter(user = request.user).delete()
+        UserProduct.objects.filter(user = get_user).delete()
 
         get_rec = Recommendation()
         products_rec = get_rec.get_login_rec(get_user, profile) 
@@ -144,10 +140,8 @@ def processdata(request):
         #create temp id for user
         if not request.session.session_key:
             request.session.create()
-    
-        print(f"id: {request.session.session_key}")
+
         request.session["skinprofile"] = user_profile
-        print(f"userprofile: {request.session["skinprofile"]}")
         request.session.modified = True
         
         create = Recommendation()
@@ -179,29 +173,68 @@ def processdata(request):
             row["product_price"] = float(row["product_price"])
 
         request.session["product_rec"]= products_rec
-        print(f"product rec: {request.session["product_rec"]}")
         return Response ({"product_recs": products_rec, "user_skin_profile": user_profile}, status=status.HTTP_200_OK)
 
 @api_view(["GET"])
 @permission_classes([IsAuthenticated])
 def getImage(request):
-    user = request.user.info
-    user_photo = user.image_profile
-    image_dict = ImageSerializer(user_photo, many=True)
-    print(f"image: {user_photo}")
-    info_dict = ProfileSerializer(user)
-    get_product_recs = UserProduct.objects.filter(user=request.user)
-    print(f"product rec: {get_product_recs}")
-    product_recs_dict = UserProductSerializer(get_product_recs, many=True)
+    user_info = None
+    info_dict = None
+    image_dict = None
+    username = None
+    product_recs_dict = None
+
+    #get current user object
+    user = request.user 
+    username = user.username
+    print(f"user object: {user}")
+    try:
+        user_info = user.info
+        print(f"user info: {user_info}")
+        if user_info: 
+            info_dict = ProfileSerializer(user_info)
+            print(f"info dict data: {info_dict.data}")
+        else: 
+            print("No object returned")
+    except Exception as e:
+        print(f"error: {e}")
+
+    try: 
+        if user_info:
+            user_photo = user_info.image_profile.all()
+            if user_photo.exists():
+                image_dict = ImageSerializer(user_photo, many=True)
+            else:
+                print("No photo object")
+        else: 
+            print("Profile doesn't exist!")
+    except Exception as e:
+        print(f"error: {e}")
+
+    try: 
+        get_product_recs = UserProduct.objects.filter(user=user)
+        if get_product_recs.exists(): 
+            product_recs_dict = UserProductSerializer(get_product_recs, many=True)
+            print(f"product recs: {product_recs_dict.data}")
+        else: 
+            print("There's no product recs")
+    except Exception as e:
+        print(f"error: {e}")
     
-    return Response({"image": image_dict.data, "skininfo": info_dict.data, "product_recs": product_recs_dict.data}, status=status.HTTP_200_OK)
+    print(f"image dict: {image_dict}")
+    if info_dict.data or image_dict.data or product_recs_dict.data:
+        return Response({"image": image_dict.data if image_dict else [], "skininfo": info_dict.data if info_dict else {}, "product_recs": product_recs_dict.data if product_recs_dict else {}}, status=status.HTTP_200_OK)
+    else:
+        if username:
+            return Response({"name": username}, status = status.HTTP_200_OK)
+        else:
+            return Response({"error": "No username saved"}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(["POST", "GET"])
 def chatbox (request): 
     get_message = request.data["message"]
     if not get_message:
         return Response({"error": "no message sent"}, status=status.HTTP_400_BAD_REQUEST)
-    print(f"type: {get_message["message"]}")
     
     consId = request.data["messageId"]
 
@@ -226,7 +259,6 @@ def chatbox (request):
         return Response ({"reply": response, "msgID" : user_conver.id}, status = status.HTTP_200_OK)
     
     else: 
-        print(f"id: {request.session.session_key}")
         if not consId: 
             if not request.session.session_key:
                 request.session.create()

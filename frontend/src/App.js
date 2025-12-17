@@ -58,7 +58,10 @@ function App() {
   const handlePage = async(site) => {
       if (site === "login" || site === "signup" || site === "home" ||site ==="profile")
       {
-        setPage(site); 
+        if (site !== "profile")
+        {
+          setPage(site); 
+        }
         changeStage(0);
         resetUserData();
         setImage(null);
@@ -536,7 +539,9 @@ function App() {
       console.log("Error: ", response.status);
     }
   }
-
+  
+  const[profileName, setProfileName] = useState("");
+  
   //fetch imgs from backend 
   const get_data = async () => {
       const response = await fetch("http://localhost:8000/getImage", {
@@ -546,28 +551,41 @@ function App() {
       const data = await response.json(); 
       if (response.ok)
       {
-          console.log(response.status); 
+        console.log(response.status); 
+        console.log("skin profile: ", data.skininfo);
+        console.log("product recs: ", data.product_recs);
+
+        if (data.skininfo)
+        {
           setSkinProfile(data.skininfo);
+        }
 
-          //if image, loops through image array and group them according to date 
-          if (data.image?.length > 0)
-          {
-            for (const i of data.image)
+        if (data.name)
+        {
+          setProfileName(data.name);
+
+        }
+        
+        //if image, loops through image array and group them according to date 
+        if (data.image?.length > 0)
+        {
+          for (const i of data.image)
+            {
+              let date = new Date(i.datetime).toLocaleDateString();
+              if (image_group[date])
               {
-                let date = new Date(i.datetime).toLocaleDateString();
-                if (image_group[date])
-                {
-                  //.push adding items to array
-                  image_group[date].push(i);
-                }
-                else 
-                {
-                  image_group[date] = [i];
-                }
+                //.push adding items to array
+                image_group[date].push(i);
               }
-            setImageArray(image_group);
-          }
-
+              else 
+              {
+                image_group[date] = [i];
+              }
+            }
+          setImageArray(image_group);
+        }
+        if (data.product_recs)
+        {
           cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
           toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner").map(x => x.product);
           serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum").map(x => x.product);
@@ -588,132 +606,134 @@ function App() {
 
           for (const item of cleanser_cat)
             {
-                if (item.product_price < 40) 
-                {
-                    copyList.cleanser.low.push(item);
-                }  
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                    copyList.cleanser.mid.push(item);
-                }
-                else
-                {
-                    copyList.cleanser.high.push(item); 
-                }
+              if (item.product_price < 40) 
+              {
+                  copyList.cleanser.low.push(item);
+              }  
+              else if (item.product_price >= 40 && item.product_price <= 80)
+              {
+                  copyList.cleanser.mid.push(item);
+              }
+              else
+              {
+                  copyList.cleanser.high.push(item); 
+              }
             }
         
             for (const item of toner_cat)
             {
-                if (item.product_price < 40)
-                {
-                  copyList.toner.low.push(item);
-                } 
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                  copyList.toner.mid.push(item);
-                }
-                else 
-                {
-                  copyList.toner.high.push(item); 
-                }
+              if (item.product_price < 40)
+              {
+                copyList.toner.low.push(item);
+              } 
+              else if (item.product_price >= 40 && item.product_price <= 80)
+              {
+                copyList.toner.mid.push(item);
+              }
+              else 
+              {
+                copyList.toner.high.push(item); 
+              }
             }
         
             for (const item of serum_cat)
             {
-                if (item.product_price < 40)
-                {
-                  copyList.serum.low.push(item);
-                }
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                  copyList.serum.mid.push(item);
-                }
-                else 
-                {
-                  copyList.serum.high.push(item); 
-                }
+              if (item.product_price < 40)
+              {
+                copyList.serum.low.push(item);
+              }
+              else if (item.product_price >= 40 && item.product_price <= 80)
+              {
+                copyList.serum.mid.push(item);
+              }
+              else 
+              {
+                copyList.serum.high.push(item); 
+              }
             }
         
             for (const item of moist_cat)
             {
-                if (item.product_price < 40)
-                {
-                  copyList.moisturiser.low.push(item);
-                } 
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                  copyList.moisturiser.mid.push(item);
-                }
-                else 
-                {
-                  copyList.moisturiser.high.push(item); 
-                }
+              if (item.product_price < 40)
+              {
+                copyList.moisturiser.low.push(item);
+              } 
+              else if (item.product_price >= 40 && item.product_price <= 80)
+              {
+                copyList.moisturiser.mid.push(item);
+              }
+              else 
+              {
+                copyList.moisturiser.high.push(item); 
+              }
             }
         
             for (const item of eye_cat)
             {
-                if (item.product_price < 40)
-                {
-                  copyList.eye.low.push(item);
-                }  
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                  copyList.eye.mid.push(item);
-                }
-                else 
-                {
-                  copyList.eye.high.push(item); 
-                }
+              if (item.product_price < 40)
+              {
+                copyList.eye.low.push(item);
+              }  
+              else if (item.product_price >= 40 && item.product_price <= 80)
+              {
+                copyList.eye.mid.push(item);
+              }
+              else 
+              {
+                copyList.eye.high.push(item); 
+              }
             }
         
             for (const item of sunscreen_cat)
             {
-                if (item.product_price < 40)
-                {
-                  copyList.sunscreen.low.push(item);
-                }  
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                  copyList.sunscreen.mid.push(item);
-                }
-                else 
-                {
-                  copyList.sunscreen.high.push(item); 
-                }
+              if (item.product_price < 40)
+              {
+                copyList.sunscreen.low.push(item);
+              }  
+              else if (item.product_price >= 40 && item.product_price <= 80)
+              {
+                copyList.sunscreen.mid.push(item);
+              }
+              else 
+              {
+                copyList.sunscreen.high.push(item); 
+              }
             }
         
             for (const item of cleansingoil_cat)
             {
-                if (item.product_price < 40)
-                {
-                  copyList.oilcleanser.low.push(item);
-                }   
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                  copyList.oilcleanser.mid.push(item);
-                }
-                else 
-                {
-                  copyList.oilcleanser.high.push(item); 
-                }
+              if (item.product_price < 40)
+              {
+                copyList.oilcleanser.low.push(item);
+              }   
+              else if (item.product_price >= 40 && item.product_price <= 80)
+              {
+                copyList.oilcleanser.mid.push(item);
+              }
+              else 
+              {
+                copyList.oilcleanser.high.push(item); 
+              }
             }
         
             for (const item of micellarwater_cat)
             {
-                if (item.product_price < 40)
-                {
-                  copyList.micellarwater.low.push(item);
-                }
-                else if (item.product_price >= 40 && item.product_price <= 80)
-                {
-                  copyList.micellarwater.mid.push(item);
-                }
-                else 
-                {
-                  copyList.micellarwater.high.push(item); 
-                }
+              if (item.product_price < 40)
+              {
+                copyList.micellarwater.low.push(item);
+              }
+              else if (item.product_price >= 40 && item.product_price <= 80)
+              {
+                copyList.micellarwater.mid.push(item);
+              }
+              else 
+              {
+                copyList.micellarwater.high.push(item); 
+              }
             }
-        setProduct_list(copyList);
+          setProduct_list(copyList);
+          setPage("profile");
+        }
       }
       else 
       {
@@ -727,8 +747,7 @@ function App() {
         {page === "login" && <Login resetSite={handlePage}/>}
         {page === "signup" && <Signup resetSite={handlePage}/>}
         {page === "home" && stage === 0 && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
-        {page === "profile" && <Profile imageArray={imageArray} skinProfile={skinProfile} product_list={product_list} handlePage={handlePage}/>}
-        {page === ""}
+        {page === "profile" && <Profile imageArray={imageArray} skinProfile={skinProfile} product_list={product_list} handlePage={handlePage} profileName={profileName}/>}
         {stage === 1 && (
           <div className="labels_container">
             <h1 className="title"> My Skincare Routine Tracker</h1>

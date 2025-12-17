@@ -84,7 +84,6 @@ function Chatbox () {
         console.log(response.status, data.error);
     }
 
-
     return(
         <div className="question_bar_container">
             <p className={`question_bar ${msgbox===true? "inactive": ""}`} onClick={() => openMsg()}>💬  Ask questions</p>

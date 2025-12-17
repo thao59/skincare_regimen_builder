@@ -2,7 +2,7 @@ import "./Profile.css";
 import {useState} from "react";
 import Chatbox from "./Chatbox";
 
-function Profile({imageArray, product_list, skinProfile, handlePage})
+function Profile({imageArray, product_list, skinProfile, handlePage, profileName})
 {
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     const URL = "http://localhost:8000";
@@ -10,11 +10,6 @@ function Profile({imageArray, product_list, skinProfile, handlePage})
     const [time, setTime] = useState("am")
     const handleTime = (string) => {
         setTime(string);
-    }
-
-    const [msgbox, setMsgbox] = useState(false); 
-    const handleMsg = () => {
-        setMsgbox(true);
     }
      
     const sunIcon = (<svg class="sun_icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" width="15" height="15">
@@ -35,8 +30,21 @@ function Profile({imageArray, product_list, skinProfile, handlePage})
         setButton(string);
     }
 
-    if (!skinProfile)
-        return <p>Loading profile...</p>
+    console.log(profileName);
+    if (!skinProfile) 
+        if(profileName)
+        {
+            return<>
+                <p className="username">{profileName}</p>
+                <p>You don't have a profile yet. </p>
+                <Chatbox/>
+            </>
+        }
+        else
+        {
+            return <p>Loading profile...</p>
+        }
+        
     
     console.log(product_list);
     console.log(product_list.cleanser);

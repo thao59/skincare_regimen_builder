@@ -9,6 +9,8 @@ function Signup({resetSite}){
         setUserData({...userData, [fieldName]: value});
     }
 
+    const[error, setError] = useState("");
+
     const handleSubmit = async () => {
            const response = await fetch ("http://localhost:8000/signup/", {
             method: "POST", 
@@ -22,18 +24,19 @@ function Signup({resetSite}){
            {
             localStorage.setItem("access", data.access);
             localStorage.setItem("refresh", data.refresh);
-            console.log("access token :", localStorage.getItem("access"));
-            console.log("refresh token: ", localStorage.getItem("refresh"));
             resetSite("home");
            }
            else 
            {
             console.log("Response status: ", response.status);
+            setError(data.error);
+            console.log(error);
            }
     }
 
     return(
     <div className="signup_page">
+        {error && <p className="error">{error}</p>}
         <form className="signup_form">
             <p className="title">Signup</p>
             <input className="signup_input" onChange={(field) => handleUser(field.target.value, "email")} placeholder="Your email"/>

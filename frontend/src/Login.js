@@ -10,6 +10,8 @@ function Login({resetSite})
         setUserAccount({...userAccount, [fieldName]: value});
     }
 
+    const[error, setError] = useState("");
+
     const handleSubmit = async () => {
         console.log("handle submit start");
      const response = await fetch ("http://localhost:8000/login/", {
@@ -23,21 +25,31 @@ function Login({resetSite})
         {
             localStorage.setItem("access", data.access);
             localStorage.setItem("refresh", data.refresh);
-            console.log("access: ", data.access);
-            console.log("refresh: ", data.refresh);
             resetSite("home");
-            console.log("login was successful");
-            console.log("Username: ", userAccount.username);
         }
         else
         {
-            console.log("Login is unsuccessful");
+            console.log("error: ", response.status);
+            //authentication errors - no credentials 
+            if (data.detail)
+            {
+                setError(data.detail);
+            }
+            else if (!data.username || !data.password)
+            {
+                setError("Your username or password is incorrect")
+            }
+            else 
+            {
+                setError("Login failed. Please try again."); 
+            }
         }
     }
 
 
     return (
         <div className="login_page">
+            {error && <p className="error">{error}</p>}
             <form className="login_form">
                 <p className="title">Login</p>
                 <input className="login_input" onChange={(field) => handleAccount(field.target.value, "username")} placeholder="Your email"/>
