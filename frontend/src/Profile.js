@@ -35,7 +35,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
         if(profileName)
         {
             return<>
-                <p className="username">{profileName}</p>
+                <p className="title"> Welcome, {profileName}!</p>
                 <p>You don't have a profile yet. </p>
                 <Chatbox/>
             </>

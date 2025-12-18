@@ -9,9 +9,11 @@ class ClaudeService:
         self.model = "claude-sonnet-4-20250514"
 
     def get_response(self, user_message):
+        prompt = f"""You are a skincare expert. Be concise, short, and informative when answering user's question regarding skincare needs"""
         response = self.client.messages.create (
             model=self.model, 
             max_tokens = 1000, 
+            system = prompt,
             messages = [
                 {"role": "user", "content": user_message}
             ]

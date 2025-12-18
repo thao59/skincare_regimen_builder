@@ -541,7 +541,7 @@ function App() {
   }
   
   const[profileName, setProfileName] = useState("");
-  
+
   //fetch imgs from backend 
   const get_data = async () => {
       const response = await fetch("http://localhost:8000/getImage", {
@@ -584,6 +584,7 @@ function App() {
             }
           setImageArray(image_group);
         }
+
         if (data.product_recs)
         {
           cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
@@ -732,8 +733,8 @@ function App() {
               }
             }
           setProduct_list(copyList);
-          setPage("profile");
         }
+        setPage("profile");
       }
       else 
       {
