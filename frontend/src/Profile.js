@@ -37,6 +37,9 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
             return<>
                 <p className="title"> Welcome, {profileName}!</p>
                 <p>You don't have a profile yet. </p>
+                <p>Take our quick survey to get personalised skincare recommendations tailored just for you</p>
+                <button className="start_button" onClick={() => handlePage("home")}> Start Your Journey ✨ </button>
+
                 <Chatbox/>
             </>
         }
