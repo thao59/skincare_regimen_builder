@@ -86,13 +86,6 @@ Uses Anthropic's Claude API to provide personalised skincare advice:
 - Product recommendations
 - Skincare routine guidance
 
-### Planned Features
--Expand product database
--Add product reviews and ratings
--Product comparison tool
--Ingredient education section
-
-
 ## Common Issues
 Issue: API requests fail with CORS error **
 Solution: Ensure `django-cors-headers` is installed and configured in `settings.py`
