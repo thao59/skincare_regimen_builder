@@ -8,7 +8,7 @@ class Command(BaseCommand):
     help = "Scaping product information from website"
 
     def handle(self, *args, **options): 
-        url="https://www.mecca.com/en-au/glow-recipe/watermelon-glow-pha-bha-pore-tight-toner-150ml-limited-edition-I-068777/?cgpath=skincare-facialtoners"
+        url="https://www.mecca.com/en-au/perricone-md/hypoallergenic-clean-correction-barrier-repair-moisturizer-I-060252/"
         response = requests.get(url)
 
         get = BeautifulSoup(response.text, "html.parser")

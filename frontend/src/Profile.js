@@ -47,17 +47,6 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
         {
             return <p>Loading profile...</p>
         }
-        
-    
-    console.log(product_list);
-    console.log(product_list.cleanser);
-    console.log(product_list.toner);
-    console.log(product_list.serum);
-    console.log(product_list.moisturiser);
-    console.log(product_list.eye);
-    console.log(product_list.sunscreen);
-    console.log(product_list.oilcleanser);
-    console.log(product_list.micellarwater);
 
     return(
         <>

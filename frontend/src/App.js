@@ -290,7 +290,6 @@ function App() {
           cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
         
           setSkinProfile(data.user_skin_profile);
-          console.log("User profile: ", skinProfile);
         }
 
         //process data if user is not logged in
@@ -473,7 +472,6 @@ function App() {
             }
           }
         setProduct_list(copyList);
-        console.log(product_list);
         changeStage(13);
       }
 
@@ -552,8 +550,6 @@ function App() {
       if (response.ok)
       {
         console.log(response.status); 
-        console.log("skin profile: ", data.skininfo);
-        console.log("product recs: ", data.product_recs);
 
         if (data.skininfo)
         {

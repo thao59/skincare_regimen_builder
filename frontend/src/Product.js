@@ -5,16 +5,6 @@ import Chatbox from "./Chatbox";
 
 function Productrec({product_list, skinProfile, handlePage})
 {
-    console.log(product_list.cleanser);
-    console.log(product_list.toner);
-    console.log(product_list.serum);
-    console.log(product_list.moisturiser);
-    console.log(product_list.eye);
-    console.log(product_list.sunscreen);
-    console.log(product_list.oilcleanser);
-    console.log(product_list.micellarwater);
-    console.log(skinProfile);
-
     //capitalise the first letter of key 
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     const URL = "http://localhost:8000";
