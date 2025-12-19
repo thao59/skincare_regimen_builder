@@ -96,4 +96,20 @@
     text-align: left;
 }
 
+.reminder_login
+{
+    background-color: #e1d3c5;
+    border: 1px solid rgb(243, 218, 197);
+    border-radius: 5px;
+    color: #5a4a42;
+    padding: 0.5rem 1rem;
+    margin-left: 1rem;
+    transition: all ease-in-out 0.1s;
+}
+
+.reminder_login:hover 
+{
+    background-color: #eddccb;
+    border: 1.5px solid rgb(235, 179, 133);
+}
 

@@ -51,6 +51,8 @@ function App() {
     "micellarwater": {"high": [], "mid": [], "low": []},
   });
 
+  console.log(product_list);
+
   const resetUserData = () => {
     setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
   }  
@@ -545,6 +547,18 @@ function App() {
       const response = await fetch("http://localhost:8000/getImage", {
           headers: {"Authorization" : `Bearer ${localStorage.getItem("access")}`}, 
       });
+        const freshList = {
+          cleanser: {high: [], mid: [], low: []}, 
+          toner: {high: [], mid: [], low: []}, 
+          serum: {high: [], mid: [], low: []}, 
+          moisturiser: {high: [], mid: [], low: []}, 
+          eye: {high: [], mid: [], low: []}, 
+          sunscreen: {high: [], mid: [], low: []}, 
+          oilcleanser: {high: [], mid: [], low: []}, 
+          micellarwater: {high: [], mid: [], low: []},
+      };
+
+
 
       const data = await response.json(); 
       if (response.ok)
@@ -605,15 +619,15 @@ function App() {
             {
               if (item.product_price < 40) 
               {
-                  copyList.cleanser.low.push(item);
+                freshList.cleanser.low.push(item);
               }  
               else if (item.product_price >= 40 && item.product_price <= 80)
               {
-                  copyList.cleanser.mid.push(item);
+                freshList.cleanser.mid.push(item);
               }
               else
               {
-                  copyList.cleanser.high.push(item); 
+                freshList.cleanser.high.push(item); 
               }
             }
         
@@ -621,15 +635,15 @@ function App() {
             {
               if (item.product_price < 40)
               {
-                copyList.toner.low.push(item);
+                freshList.toner.low.push(item);
               } 
               else if (item.product_price >= 40 && item.product_price <= 80)
               {
-                copyList.toner.mid.push(item);
+                freshList.toner.mid.push(item);
               }
               else 
               {
-                copyList.toner.high.push(item); 
+                freshList.toner.high.push(item); 
               }
             }
         
@@ -637,15 +651,15 @@ function App() {
             {
               if (item.product_price < 40)
               {
-                copyList.serum.low.push(item);
+                freshList.serum.low.push(item);
               }
               else if (item.product_price >= 40 && item.product_price <= 80)
               {
-                copyList.serum.mid.push(item);
+                freshList.serum.mid.push(item);
               }
               else 
               {
-                copyList.serum.high.push(item); 
+                freshList.serum.high.push(item); 
               }
             }
         
@@ -653,15 +667,15 @@ function App() {
             {
               if (item.product_price < 40)
               {
-                copyList.moisturiser.low.push(item);
+                freshList.moisturiser.low.push(item);
               } 
               else if (item.product_price >= 40 && item.product_price <= 80)
               {
-                copyList.moisturiser.mid.push(item);
+                freshList.moisturiser.mid.push(item);
               }
               else 
               {
-                copyList.moisturiser.high.push(item); 
+                freshList.moisturiser.high.push(item); 
               }
             }
         
@@ -669,15 +683,15 @@ function App() {
             {
               if (item.product_price < 40)
               {
-                copyList.eye.low.push(item);
+                freshList.eye.low.push(item);
               }  
               else if (item.product_price >= 40 && item.product_price <= 80)
               {
-                copyList.eye.mid.push(item);
+                freshList.eye.mid.push(item);
               }
               else 
               {
-                copyList.eye.high.push(item); 
+                freshList.eye.high.push(item); 
               }
             }
         
@@ -685,15 +699,15 @@ function App() {
             {
               if (item.product_price < 40)
               {
-                copyList.sunscreen.low.push(item);
+                freshList.sunscreen.low.push(item);
               }  
               else if (item.product_price >= 40 && item.product_price <= 80)
               {
-                copyList.sunscreen.mid.push(item);
+                freshList.sunscreen.mid.push(item);
               }
               else 
               {
-                copyList.sunscreen.high.push(item); 
+                freshList.sunscreen.high.push(item); 
               }
             }
         
@@ -701,15 +715,15 @@ function App() {
             {
               if (item.product_price < 40)
               {
-                copyList.oilcleanser.low.push(item);
+                freshList.oilcleanser.low.push(item);
               }   
               else if (item.product_price >= 40 && item.product_price <= 80)
               {
-                copyList.oilcleanser.mid.push(item);
+                freshList.oilcleanser.mid.push(item);
               }
               else 
               {
-                copyList.oilcleanser.high.push(item); 
+                freshList.oilcleanser.high.push(item); 
               }
             }
         
@@ -717,18 +731,18 @@ function App() {
             {
               if (item.product_price < 40)
               {
-                copyList.micellarwater.low.push(item);
+                freshList.micellarwater.low.push(item);
               }
               else if (item.product_price >= 40 && item.product_price <= 80)
               {
-                copyList.micellarwater.mid.push(item);
+                freshList.micellarwater.mid.push(item);
               }
               else 
               {
-                copyList.micellarwater.high.push(item); 
+                freshList.micellarwater.high.push(item); 
               }
             }
-          setProduct_list(copyList);
+          setProduct_list(freshList);
         }
         setPage("profile");
       }
