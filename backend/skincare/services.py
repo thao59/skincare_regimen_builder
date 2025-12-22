@@ -39,7 +39,14 @@ class ClaudeService:
                 instruction = "Recommend all products"
             userActive = user_profile.active_ingre or []
             activeLevel = user_profile.advanced_active_use or None
-
+        
+        extra_info = ""
+        if userActive:
+            extra_info += f"User is using these active ingredients: {', '.join(userActive)}\n"
+        if activeLevel:
+            extra_info += f"User's experience level with actives: {activeLevel}\n"
+            if activeLevel == "beginner":
+                extra_info += "Provide extra precautions for beginners using actives\n"
 
         prompt = f"""You are a skincare expert. Provide personalised advice based on user's profile:
         {instruction}
@@ -48,7 +55,7 @@ class ClaudeService:
         Only answer question when asked. Be short all the time
         When answering questions: 
         - Use Australian spelling 
-        - Taking their skin profile, especially {userActive} and {activeLevel} into account. Provides precautions for beginner users trying out active.
+        - Taking their skin profile, especially {extra_info} into account.
         - Explain the reasons behind recommend these products 
         - Be concise, short and informative """
         response = self.client.messages.create(
