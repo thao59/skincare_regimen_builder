@@ -1,8 +1,26 @@
 # Skincare Regimen Builder
-A full-stack web application that provides personalized skincare product recommendations based on user skin profiles. Built with Django REST Framework and React.
+A full-stack app that recommends skincare products based on your skin profile. 
+** Note: This project runs locally. Deployment is in progress
+
+## Demo 
+Main Page
+<img width="1719" height="958" alt="Screenshot 2025-12-24 at 4 15 10 pm" src="https://github.com/user-attachments/assets/5c378f25-323b-436f-9724-28996d74921f" />
+
+Survey
+<img width="1728" height="964" alt="Screenshot 2025-12-24 at 4 22 44 pm" src="https://github.com/user-attachments/assets/be64e091-a45a-4e55-ae2a-c57298809ee6" />
+
+<img width="1726" height="962" alt="Screenshot 2025-12-24 at 4 16 11 pm" src="https://github.com/user-attachments/assets/8a4cd573-bac4-4b65-8c8b-63be80e0d89d" />
+
+Recommendation Page
+<img width="1725" height="962" alt="Screenshot 2025-12-24 at 4 16 22 pm" src="https://github.com/user-attachments/assets/0349bf9a-3b7e-4c3e-9578-310427f95921" />
+
+<img width="1723" height="962" alt="Screenshot 2025-12-24 at 4 16 31 pm" src="https://github.com/user-attachments/assets/91b39de8-408d-43fd-868f-2f2c1865809e" />
+
+AI Chatbot
+<img width="1705" height="946" alt="Screenshot 2025-12-24 at 4 17 27 pm" src="https://github.com/user-attachments/assets/5ce90515-0144-4ed1-b41a-7c62b754cc0f" />
 
 
-## 🌟 Core Functionality
+## Core Functionality
 13-Stage Interactive Survey: Comprehensive questionnaire to understand user's skin needs.
 Personalised Recommendations based on:
   - Skin type
@@ -27,7 +45,7 @@ RESTful API: Django REST Framework backend
 Web Scraping: Automated product data collection using BeautifulSoup
 Conditional Survey Flow: Dynamic question branching based on user responses
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ## Backend
 Django 4.2 - Web framework
@@ -38,15 +56,12 @@ Anthropic Claude API - AI chatbot integration
 python-dotenv - Environment variable management
 
 ## Frontend
-React 18 - UI framework
+React - UI framework
 CSS3 - Custom styling
 Fetch API- HTTP requests
 
-## Development Tools
-Git - Version control
-VS Code - Code editor
 
-## 💾 Database Models
+## Database Models
 
 ### Products
 - Product name, brand, category
@@ -71,7 +86,7 @@ VS Code - Code editor
 ### UserImage
 - Stores user-uploaded skin photos
 
-## 🔧 Key Features Implementation
+## Key Features Implementation
 
 ## Recommendation Algorithm
 The algorithm scores products based on:
@@ -80,13 +95,13 @@ The algorithm scores products based on:
 3. **Pregnancy Safety** (excludes products with "avoid pregnancy" flag)
 
 
-## AI Chatbot Integration
+## AI Chatbot 
 Uses Anthropic's Claude API to provide personalised skincare advice:
 - Context-aware responses based on user profile
 - Product recommendations
 - Skincare routine guidance
 
-## Common Issues
+## Common Issues 
 Issue: API requests fail with CORS error **
 Solution: Ensure `django-cors-headers` is installed and configured in `settings.py`
 
