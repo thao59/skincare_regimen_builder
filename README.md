@@ -1,8 +1,8 @@
 # Skincare Regimen Builder
-A full-stack web application that provides personalized skincare product recommendations based on user skin profiles. Built with Django REST Framework and React.
+A full-stack app that recommends skincare products based on your skin profile. 
 
 
-## 🌟 Core Functionality
+## Core Functionality
 13-Stage Interactive Survey: Comprehensive questionnaire to understand user's skin needs.
 Personalised Recommendations based on:
   - Skin type
@@ -27,7 +27,7 @@ RESTful API: Django REST Framework backend
 Web Scraping: Automated product data collection using BeautifulSoup
 Conditional Survey Flow: Dynamic question branching based on user responses
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 ## Backend
 Django 4.2 - Web framework
@@ -38,15 +38,12 @@ Anthropic Claude API - AI chatbot integration
 python-dotenv - Environment variable management
 
 ## Frontend
-React 18 - UI framework
+React - UI framework
 CSS3 - Custom styling
 Fetch API- HTTP requests
 
-## Development Tools
-Git - Version control
-VS Code - Code editor
 
-## 💾 Database Models
+## Database Models
 
 ### Products
 - Product name, brand, category
@@ -71,7 +68,7 @@ VS Code - Code editor
 ### UserImage
 - Stores user-uploaded skin photos
 
-## 🔧 Key Features Implementation
+## Key Features Implementation
 
 ## Recommendation Algorithm
 The algorithm scores products based on:
@@ -80,13 +77,13 @@ The algorithm scores products based on:
 3. **Pregnancy Safety** (excludes products with "avoid pregnancy" flag)
 
 
-## AI Chatbot Integration
+## AI Chatbot 
 Uses Anthropic's Claude API to provide personalised skincare advice:
 - Context-aware responses based on user profile
 - Product recommendations
 - Skincare routine guidance
 
-## Common Issues
+## Common Issues 
 Issue: API requests fail with CORS error **
 Solution: Ensure `django-cors-headers` is installed and configured in `settings.py`
 
