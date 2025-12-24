@@ -1,5 +1,23 @@
 # Skincare Regimen Builder
 A full-stack app that recommends skincare products based on your skin profile. 
+** Note: This project runs locally. Deployment is in progress
+
+## Demo 
+Main Page
+<img width="1719" height="958" alt="Screenshot 2025-12-24 at 4 15 10 pm" src="https://github.com/user-attachments/assets/5c378f25-323b-436f-9724-28996d74921f" />
+
+Survey
+<img width="1728" height="964" alt="Screenshot 2025-12-24 at 4 22 44 pm" src="https://github.com/user-attachments/assets/be64e091-a45a-4e55-ae2a-c57298809ee6" />
+
+<img width="1726" height="962" alt="Screenshot 2025-12-24 at 4 16 11 pm" src="https://github.com/user-attachments/assets/8a4cd573-bac4-4b65-8c8b-63be80e0d89d" />
+
+Recommendation Page
+<img width="1725" height="962" alt="Screenshot 2025-12-24 at 4 16 22 pm" src="https://github.com/user-attachments/assets/0349bf9a-3b7e-4c3e-9578-310427f95921" />
+
+<img width="1723" height="962" alt="Screenshot 2025-12-24 at 4 16 31 pm" src="https://github.com/user-attachments/assets/91b39de8-408d-43fd-868f-2f2c1865809e" />
+
+AI Chatbot
+<img width="1705" height="946" alt="Screenshot 2025-12-24 at 4 17 27 pm" src="https://github.com/user-attachments/assets/5ce90515-0144-4ed1-b41a-7c62b754cc0f" />
 
 
 ## Core Functionality
