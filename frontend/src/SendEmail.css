@@ -1,0 +1,16 @@
+.send_result_butt
+{
+    margin-bottom: 1rem;
+    border-radius: 3rem;
+    padding: 0.4rem 0.7rem;
+    border: 1px solid rgba(239, 184, 125, 0.5);
+    background-color: #eedac5;
+    color: #5a4a42;
+    transition: all ease-in-out 0.3s;
+}
+
+.send_result_butt:hover
+{
+    transform: translateY(-3px);
+    box-shadow: 4px 4px 15px rgba(0, 0, 0, 0.1);
+}

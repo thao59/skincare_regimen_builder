@@ -1,6 +1,7 @@
 import {useState} from "react";
 import "./Product.css"
 import Chatbox from "./Chatbox";
+import SendEmail from "./SendEmail"
 
 
 function Productrec({product_list, skinProfile, handlePage})
@@ -51,7 +52,8 @@ function Productrec({product_list, skinProfile, handlePage})
                     </ul> 
                     {skinProfile.eye_concern && skinProfile.eye_concern.length === 1 ? <p className="concern_title">EYE CONCERNS: <span className="skintype">{cap(skinProfile.eye_concern[0])}</span></p> : <p className="concern_title">EYE CONCERNS: <span className="skintype">{skinProfile.eye_concern.map(x => cap(x)).join(", ")}</span></p>}
                     <p className="return_button" onClick={() => handlePage("home")}>Retake survey &#8594;</p>
-                    {!token && <p> Save your result <button className="reminder_login" onClick={() => handlePage("login")}> Login</button></p>}
+                    {!token ? <p> Save your result <button className="reminder_login" onClick={() => handlePage("login")}> Login</button></p>: <SendEmail/>}
+                
                 </div> 
                 <img className="skincare_img" src="/images/2_39dcafaf-18fa-4aff-9292-918c7b5c22c6.webp" alt="skincare"/>
                 

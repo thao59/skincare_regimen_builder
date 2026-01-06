@@ -10,6 +10,7 @@ urlpatterns = [
     path("processdata/", views.processdata, name="process_data"), 
     path("getImage/", views.getImage, name="get_image"),
     path("chatbox/", views.chatbox, name="chatbox"),
+    path("sendtoemail/", views.sendEmail, name="send_to_email")
 ]
 
     #if debug = true, set path and storage for photos 

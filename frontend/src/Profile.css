@@ -113,3 +113,11 @@
     border: 1.5px solid rgb(235, 179, 133);
 }
 
+.sub_result_title
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3rem;
+}
+

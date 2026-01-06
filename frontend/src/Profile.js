@@ -1,6 +1,7 @@
 import "./Profile.css";
 import {useState} from "react";
 import Chatbox from "./Chatbox";
+import SendEmail from "./SendEmail"
 
 function Profile({imageArray, product_list, skinProfile, handlePage, profileName})
 {
@@ -30,7 +31,6 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
         setButton(string);
     }
 
-    console.log(profileName);
     if (!skinProfile) 
         if(profileName)
         {
@@ -39,7 +39,6 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                 <p>You don't have a profile yet. </p>
                 <p>Take our quick survey to get personalised skincare recommendations tailored just for you</p>
                 <button className="start_button" onClick={() => handlePage("home")}> Start Your Journey ✨ </button>
-
                 <Chatbox/>
             </>
         }
@@ -103,7 +102,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                     }
                 </div>
                 <div className="image_display">
-                    <h3 className="image_title">PROGRESS PHOTO</h3>
+                    {imageArray && <h3 className="image_title">PROGRESS PHOTO</h3>}
                     {imageArray && Object.entries(imageArray).map(([date, photo_obj]) => (
                         <div className="img_container" key={date}>
                             <p className="date">{date}</p>
@@ -121,7 +120,10 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                 <div className="info_left">
                     <div className="profile">
                         <h2 className="result_title">Here are your regimen results.</h2>
-                        <p className="return_button" onClick={() => handlePage("home")}>Retake survey &#8594;</p>
+                        <div className="sub_result_title">
+                            <SendEmail/>
+                            <p className="return_button" onClick={() => handlePage("home")}>Retake survey &#8594;</p>
+                        </div>
                     </div>
 
                 </div>
