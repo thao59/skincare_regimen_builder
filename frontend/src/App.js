@@ -261,7 +261,7 @@ function App() {
       {
         option_headers.headers.Authorization = `Bearer ${token}`; 
       }
-      const response = await fetch("http://localhost:8000/processdata/", option_headers); 
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/processdata/`, option_headers); 
 
       const data = await response.json(); 
       if (response.ok)
@@ -525,7 +525,7 @@ function App() {
       object_header.headers = {"Authorization": `Bearer ${token}`};
     }
 
-    const response = await fetch("http://localhost:8000/processdata/", object_header)
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/processdata/`, object_header)
 
     const data = await response.json(); 
     if (response.ok)
@@ -544,7 +544,7 @@ function App() {
 
   //fetch imgs from backend 
   const get_data = async () => {
-      const response = await fetch("http://localhost:8000/getImage", {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/getImage/`, {
           headers: {"Authorization" : `Bearer ${localStorage.getItem("access")}`}, 
       });
         const freshList = {

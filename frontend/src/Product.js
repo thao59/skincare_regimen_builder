@@ -8,7 +8,7 @@ function Productrec({product_list, skinProfile, handlePage})
 {
     //capitalise the first letter of key 
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
-    const URL = "http://localhost:8000";
+    const URL = process.env.REACT_APP_API_URL;
 
     //when am/pm button is clicked, displayed products marked as am/pm
     const [time, setTime] = useState("am")

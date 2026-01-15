@@ -70,7 +70,7 @@ function Chatbox () {
             option_headers.headers.Authorization = `Bearer ${token}`;
         }
 
-        const response = await fetch("http://localhost:8000/chatbox/", option_headers);
+        const response = await fetch(`${process.env.REACT_APP_API_URL}/api/chatbox/`, option_headers);
 
         const data = await response.json();
         if (response.ok)

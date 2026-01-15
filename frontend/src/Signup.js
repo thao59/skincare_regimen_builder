@@ -12,7 +12,7 @@ function Signup({resetSite}){
     const[error, setError] = useState("");
 
     const handleSubmit = async () => {
-           const response = await fetch ("http://localhost:8000/signup/", {
+           const response = await fetch (`${process.env.REACT_APP_API_URL}/api/signup/`, {
             method: "POST", 
             headers: {"Content-type": "application/json"}, 
             body: JSON.stringify(userData), 

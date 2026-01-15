@@ -6,7 +6,7 @@ import SendEmail from "./SendEmail"
 function Profile({imageArray, product_list, skinProfile, handlePage, profileName})
 {
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
-    const URL = "http://localhost:8000";
+    const URL = process.env.REACT_APP_API_URL;
     
     const [time, setTime] = useState("am")
     const handleTime = (string) => {
