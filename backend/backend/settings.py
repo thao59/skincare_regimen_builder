@@ -142,6 +142,7 @@ REST_FRAMEWORK = {
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://170.64.233.15",
 ]
 
 #session setting 
@@ -155,7 +156,7 @@ MEDIA_ROOT = BASE_DIR/ "media"
 load_dotenv()
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 
-EMAIL_BACKEND = "django.core.mail.console.smtp.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587 
 EMAIL_USE_TLS = True
