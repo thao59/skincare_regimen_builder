@@ -82,7 +82,7 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'skinscare_db',
+        'NAME': 'skincare_db',
         "USER": "skincare_user", 
         "PASSWORD": os.getenv("DB_PASSWORD"), 
         "HOST": "localhost",
