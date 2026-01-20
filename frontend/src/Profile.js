@@ -108,7 +108,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                             <p className="date">{date}</p>
                             <div className="display_profile_img">   
                                 {photo_obj.map(x => (            
-                                    <img key={x.id} className="preview_image" src={`http://localhost:8000/${x.image}`}/>
+                                    <img key={x.id} className="preview_image" src={`${process.env.REACT_APP_API_URL}${x.image}`}/>
                                 ))}
                             </div>
                         </div>
@@ -175,7 +175,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                                         </div>
                                                         <p className="product_price">${x.product_price}</p>
-                                                        {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                        {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
                                                         <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                                         <p className="product_des">{x.product_des}</p>
                                                         <a className="shop_button" href={x.product_link}>Shop now</a>
@@ -200,7 +200,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                         <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
-                                                    {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                    {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
                                                     <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                                     <p className="product_des">{x.product_des}</p>
                                                     <a className="shop_button" href={x.product_link}>Shop now </a> 
@@ -225,7 +225,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                                         </div>
                                                         <p className="product_price">${x.product_price}</p>
-                                                        {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                        {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
                                                         <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                                         <p className="product_des">{x.product_des}</p>
                                                         <a className="shop_button" href={x.product_link}> Shop now </a> 
@@ -263,7 +263,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                                         </div>
                                                         <p className="product_price">${x.product_price}</p>
-                                                        {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                        {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
                                                         <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                                         <p className="product_des">{x.product_des}</p>
                                                         <a className="shop_button" href={x.product_link}>Shop now</a>
@@ -289,7 +289,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                         <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
-                                                    {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                    {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
                                                     <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                                     <p className="product_des">{x.product_des}</p>
                                                     <a className="shop_button" href={x.product_link}>Shop now </a> 
@@ -314,7 +314,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                             <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                                         </div>
                                                         <p className="product_price">${x.product_price}</p>
-                                                        {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                        {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
                                                         <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                                         <p className="product_des">{x.product_des}</p>
                                                         <a className="shop_button" href={x.product_link}> Shop now </a> 
@@ -350,7 +350,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                         <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
-                                                    {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                    {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
                                                     <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                                     <p className="product_des">{x.product_des}</p>
                                                     <a className="shop_button" href={x.product_link}>Shop now</a>
@@ -375,7 +375,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                     <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                                 </div>
                                                 <p className="product_price">${x.product_price}</p>
-                                                {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
                                                 <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                                 <p className="product_des">{x.product_des}</p>
                                                 <a className="shop_button" href={x.product_link}>Shop now </a> 
@@ -400,7 +400,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                         <img className="img_rec" src={`${URL}${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
-                                                    {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
+                                                    {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
                                                     <p className="product_target">Targeted concerns: {x.product_target.join(", ")}</p>
                                                     <p className="product_des">{x.product_des}</p>
                                                     <a className="shop_button" href={x.product_link}> Shop now </a> 

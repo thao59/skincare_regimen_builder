@@ -9,6 +9,8 @@ __pycache__/
 #Django specific
 backend/media/
 backend/db.sqlite3
+backend/products.json
+backend/skincare_db
 
 # Node
 node_modules/
