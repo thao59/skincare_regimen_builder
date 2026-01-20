@@ -41,7 +41,7 @@ class Products(models.Model):
     skintypes = models.JSONField(null=True)
     product_price = models.DecimalField (null = True, max_digits = 6, decimal_places=2)
     product_link = models.URLField(max_length=500)
-    product_img = models.ImageField(upload_to="product/")
+    product_img = models.URLField(max_length=500)
     product_des = models.TextField(null=True)
     product_time = models.CharField(null=True)
 
