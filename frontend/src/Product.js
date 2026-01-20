@@ -106,7 +106,7 @@ function Productrec({product_list, skinProfile, handlePage})
                                                     <p className="product_name">{x.product_name} </p>
                                                     <p>{Icon[x.product_time]}</p>
                                                     <div className="img_container">
-                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                        <img className="img_rec" src={`${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
                                                     {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
@@ -132,7 +132,7 @@ function Productrec({product_list, skinProfile, handlePage})
                                                 <p className="product_name">{x.product_name} </p>
                                                 <p>{Icon[x.product_time]}</p>
                                                 <div className="img_container">
-                                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                    <img className="img_rec" src={`${x.product_img}`}/>
                                                 </div>
                                                 <p className="product_price">${x.product_price}</p>
                                                 {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
@@ -157,7 +157,7 @@ function Productrec({product_list, skinProfile, handlePage})
                                                     <p className="product_name">{x.product_name} </p>
                                                     <p>{Icon[x.product_time]}</p>
                                                     <div className="img_container">
-                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                        <img className="img_rec" src={`${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
                                                     {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
@@ -196,7 +196,7 @@ function Productrec({product_list, skinProfile, handlePage})
                                                     <p className="product_name">{x.product_name} </p>
                                                     <p>{Icon[x.product_time]}</p>
                                                     <div className="img_container">
-                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                        <img className="img_rec" src={`${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
                                                     {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
@@ -222,7 +222,7 @@ function Productrec({product_list, skinProfile, handlePage})
                                                 <p className="product_name">{x.product_name} </p>
                                                 <p>{Icon[x.product_time]}</p>
                                                 <div className="img_container">
-                                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                    <img className="img_rec" src={`${x.product_img}`}/>
                                                 </div>
                                                 <p className="product_price">${x.product_price}</p>
                                                 {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
@@ -247,7 +247,7 @@ function Productrec({product_list, skinProfile, handlePage})
                                                     <p className="product_name">{x.product_name} </p>
                                                     <p>{Icon[x.product_time]}</p>
                                                     <div className="img_container">
-                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                        <img className="img_rec" src={`${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
                                                     {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
@@ -283,7 +283,7 @@ function Productrec({product_list, skinProfile, handlePage})
                                                 <p className="product_name">{x.product_name} </p>
                                                 <p>{Icon[x.product_time]}</p>
                                                 <div className="img_container">
-                                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                    <img className="img_rec" src={`${x.product_img}`}/>
                                                 </div>
                                                 <p className="product_price">${x.product_price}</p>
                                                 {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
@@ -308,7 +308,7 @@ function Productrec({product_list, skinProfile, handlePage})
                                             <p className="product_name">{x.product_name} </p>
                                             <p>{Icon[x.product_time]}</p>
                                             <div className="img_container">
-                                                <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                <img className="img_rec" src={`${x.product_img}`}/>
                                             </div>
                                             <p className="product_price">${x.product_price}</p>
                                             {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}
@@ -333,7 +333,7 @@ function Productrec({product_list, skinProfile, handlePage})
                                                 <p className="product_name">{x.product_name} </p>
                                                 <p>{Icon[x.product_time]}</p>
                                                 <div className="img_container">
-                                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                    <img className="img_rec" src={`${x.product_img}`}/>
                                                 </div>
                                                 <p className="product_price">${x.product_price}</p>
                                                 {x.skintypes && x.skintypes.length > 1 ? <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p> : <p className="product_skintype">Skin type: {x.skintypes.map(x=> cap(x))}</p>}

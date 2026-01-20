@@ -108,7 +108,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                             <p className="date">{date}</p>
                             <div className="display_profile_img">   
                                 {photo_obj.map(x => (            
-                                    <img key={x.id} className="preview_image" src={`${process.env.REACT_APP_API_URL}${x.image}`}/>
+                                    <img key={x.id} className="preview_image" src={`${URL}${x.image}`}/>
                                 ))}
                             </div>
                         </div>
@@ -172,7 +172,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                         <p className="product_name">{x.product_name} </p>
                                                         <p>{Icon[x.product_time]}</p>
                                                         <div className="img_container">
-                                                            <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                            <img className="img_rec" src={`{x.product_img}`}/>
                                                         </div>
                                                         <p className="product_price">${x.product_price}</p>
                                                         {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
@@ -197,7 +197,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                     <p className="product_name">{x.product_name} </p>
                                                     <p>{Icon[x.product_time]}</p>
                                                     <div className="img_container">
-                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                        <img className="img_rec" src={`${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
                                                     {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
@@ -222,7 +222,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                         <p className="product_name">{x.product_name} </p>
                                                         <p>{Icon[x.product_time]}</p>
                                                         <div className="img_container">
-                                                            <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                            <img className="img_rec" src={`${x.product_img}`}/>
                                                         </div>
                                                         <p className="product_price">${x.product_price}</p>
                                                         {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
@@ -260,7 +260,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                         <p className="product_name">{x.product_name} </p>
                                                         <p>{Icon[x.product_time]}</p>
                                                         <div className="img_container">
-                                                            <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                            <img className="img_rec" src={`${x.product_img}`}/>
                                                         </div>
                                                         <p className="product_price">${x.product_price}</p>
                                                         {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
@@ -286,7 +286,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                     <p className="product_name">{x.product_name} </p>
                                                     <p>{Icon[x.product_time]}</p>
                                                     <div className="img_container">
-                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                        <img className="img_rec" src={`${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
                                                     {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
@@ -311,7 +311,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                         <p className="product_name">{x.product_name} </p>
                                                         <p>{Icon[x.product_time]}</p>
                                                         <div className="img_container">
-                                                            <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                            <img className="img_rec" src={`${x.product_img}`}/>
                                                         </div>
                                                         <p className="product_price">${x.product_price}</p>
                                                         {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
@@ -347,7 +347,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                     <p className="product_name">{x.product_name} </p>
                                                     <p>{Icon[x.product_time]}</p>
                                                     <div className="img_container">
-                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                        <img className="img_rec" src={`${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
                                                     {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
@@ -372,7 +372,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                 <p className="product_name">{x.product_name} </p>
                                                 <p>{Icon[x.product_time]}</p>
                                                 <div className="img_container">
-                                                    <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                    <img className="img_rec" src={`${x.product_img}`}/>
                                                 </div>
                                                 <p className="product_price">${x.product_price}</p>
                                                 {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
@@ -397,7 +397,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                                                     <p className="product_name">{x.product_name} </p>
                                                     <p>{Icon[x.product_time]}</p>
                                                     <div className="img_container">
-                                                        <img className="img_rec" src={`${URL}${x.product_img}`}/>
+                                                        <img className="img_rec" src={`${x.product_img}`}/>
                                                     </div>
                                                     <p className="product_price">${x.product_price}</p>
                                                     {x.skintypes && x.skintypes.length > 0 && <p className="product_skintype">Skin type: {x.skintypes.map(x => cap(x)).join(", ")}</p>}
