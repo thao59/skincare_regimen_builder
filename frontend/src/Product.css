@@ -330,6 +330,7 @@
     display: flex;
     gap: 2rem;
     justify-content: center;
+    margin-bottom: 1.5rem;
 }
 
 #price
@@ -388,5 +389,45 @@
     background-color: #75312a;
     color: white;
 }
+@media(max-width: 345px)
+{
+    .info_left{gap: 1.5rem;}
+    .profile{margin-left: 1rem; align-items: center;}
+    .skincare_img{width: 150px; height: 150px; margin-top: 7rem; margin-right: 0.3rem}
+    .skin_title, .concern_title {font-size: 0.9rem;}
+    .list{font-size: 0.8rem;}
+    .customisation{margin-left: 1.3rem; width: 80%;}
+    .button_cont{margin-left: 1.3rem; margin-bottom: 1rem; width: 80%;}
+    .price_list{gap: 0.9rem;}
+    #price{width:70px; height:40px; border-radius: 1.4rem; padding: 0.4rem 0.6rem; font-size: 0.6rem;}
+    .category{margin-left: 0.4rem;} 
+    .product_row{margin-left: 0;}
+    .product_display{width: 330px; margin-left: 0;}
+}
+@media(min-width: 346px) and (max-width: 500px){
+    .info_left{gap: 1.5rem;}
+    .profile{margin-left: 1rem; align-items: center;}
+    .result_title{font-size: 1rem;}
+    .skin_title, .concern_title {font-size: 0.9rem;}
+    .list{font-size: 0.8rem;}
+    .skincare_img{width: 150px; height: 150px; margin-top: 7rem; margin-right: 0.3rem}
+    .customisation{margin-left: 1.3rem; width: 90%;}
+    .button_cont{margin-left: 1.3rem; margin-bottom: 1rem}
+    .price_list{gap: 0.9rem;}
+    #price{width:80px; border-radius: 1.4rem; padding: 0.4rem 0.6rem;}
+    .product_row{margin-left: 0.4rem;}
+    .product_display{width: 330px;}
+    .category{margin-left: 0.4rem;} 
+}
 
+@media (min-width: 501px) and (max-width: 900px)
+{
+    .info_left{gap: 2rem;}
+    .profile{margin-left: 1rem; align-items: center; width: 400px;}
+    .skincare_img{width: 300px; height: 300px; margin-top: 7rem; margin-right: 0.3rem}
+    .customisation{margin-left: 1.7rem; width: 90%;}
+    #price{width:80px; border-radius: 1.4rem; padding: 0.4rem 0.6rem;}
+    .category{margin-left: 0.4rem;} 
+    .product_row{margin-left: 2rem;}
+}
 

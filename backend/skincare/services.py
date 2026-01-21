@@ -102,8 +102,6 @@ class Recommendation:
             if user_profile.skintype in row.skintypes: 
                 score += 1
             score += sum(1 for item in user_profile.skin_concern if item in row.product_target)
-            print(f"score: {score}")
-            print(f"product: {row.product_name}")
 
             # rank products according to scores 
             if score == 2:
@@ -144,8 +142,6 @@ class Recommendation:
             if user_profile.skintype in row.skintypes: 
                 score += 1
             score += sum(1 for item in user_profile.skin_concern if item in row.product_target)
-            print(f"score: {score}")
-            print(f"product: {row.product_name}")
             
             # rank products according to scores 
             if score == 2:
@@ -182,8 +178,6 @@ class Recommendation:
             if user_profile.skintype in row.skintypes: 
                 score += 1
             score += sum(1 for item in user_profile.skin_concern if item in row.product_target)
-            print(f"score: {score}")
-            print(f"product: {row.product_name}")
             
             # rank products according to scores 
             if score == 2:
@@ -220,8 +214,6 @@ class Recommendation:
             if user_profile.skintype in row.skintypes: 
                 score += 1
             score += sum(1 for item in user_profile.skin_concern if item in row.product_target)
-            print(f"score: {score}")
-            print(f"product: {row.product_name}")
             
             # rank products according to scores 
             if score == 2:
@@ -259,8 +251,6 @@ class Recommendation:
                 if user_profile.skintype in row.skintypes: 
                     score += 1
                 score += sum(1 for item in user_profile.skin_concern if item in row.product_target)
-                print(f"score: {score}")
-                print(f"product: {row.product_name}")
                 
                 # rank products according to scores 
                 if score == 2:
@@ -296,8 +286,6 @@ class Recommendation:
                 if user_profile.skintype in row.skintypes: 
                     score += 1
                 score += sum(1 for item in user_profile.skin_concern if item in row.product_target)
-                print(f"score: {score}")
-                print(f"product: {row.product_name}")
                 
                 # rank products according to scores 
                 if score == 2:
@@ -334,8 +322,6 @@ class Recommendation:
                 if any(item in row.product_target for item in user_profile.eye_concern):
                     score += 1
                 score += sum(1 for item in user_profile.skin_concern if item in row.product_target)
-                print(f"score: {score}")
-                print(f"product: {row.product_name}")
                 
                 # rank products according to scores 
                 if score == 2:
@@ -373,8 +359,6 @@ class Recommendation:
                 if user_profile.skintype in row.skintypes: 
                     score += 1
                 score += sum(1 for item in user_profile.skin_concern if item in row.product_target)
-                print(f"score: {score}")
-                print(f"product: {row.product_name}")
                 
                 # rank products according to scores 
                 if score == 2:
@@ -410,8 +394,6 @@ class Recommendation:
                 if user_profile.skintype in row.skintypes: 
                     score += 1
                 score += sum(1 for item in user_profile.skin_concern if item in row.product_target)
-                print(f"score: {score}")
-                print(f"product: {row.product_name}")
                 
                 # rank products according to scores 
                 if score == 2:
@@ -454,8 +436,6 @@ class Recommendation:
             if user_profile["skintype"] in row.skintypes: 
                 score += 1
             score += sum(1 for item in user_profile["skin_concern"] if item in row.product_target)
-            print(f"score: {score}")
-            print(f"product: {row.product_name}")
             
             #build a product dict 
             add_product = {
@@ -464,7 +444,7 @@ class Recommendation:
                 "product_category": row.product_cat, 
                 "product_price": row.product_price, 
                 "product_link": row.product_link, 
-                "product_img": row.product_img.url, 
+                "product_img": row.product_img, 
                 "product_target": row.product_target,
                 "skintypes" : row.skintypes,
                 "product_des": row.product_des,
@@ -503,8 +483,6 @@ class Recommendation:
             if user_profile["skintype"] in row.skintypes: 
                 score += 1
             score += sum(1 for item in user_profile["skin_concern"] if item in row.product_target)
-            print(f"score: {score}")
-            print(f"product: {row.product_name}")
 
             #build a product dict 
             add_product = {
@@ -513,7 +491,7 @@ class Recommendation:
                 "product_category": row.product_cat, 
                 "product_price": row.product_price, 
                 "product_link": row.product_link, 
-                "product_img": row.product_img.url, 
+                "product_img": row.product_img, 
                 "product_target": row.product_target,
                 "skintypes" : row.skintypes,
                 "product_des": row.product_des,
@@ -549,8 +527,6 @@ class Recommendation:
             if user_profile["skintype"] in row.skintypes: 
                 score += 1
             score += sum(1 for item in user_profile["skin_concern"] if item in row.product_target)
-            print(f"score: {score}")
-            print(f"product: {row.product_name}")
 
             #build a product dict 
             add_product = {
@@ -559,7 +535,7 @@ class Recommendation:
                 "product_category": row.product_cat, 
                 "product_price": row.product_price, 
                 "product_link": row.product_link, 
-                "product_img": row.product_img.url, 
+                "product_img": row.product_img, 
                 "product_target": row.product_target,
                 "skintypes" : row.skintypes,
                 "product_des": row.product_des,
@@ -596,8 +572,6 @@ class Recommendation:
             if user_profile["skintype"] in row.skintypes: 
                 score += 1
             score += sum(1 for item in user_profile["skin_concern"] if item in row.product_target)
-            print(f"score: {score}")
-            print(f"product: {row.product_name}")
 
             #build a product dict 
             add_product = {
@@ -606,7 +580,7 @@ class Recommendation:
                 "product_category": row.product_cat, 
                 "product_price": row.product_price, 
                 "product_link": row.product_link, 
-                "product_img": row.product_img.url, 
+                "product_img": row.product_img, 
                 "product_target": row.product_target,
                 "skintypes" : row.skintypes,
                 "product_des": row.product_des,
@@ -644,8 +618,6 @@ class Recommendation:
                 if user_profile["skintype"] in row.skintypes: 
                     score += 1
                 score += sum(1 for item in user_profile["skin_concern"] if item in row.product_target)
-                print(f"score: {score}")
-                print(f"product: {row.product_name}")
 
                 #build a product dict 
                 add_product = {
@@ -654,7 +626,7 @@ class Recommendation:
                     "product_category": row.product_cat, 
                     "product_price": row.product_price, 
                     "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
+                    "product_img": row.product_img, 
                     "product_target": row.product_target,
                     "skintypes" : row.skintypes,
                     "product_des": row.product_des,
@@ -691,8 +663,6 @@ class Recommendation:
                 if user_profile["skintype"] in row.skintypes: 
                     score += 1
                 score += sum(1 for item in user_profile["skin_concern"] if item in row.product_target)
-                print(f"score: {score}")
-                print(f"product: {row.product_name}")
 
                 #build a product dict 
                 add_product = {
@@ -701,7 +671,7 @@ class Recommendation:
                     "product_category": row.product_cat, 
                     "product_price": row.product_price, 
                     "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
+                    "product_img": row.product_img, 
                     "product_target": row.product_target,
                     "skintypes" : row.skintypes,
                     "product_des": row.product_des,
@@ -740,8 +710,6 @@ class Recommendation:
                 if user_profile["skintype"] in row.skintypes: 
                     score += 1
                 score += sum(1 for item in user_profile["skin_concern"] if item in row.product_target)
-                print(f"score: {score}")
-                print(f"product: {row.product_name}")
 
                 #build a product dict 
                 add_product = {
@@ -750,7 +718,7 @@ class Recommendation:
                     "product_category": row.product_cat, 
                     "product_price": row.product_price, 
                     "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
+                    "product_img": row.product_img, 
                     "product_target": row.product_target,
                     "skintypes" : row.skintypes,
                     "product_des": row.product_des,
@@ -788,8 +756,6 @@ class Recommendation:
                 if user_profile["skintype"] in row.skintypes: 
                     score += 1
                 score += sum(1 for item in user_profile["skin_concern"] if item in row.product_target)
-                print(f"score: {score}")
-                print(f"product: {row.product_name}")
 
                 #build a product dict 
                 add_product = {
@@ -798,7 +764,7 @@ class Recommendation:
                     "product_category": row.product_cat, 
                     "product_price": row.product_price, 
                     "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
+                    "product_img": row.product_img, 
                     "product_target": row.product_target,
                     "skintypes" : row.skintypes,
                     "product_des": row.product_des,
@@ -835,8 +801,6 @@ class Recommendation:
                 if user_profile["skintype"] in row.skintypes: 
                     score += 1
                 score += sum(1 for item in user_profile["skin_concern"] if item in row.product_target)
-                print(f"score: {score}")
-                print(f"product: {row.product_name}")
 
                 #build a product dict 
                 add_product = {
@@ -845,7 +809,7 @@ class Recommendation:
                     "product_category": row.product_cat, 
                     "product_price": row.product_price, 
                     "product_link": row.product_link, 
-                    "product_img": row.product_img.url, 
+                    "product_img": row.product_img, 
                     "product_target": row.product_target,
                     "skintypes" : row.skintypes,
                     "product_des": row.product_des,

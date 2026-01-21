@@ -244,3 +244,12 @@
     font-size: 2rem;
 }
 
+@media (max-width: 400px)
+{
+    .question_bar{right: 180px;}
+}
+
+@media(min-width: 401px) and (max-width: 1280px)
+{
+    .question_bar{right: 70px;}
+}
