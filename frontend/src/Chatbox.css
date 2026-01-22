@@ -73,6 +73,10 @@
     height: 28px;
     width: 30px;
     transition: all ease-in-out 0.3s;
+    padding: 0.4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .closing_header:hover
@@ -244,12 +248,13 @@
     font-size: 2rem;
 }
 
-@media (max-width: 400px)
+@media (max-width: 500px)
 {
-    .question_bar{right: 180px;}
+    .question_bar{right: 140px;}
+    .chatbox{right: 140px;}
 }
 
-@media(min-width: 401px) and (max-width: 1280px)
+@media(min-width: 501px) and (max-width: 1280px)
 {
     .question_bar{right: 70px;}
 }

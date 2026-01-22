@@ -91,7 +91,7 @@ function Chatbox () {
                 <div className="chatbox">
                     <div className="header_chat">
                         <p className="assistant_header">Skincare Assistant</p>
-                        <p className="closing_header" onClick={closeMsg}>&times;</p>
+                        <p className="closing_header" onClick={closeMsg}>-</p>
                     </div>
                     <div className="chat_container">
                         {newSession === true && 
@@ -126,8 +126,8 @@ function Chatbox () {
                         )}
                         {loading === true && <p className="ai_msg_loading">Thinking...</p>}
                     </div>
-                    <div className="input_container newSession">
-                        <textarea disabled={newSession===true} onChange={(field) => handleContent(field.target.value)} className="chat" placeholder="How can I help you today?" value={content}></textarea>
+                    <div className="input_container">
+                        <textarea disabled={newSession===true} onChange={(field) => handleContent(field.target.value)} onKeyDown={(e) => {if(e.key === "Enter" && !e.shiftKey) {e.preventDefault(); sendMsg();}}} className="chat" placeholder="How can I help you today?" value={content}></textarea>
                         <button onClick={sendMsg} className="chat_button">Send</button>
                     </div>
                 </div>}
