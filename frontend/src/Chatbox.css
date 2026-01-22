@@ -247,8 +247,11 @@
 {
     font-size: 2rem;
 }
-
-@media (max-width: 500px)
+@media (max-width: 320px)
+{
+    .question_bar{right: 20px;} 
+}
+@media(min-width: 321px) and (max-width: 500px)
 {
     .question_bar{right: 140px;}
     .chatbox{right: 140px;}
