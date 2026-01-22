@@ -9,6 +9,8 @@ import Profile from "./Profile";
 import Productrec from "./Product";
 
 function App() {
+  const[error, setError] = useState("")
+
   //track stages (next) 
   const[stage, setStage] = useState(0);
 
@@ -51,11 +53,10 @@ function App() {
     "micellarwater": {"high": [], "mid": [], "low": []},
   });
 
-  console.log(product_list);
-
   const resetUserData = () => {
     setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
   }  
+  
 
   const handlePage = async(site) => {
       if (site === "login" || site === "signup" || site === "home" ||site ==="profile")
@@ -208,8 +209,18 @@ function App() {
   }
 
   const handleAge = (userAge) => {
-      //filter out age 18 and above 
       setUserData(prev => ({...prev, age: userAge}));
+  }
+
+  const validateAge = () => {
+    if(userData.age && userData.age < 12)
+      {
+        setError("You need to be at least 12 years old to use this service.");
+      }
+    else 
+    {
+      setError("");
+    }
   }
 
   const handleAdvancedUser = (statement) => {
@@ -774,12 +785,13 @@ function App() {
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question">How old are you?</h2>
-              <input className="input_field" type="text" onChange={(field) => handleAge(field.target.value)} value={userData.age > 0 ? userData.age : ""}/>
+              <input className="input_field" type="number" onChange={(field) => handleAge(field.target.value)} value={userData.age > 0 ? userData.age : ""} onBlur={validateAge}/>
               <div className="button_container">
                 <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
                 {userData.age < 12 || userData.age > 100 || isNaN(userData.age)? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
               </div>
             </div>
+            {error && <p className="error">{error}</p>}
           </div>
         )}
 
