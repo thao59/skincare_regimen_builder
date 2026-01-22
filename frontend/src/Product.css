@@ -14,7 +14,7 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: flex-start;
-    margin-left: 15rem;
+    margin-left: 10rem;
 }
 
 .product_display
@@ -423,11 +423,11 @@
 @media (min-width: 501px) and (max-width: 900px)
 {
     .info_left{gap: 2rem;}
-    .profile{margin-left: 1rem; align-items: center; width: 400px;}
+    .profile{margin-left: 2rem; align-items: center; width: 400px;}
     .skincare_img{width: 300px; height: 300px; margin-top: 7rem; margin-right: 0.3rem}
-    .customisation{margin-left: 1.7rem; width: 90%;}
+    .customisation{margin-left: 1.7rem; width: 90%; margin-bottom: 4rem;}
     #price{width:80px; border-radius: 1.4rem; padding: 0.4rem 0.6rem;}
     .category{margin-left: 0.4rem;} 
-    .product_row{margin-left: 2rem;}
+    .product_row{margin-left: 5rem;}
 }
 

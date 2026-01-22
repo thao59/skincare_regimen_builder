@@ -9,7 +9,7 @@
     transition: all ease-in-out 0.3s;
     position: fixed;
     bottom: 30px;
-    right: 30px;
+    right: 20px;
 }
 
 .question_bar.inactive 
@@ -35,7 +35,7 @@
 {
     position: fixed;
     bottom: 30px;
-    right: 30px; 
+    right: 20px; 
     border-radius: 20px;
     height: 400px;
     width: 270px;
@@ -246,20 +246,4 @@
 .prompt_thinkbox
 {
     font-size: 2rem;
-}
-@media (max-width: 320px)
-{
-    .question_bar{right: 20px; font-size: 16px;} 
-    .chatbox{right: 20px;}
-}
-@media(min-width: 321px) and (max-width: 500px)
-{
-    .question_bar{right: 140px;}
-    .chatbox{right: 140px;}
-}
-
-@media(min-width: 501px) and (max-width: 1280px)
-{
-    .question_bar{right: 70px;}
-    .chatbox{right: 70px;}
 }
