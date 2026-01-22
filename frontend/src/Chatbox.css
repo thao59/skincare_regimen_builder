@@ -249,7 +249,8 @@
 }
 @media (max-width: 320px)
 {
-    .question_bar{right: 20px;} 
+    .question_bar{right: 20px; font-size: 16px;} 
+    .chatbox{right: 20px;}
 }
 @media(min-width: 321px) and (max-width: 500px)
 {
@@ -260,4 +261,5 @@
 @media(min-width: 501px) and (max-width: 1280px)
 {
     .question_bar{right: 70px;}
+    .chatbox{right: 70px;}
 }
