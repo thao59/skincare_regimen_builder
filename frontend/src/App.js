@@ -10,6 +10,40 @@ import Productrec from "./Product";
 
 function App() {
   const[error, setError] = useState("")
+  const[popup, setPopup] = useState(false)
+  
+  const handlePopup = () => {
+    if (popup)
+    {
+      setPopup(false);
+
+    }
+    else
+    {
+      setPopup(true);
+    }
+  }
+  console.log("pop up", popup);
+
+  const skintypeInfo = 
+      <div className="popup">
+        <button onClick={handlePopup} className="closing_button">&times;</button> 
+        <p><strong style={{fontSize: '1rem'}}>Not sure of your skin type?</strong></p>
+        <ul>
+          <li><strong>Oily</strong>: Shiny face throughout the day, enlarged pores.</li>
+          <li><strong>Dry</strong>: Tight feeling, flaky patches.</li>
+          <li><strong>Balanced</strong>: Comfortable, no major issues.</li>
+          <li><strong>Combination</strong>: Oily forehead/nose, dry cheeks.</li>
+          <li><strong>Sensitive</strong>: Reacts easily, redness, stinging</li>
+        </ul>
+      </div>
+
+  const activeInfo = 
+  <div className="popup">
+    <button className="closing_button" onClick={handlePopup}>&times;</button>
+    <p ><strong style={{fontSize: '1rem'}}>What is active?</strong></p>
+    <p>Actives are powerful ingredients that target specific skin concerns like acne, wrinkles, or dark spots. Common examples include retinol, vitamin C, AHAs/BHAs, and niacinamide.</p>
+  </div>
 
   //track stages (next) 
   const[stage, setStage] = useState(0);
@@ -799,7 +833,11 @@ function App() {
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question">What is your skin type?</h2>
-              <p className="note">Select the answer that fits you best.</p>
+              <p className="note">Select the answer that fits you best <span className="popup_info" onClick={handlePopup}>ⓘ</span></p>
+              {popup && 
+              <div className="popup_backdrop"> 
+                {skintypeInfo}
+              </div>}
               <label><input type="radio" name="skin_type" onChange={() => handleSkinType("oily")} checked={userData.skin_type === "oily"}/> Oily</label>
               <label><input type="radio" name="skin_type" onChange={() => handleSkinType("dry")} checked={userData.skin_type === "dry"}/> Dry</label>
               <label><input type="radio" name="skin_type" onChange={() => handleSkinType("balanced")} checked={userData.skin_type === "balanced"}/> Balanced</label>
@@ -889,7 +927,10 @@ function App() {
         {stage === 8 && userData.products_type.length > 0 && (
           <div className="labels_container">
             <div className="content_container">
-              <h2 className="question"> Are you using actives in your skincare routine? </h2>
+              <h2 className="question"> Are you using actives in your skincare routine? <span className="note popup_info" onClick={handlePopup}>ⓘ</span></h2>
+              {popup && <div className="popup_backdrop">
+                {activeInfo}
+              </div>}
               <label><input type="radio" name="active" onChange={() => handleActive("yes")} checked={userData.active_use === true}/> Yes</label>
               <label><input type="radio" name="active" onChange={() => handleActive("no")} checked={userData.active_use === false}/> No</label>
               <div className="button_container">
