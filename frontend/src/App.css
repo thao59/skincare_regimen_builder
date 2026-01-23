@@ -164,10 +164,11 @@ label
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 230px;
+  height: auto;
   width: auto;
-  max-width: 350px;
-  padding: 0.5rem;
+  min-width: 340px;
+  max-width: 450px;
+  padding: 1rem;
   background: #f8f9fa;
   border: 2px solid #e1e4e8;
   border-radius: 2rem;
