@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-qip545uw7fkv*b2xzju=4hf@4+6u)hi+fvb^t!*tjg#!83suua
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["170.64.233.15", "localhost", "127.0.0.1", "skincareregiment.shop", "www.skincareregiment.shop"]
+ALLOWED_HOSTS = ["170.64.233.15", "localhost", "127.0.0.1", "skincareregimen.shop", "www.skincareregimen.shop"]
 
 
 # Application definition
