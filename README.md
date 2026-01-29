@@ -30,20 +30,11 @@ Web Scraping: Automated product data collection using BeautifulSoup
 Conditional Survey Flow: Dynamic question branching based on user responses
 
 ## Tech Stack
-
-## Backend
-Django 4.2 - Web framework
-Django REST Framework - API development
-SQLite - Database
-BeautifulSoup4 - Web scraping
-Anthropic Claude API - AI chatbot integration
-python-dotenv - Environment variable management
-
-## Frontend
-React - UI framework
-CSS3 - Custom styling
-Fetch API- HTTP requests
-
+Frontend: React, CSS
+Backend: Django + Django REST Framework
+Database: PostgreSQL (production), SQLite (local)
+Auth: JWT tokens (djangorestframework-simplejwt)
+Deployment: DigitalOcean
 
 ## Database Models
 
@@ -70,7 +61,14 @@ Fetch API- HTTP requests
 ### UserImage
 - Stores user-uploaded skin photos
 
-## Key Features Implementation
+### Conversation
+- User's chat sessions with AI chatbot
+- Timestamp and session management
+
+### Message
+- Individual messages within conversations
+- Stores user queries and AI responses
+- Links to Conversation model
 
 ## Recommendation Algorithm
 The algorithm scores products based on:
