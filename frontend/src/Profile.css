@@ -105,12 +105,27 @@
     padding: 0.5rem 1rem;
     margin-left: 1rem;
     transition: all ease-in-out 0.1s;
+    width: 100px;
 }
 
 .reminder_login:hover 
 {
     background-color: #eddccb;
     border: 1.5px solid rgb(235, 179, 133);
+}
+
+.reminder_signup
+{
+    font-size: 0.8rem;
+    color: #c7b19b;
+}
+
+.reminder_signup button
+{
+    border: none;
+    background-color: #fafafa;
+    color: #c7b19b;
+    text-decoration: underline;
 }
 
 .sub_result_title

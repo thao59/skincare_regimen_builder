@@ -1,12 +1,14 @@
 import {useState} from "react"; 
 import "./Signup.css";
+import {useNavigate} from "react-router-dom";
 
-function Signup({resetSite}){
+function Signup({handlePage, userData, sendData}){
+    const navigate = useNavigate();
 
-    const[userData, setUserData] = useState({email: "", username: "", password: "", confirm_password: ""})
+    const[userDeets, setUserDeets] = useState({email: "", username: "", password: "", confirm_password: ""})
     
     const handleUser = (value, fieldName) => {
-        setUserData({...userData, [fieldName]: value});
+        setUserDeets({...userDeets, [fieldName]: value});
     }
 
     const[error, setError] = useState("");
@@ -15,7 +17,7 @@ function Signup({resetSite}){
            const response = await fetch (`${process.env.REACT_APP_API_URL}/api/signup/`, {
             method: "POST", 
             headers: {"Content-type": "application/json"}, 
-            body: JSON.stringify(userData), 
+            body: JSON.stringify(userDeets), 
            }); 
 
            const data = await response.json(); 
@@ -24,7 +26,15 @@ function Signup({resetSite}){
            {
             localStorage.setItem("access", data.access);
             localStorage.setItem("refresh", data.refresh);
-            resetSite("home");
+            if (userData)
+            {
+                sendData();
+            }
+            else
+            {
+                handlePage("home");
+                navigate("/home");
+            }
            }
            else 
            {
@@ -37,13 +47,13 @@ function Signup({resetSite}){
     return(
     <div className="signup_page">
         {error && <p className="error">{error}</p>}
-        <form className="signup_form">
+        <form className="signup_form" onSubmit={(e)=> e.preventDefault()}>
             <p className="title">Signup</p>
             <input className="signup_input" onChange={(field) => handleUser(field.target.value, "email")} placeholder="Your email"/>
             <input className="signup_input" onChange={(field) => handleUser(field.target.value, "username")} placeholder="Username"/>
             <input className="signup_input" type="password" placeholder="Set your password" onChange={(field) => handleUser(field.target.value, "password")} />
             <input className="signup_input" type="password" placeholder="Confirm password" onChange={(field) => handleUser(field.target.value, "confirm_password")}/>
-            <button className={`submit_button ${!userData.email || !userData.username || !userData.password || !userData.confirm_password? "disabled":""}`} disabled={!userData.email || !userData.username || !userData.password || !userData.confirm_password} onClick={handleSubmit} type="button">Signup</button>
+            <button className={`submit_button ${!userDeets.email || !userDeets.username || !userDeets.password || !userDeets.confirm_password? "disabled":""}`} disabled={!userDeets.email || !userDeets.username || !userDeets.password || !userDeets.confirm_password} onClick={(e) => {e.preventDefault(); handleSubmit();}} type="button">Signup</button>
         </form>   
     </div>
     )

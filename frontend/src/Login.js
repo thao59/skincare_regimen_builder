@@ -1,9 +1,11 @@
 import {useState} from "react"; 
 import "./Login.css";
+import {useNavigate} from "react-router-dom";
 
 
-function Login({resetSite})
+function Login({handlePage, userData, sendData})
 {
+    const navigate = useNavigate();
     const[userAccount, setUserAccount] = useState({username: "", password: ""});
 
     const handleAccount = (value, fieldName) => {
@@ -13,7 +15,6 @@ function Login({resetSite})
     const[error, setError] = useState("");
 
     const handleSubmit = async () => {
-        console.log("handle submit start");
      const response = await fetch (`${process.env.REACT_APP_API_URL}/api/login/`, {
         method: "POST", 
         headers: {"Content-Type": "application/json"}, 
@@ -25,7 +26,15 @@ function Login({resetSite})
         {
             localStorage.setItem("access", data.access);
             localStorage.setItem("refresh", data.refresh);
-            resetSite("home");
+            if ((userData.name && userData.age && userData.skin_type && userData.skin_concern.length>0) && (userData.products_type.length>0 ||userData.routine||userData.no_products))
+            {
+                await sendData();
+            }
+            else 
+            {
+                handlePage("home");
+                navigate("/home");
+            }
         }
         else
         {
@@ -50,12 +59,12 @@ function Login({resetSite})
     return (
         <div className="login_page">
             {error && <p className="error">{error}</p>}
-            <form className="login_form">
+            <form className="login_form" onSubmit={(e) => e.preventDefault()}>
                 <p className="title">Login</p>
                 <input className="login_input" onChange={(field) => handleAccount(field.target.value, "username")} placeholder="Your email"/>
                 <input className="login_input" type="password" onChange={(field) => handleAccount(field.target.value, "password")} placeholder="Your password" />
-                <button className={`submit_button ${!userAccount.username || !userAccount.password? "disabled": ""}`} disabled={!userAccount.username || !userAccount.password} onClick={() => {handleSubmit()}}>Login</button>
-                <p className="reminder"> Don't have an account? <button onClick={() => resetSite("signup")}>Sign up</button></p>
+                <button className={`submit_button ${!userAccount.username || !userAccount.password? "disabled": ""}`} disabled={!userAccount.username || !userAccount.password} onClick={(e) => {e.preventDefault(); handleSubmit();}} type="button">Login</button>
+                <p className="reminder"> Don't have an account? <button type="button" onClick={() => {handlePage("signup"); navigate("/signup") }}>Sign up</button></p>
             </form>   
         </div>
     )

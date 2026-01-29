@@ -2,10 +2,13 @@ import {useState} from "react";
 import "./Product.css"
 import Chatbox from "./Chatbox";
 import SendEmail from "./SendEmail"
+import {useNavigate} from "react-router-dom";
 
 
 function Productrec({product_list, skinProfile, handlePage})
 {
+    const navigate = useNavigate();
+
     //capitalise the first letter of key 
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     const URL = process.env.REACT_APP_API_URL;
@@ -36,7 +39,6 @@ function Productrec({product_list, skinProfile, handlePage})
     }
 
     const token = localStorage.getItem("access");
-    console.log("token: ", token);
 
     return (
         <div className="product_page">
@@ -51,8 +53,9 @@ function Productrec({product_list, skinProfile, handlePage})
                         ))}
                     </ul> 
                     {skinProfile.eye_concern && skinProfile.eye_concern.length === 1 ? <p className="concern_title">EYE CONCERNS: <span className="skintype">{cap(skinProfile.eye_concern[0])}</span></p> : <p className="concern_title">EYE CONCERNS: <span className="skintype">{skinProfile.eye_concern.map(x => cap(x)).join(", ")}</span></p>}
-                    <p className="return_button" onClick={() => handlePage("home")}>Retake survey &#8594;</p>
-                    {!token ? <p> Save your result <button className="reminder_login" onClick={() => handlePage("login")}> Login</button></p>: <SendEmail/>}
+                    <p className="return_button" onClick={() => {handlePage("home"); navigate("/form/step-1")}}>Retake survey &#8594;</p>
+                    {!token ? <p> Save your result <button className="reminder_login" onClick={() => navigate("/login")}> Login</button></p>: <SendEmail/>}
+                    {!token && <p className="reminder_signup">Don't have an account? <button onClick={() => navigate("/signup")}>Signup</button></p>}
                 
                 </div> 
                 <img className="skincare_img" src="/images/2_39dcafaf-18fa-4aff-9292-918c7b5c22c6.webp" alt="skincare"/>

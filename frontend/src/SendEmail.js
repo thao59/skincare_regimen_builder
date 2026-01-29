@@ -1,6 +1,9 @@
 import "./SendEmail.css"
+import {useState} from "react";
 
 function SendEmail(){
+    const [msg, setMsg] = useState("");
+
     const sendToEmail = async() => {
         const response = await fetch(`${process.env.REACT_APP_API_URL}/api/sendtoemail/`, {
             method: "POST", 
@@ -13,6 +16,7 @@ function SendEmail(){
         {
             console.log(response.status);
             console.log(data.message);
+            setMsg("Results sent to your email!");
         }
 
         else 
@@ -23,6 +27,7 @@ function SendEmail(){
     return (
         <div>
             <button className="send_result_butt" onClick={sendToEmail}>Email Results</button>
+            {msg && <p className="msg">{msg}</p>}
         </div>
     )
 }

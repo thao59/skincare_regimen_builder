@@ -29,7 +29,7 @@ SECRET_KEY = 'django-insecure-qip545uw7fkv*b2xzju=4hf@4+6u)hi+fvb^t!*tjg#!83suua
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["170.64.233.15", "localhost"]
+ALLOWED_HOSTS = ["170.64.233.15", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -166,7 +166,7 @@ MEDIA_ROOT = BASE_DIR/ "media"
 
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587 
 EMAIL_USE_TLS = True

@@ -42,12 +42,9 @@ function Chatbox () {
         }
     }
 
-    console.log("new session: ", newSession);
-
     const handleNewChat = () => {
         setNewSession(false);
     }
-    console.log("loading: ", loading);
 
     const token = localStorage.getItem("access"); 
     const sendMsg = async() => {

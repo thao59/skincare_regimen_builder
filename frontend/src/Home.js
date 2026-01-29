@@ -1,10 +1,12 @@
 import "./Home.css"
+import {useNavigate} from "react-router-dom";
 
-function Home({buttonSubmit, resetSite}){
+function Home(){
+    const navigate = useNavigate();
     return (
         <div>
             <h1 className="title"> Regimen Builder</h1>
-            <button className="start_button" onClick={() => {buttonSubmit(); resetSite("none")}}> Begin &#8594; </button>
+            <button className="start_button" onClick={() => navigate("/form/step-1")}> Begin &#8594; </button>
             <div className="info_section">
                 <div className="info_container">
                     <p className="info_icon">✨</p>

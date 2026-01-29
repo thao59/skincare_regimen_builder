@@ -7,11 +7,15 @@ import Signup from "./Signup";
 import Home from "./Home";
 import Profile from "./Profile";
 import Productrec from "./Product";
+import {BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation} from "react-router-dom";
 
-function App() {
+function Routers()
+{
+  const navigate = useNavigate();
+  
   const[error, setError] = useState("")
   const[popup, setPopup] = useState(false)
-  
+
   const handlePopup = () => {
     if (popup)
     {
@@ -19,11 +23,11 @@ function App() {
 
     }
     else
+    
     {
       setPopup(true);
     }
   }
-  console.log("pop up", popup);
 
   const skintypeInfo = 
       <div className="popup">
@@ -45,36 +49,7 @@ function App() {
     <p>Actives are powerful ingredients that target specific skin concerns like acne, wrinkles, or dark spots. Common examples include retinol, vitamin C, AHAs/BHAs, and niacinamide.</p>
   </div>
 
-  //track stages (next) 
-  const[stage, setStage] = useState(0);
-
-  //once button is clicked change to the next page. Set default as 1 (if no arg passed, auto increase by 1. If 0 is passed as an arg set page to 0)
-  const changeStage = (count = 1) => {
-    if (count === 1)
-    {
-      setStage(prev => prev + count);
-    }
-    else 
-    {
-      setStage(count);
-    }
-  }
-
-  //allow user to go back to previous page
-  const changePreviousStage = (count = 1) => {
-    if (count === 1)
-    {
-      setStage(prev => prev - count);
-    }
-
-    else 
-    {
-      setStage(count);
-    }
-  }
-
   const[image, setImage] = useState(null);
-  const[page, setPage] = useState("home");
   const[userData, setUserData] = useState({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
   const [product_list, setProduct_list] = useState({
     "cleanser": {"high": [], "mid": [], "low": []}, 
@@ -90,16 +65,11 @@ function App() {
   const resetUserData = () => {
     setUserData({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
   }  
-  
+
 
   const handlePage = async(site) => {
       if (site === "login" || site === "signup" || site === "home" ||site ==="profile")
       {
-        if (site !== "profile")
-        {
-          setPage(site); 
-        }
-        changeStage(0);
         resetUserData();
         setImage(null);
         setProduct_list({
@@ -218,7 +188,7 @@ function App() {
         }
       }
   }
-  
+
   //save user's answer whether they use actives 
   const handleActive = (bool) => {
     if (bool === "no")
@@ -267,10 +237,10 @@ function App() {
 
   //delete all saved info, set page to 0, navigate back to home page after logging out
   const handleLogout = () => {
-    changeStage(0);
     localStorage.removeItem("refresh");
     localStorage.removeItem("access"); 
     handlePage("home");
+    navigate("/home");
     resetUserData();
   }
 
@@ -278,7 +248,6 @@ function App() {
   const[skinProfile, setSkinProfile] = useState(null);
   const image_group ={};
 
-  const copyList = {...product_list};
   let cleanser_cat;
   let toner_cat;
   let serum_cat;
@@ -287,11 +256,22 @@ function App() {
   let eye_cat;
   let micellarwater_cat;
   let cleansingoil_cat;
-
-  const token = localStorage.getItem("access");
+  let token;
 
   //fetch user data to Django 
   const sendData = async() => {
+    token = localStorage.getItem("access");
+    const copyList = {
+      cleanser: {high: [], mid: [], low: []}, 
+      toner: {high: [], mid: [], low: []}, 
+      serum: {high: [], mid: [], low: []}, 
+      moisturiser: {high: [], mid: [], low: []}, 
+      eye: {high: [], mid: [], low: []}, 
+      sunscreen: {high: [], mid: [], low: []}, 
+      oilcleanser: {high: [], mid: [], low: []}, 
+      micellarwater: {high: [], mid: [], low: []},
+  };
+  
     if (userData.no_products !== 0)
     {
       const option_headers = {
@@ -315,7 +295,7 @@ function App() {
         
         //process data if user is logged in
         if (token)
-        {       
+        {     
           //group and save products according to types 
           cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
           toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner").map(x => x.product);
@@ -519,7 +499,7 @@ function App() {
             }
           }
         setProduct_list(copyList);
-        changeStage(13);
+        navigate("/productrec");
       }
 
       else
@@ -556,8 +536,9 @@ function App() {
 
   //function to fetch image to backend 
   const handleSendImage = async() => {
-    const file_form = new FormData();
-    file_form.append("image_file", imageFile);
+   token = localStorage.getItem("access");
+   const file_form = new FormData();
+   file_form.append("image_file", imageFile);
 
     const object_header = {
       method: "POST", 
@@ -584,274 +565,278 @@ function App() {
       console.log("Error: ", response.status);
     }
   }
-  
+
   const[profileName, setProfileName] = useState("");
 
   //fetch imgs from backend 
   const get_data = async () => {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/getImage/`, {
-          headers: {"Authorization" : `Bearer ${localStorage.getItem("access")}`}, 
-      });
-        const freshList = {
-          cleanser: {high: [], mid: [], low: []}, 
-          toner: {high: [], mid: [], low: []}, 
-          serum: {high: [], mid: [], low: []}, 
-          moisturiser: {high: [], mid: [], low: []}, 
-          eye: {high: [], mid: [], low: []}, 
-          sunscreen: {high: [], mid: [], low: []}, 
-          oilcleanser: {high: [], mid: [], low: []}, 
-          micellarwater: {high: [], mid: [], low: []},
-      };
+    token = localStorage.getItem("access");
+    const response = await fetch(`${process.env.REACT_APP_API_URL}/api/getImage/`, {
+        headers: {"Authorization" : `Bearer ${token}`}, 
+    });
+      const freshList = {
+        cleanser: {high: [], mid: [], low: []}, 
+        toner: {high: [], mid: [], low: []}, 
+        serum: {high: [], mid: [], low: []}, 
+        moisturiser: {high: [], mid: [], low: []}, 
+        eye: {high: [], mid: [], low: []}, 
+        sunscreen: {high: [], mid: [], low: []}, 
+        oilcleanser: {high: [], mid: [], low: []}, 
+        micellarwater: {high: [], mid: [], low: []},
+    };
 
+    const data = await response.json(); 
+    if (response.ok)
+    {
+      console.log(response.status); 
 
-
-      const data = await response.json(); 
-      if (response.ok)
+      if (data.skininfo)
       {
-        console.log(response.status); 
-
-        if (data.skininfo)
-        {
-          setSkinProfile(data.skininfo);
-        }
-
-        if (data.name)
-        {
-          setProfileName(data.name);
-
-        }
-        
-        //if image, loops through image array and group them according to date 
-        if (data.image?.length > 0)
-        {
-          for (const i of data.image)
-            {
-              let date = new Date(i.datetime).toLocaleDateString();
-              if (image_group[date])
-              {
-                //.push adding items to array
-                image_group[date].push(i);
-              }
-              else 
-              {
-                image_group[date] = [i];
-              }
-            }
-          setImageArray(image_group);
-        }
-
-        if (data.product_recs)
-        {
-          cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
-          toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner").map(x => x.product);
-          serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum").map(x => x.product);
-          moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
-          
-          if (data.skininfo.skin_concern.includes("acne") || (data.skininfo.skin_concern.includes("sensitive")))
-          {
-            sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
-          }
-          else 
-          {
-            sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "chemical sunscreen").map(x => x.product);
-          }
-
-          eye_cat = data.product_recs.filter(x=> x.product.product_cat === "eye").map(x => x.product);
-          micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water").map(x => x.product);
-          cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
-
-          for (const item of cleanser_cat)
-            {
-              if (item.product_price < 40) 
-              {
-                freshList.cleanser.low.push(item);
-              }  
-              else if (item.product_price >= 40 && item.product_price <= 80)
-              {
-                freshList.cleanser.mid.push(item);
-              }
-              else
-              {
-                freshList.cleanser.high.push(item); 
-              }
-            }
-        
-            for (const item of toner_cat)
-            {
-              if (item.product_price < 40)
-              {
-                freshList.toner.low.push(item);
-              } 
-              else if (item.product_price >= 40 && item.product_price <= 80)
-              {
-                freshList.toner.mid.push(item);
-              }
-              else 
-              {
-                freshList.toner.high.push(item); 
-              }
-            }
-        
-            for (const item of serum_cat)
-            {
-              if (item.product_price < 40)
-              {
-                freshList.serum.low.push(item);
-              }
-              else if (item.product_price >= 40 && item.product_price <= 80)
-              {
-                freshList.serum.mid.push(item);
-              }
-              else 
-              {
-                freshList.serum.high.push(item); 
-              }
-            }
-        
-            for (const item of moist_cat)
-            {
-              if (item.product_price < 40)
-              {
-                freshList.moisturiser.low.push(item);
-              } 
-              else if (item.product_price >= 40 && item.product_price <= 80)
-              {
-                freshList.moisturiser.mid.push(item);
-              }
-              else 
-              {
-                freshList.moisturiser.high.push(item); 
-              }
-            }
-        
-            for (const item of eye_cat)
-            {
-              if (item.product_price < 40)
-              {
-                freshList.eye.low.push(item);
-              }  
-              else if (item.product_price >= 40 && item.product_price <= 80)
-              {
-                freshList.eye.mid.push(item);
-              }
-              else 
-              {
-                freshList.eye.high.push(item); 
-              }
-            }
-        
-            for (const item of sunscreen_cat)
-            {
-              if (item.product_price < 40)
-              {
-                freshList.sunscreen.low.push(item);
-              }  
-              else if (item.product_price >= 40 && item.product_price <= 80)
-              {
-                freshList.sunscreen.mid.push(item);
-              }
-              else 
-              {
-                freshList.sunscreen.high.push(item); 
-              }
-            }
-        
-            for (const item of cleansingoil_cat)
-            {
-              if (item.product_price < 40)
-              {
-                freshList.oilcleanser.low.push(item);
-              }   
-              else if (item.product_price >= 40 && item.product_price <= 80)
-              {
-                freshList.oilcleanser.mid.push(item);
-              }
-              else 
-              {
-                freshList.oilcleanser.high.push(item); 
-              }
-            }
-        
-            for (const item of micellarwater_cat)
-            {
-              if (item.product_price < 40)
-              {
-                freshList.micellarwater.low.push(item);
-              }
-              else if (item.product_price >= 40 && item.product_price <= 80)
-              {
-                freshList.micellarwater.mid.push(item);
-              }
-              else 
-              {
-                freshList.micellarwater.high.push(item); 
-              }
-            }
-          setProduct_list(freshList);
-        }
-        setPage("profile");
+        setSkinProfile(data.skininfo);
       }
-      else 
+
+      if (data.name)
       {
-        console.log("Error: ", response.status);
+        setProfileName(data.name);
+
+      }
+      
+      //if image, loops through image array and group them according to date 
+      if (data.image?.length > 0)
+      {
+        for (const i of data.image)
+          {
+            let date = new Date(i.datetime).toLocaleDateString();
+            if (image_group[date])
+            {
+              //.push adding items to array
+              image_group[date].push(i);
+            }
+            else 
+            {
+              image_group[date] = [i];
+            }
+          }
+        setImageArray(image_group);
+      }
+
+      if (data.product_recs)
+      {
+        cleanser_cat = data.product_recs.filter(x => x.product.product_cat === "cleanser").map(x => x.product);
+        toner_cat = data.product_recs.filter(x=> x.product.product_cat === "toner").map(x => x.product);
+        serum_cat = data.product_recs.filter(x=> x.product.product_cat === "serum").map(x => x.product);
+        moist_cat = data.product_recs.filter(x=> x.product.product_cat === "moisturiser").map(x => x.product);
+        
+        if (data.skininfo.skin_concern.includes("acne") || (data.skininfo.skin_concern.includes("sensitive")))
+        {
+          sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "physical sunscreen").map(x => x.product);
+        }
+        else 
+        {
+          sunscreen_cat = data.product_recs.filter(x=> x.product.product_cat === "chemical sunscreen").map(x => x.product);
+        }
+
+        eye_cat = data.product_recs.filter(x=> x.product.product_cat === "eye").map(x => x.product);
+        micellarwater_cat = data.product_recs.filter(x=> x.product.product_cat === "micellar water").map(x => x.product);
+        cleansingoil_cat = data.product_recs.filter(x=> x.product.product_cat === "oil cleanser").map(x => x.product);
+
+        for (const item of cleanser_cat)
+          {
+            if (item.product_price < 40) 
+            {
+              freshList.cleanser.low.push(item);
+            }  
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              freshList.cleanser.mid.push(item);
+            }
+            else
+            {
+              freshList.cleanser.high.push(item); 
+            }
+          }
+      
+          for (const item of toner_cat)
+          {
+            if (item.product_price < 40)
+            {
+              freshList.toner.low.push(item);
+            } 
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              freshList.toner.mid.push(item);
+            }
+            else 
+            {
+              freshList.toner.high.push(item); 
+            }
+          }
+      
+          for (const item of serum_cat)
+          {
+            if (item.product_price < 40)
+            {
+              freshList.serum.low.push(item);
+            }
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              freshList.serum.mid.push(item);
+            }
+            else 
+            {
+              freshList.serum.high.push(item); 
+            }
+          }
+      
+          for (const item of moist_cat)
+          {
+            if (item.product_price < 40)
+            {
+              freshList.moisturiser.low.push(item);
+            } 
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              freshList.moisturiser.mid.push(item);
+            }
+            else 
+            {
+              freshList.moisturiser.high.push(item); 
+            }
+          }
+      
+          for (const item of eye_cat)
+          {
+            if (item.product_price < 40)
+            {
+              freshList.eye.low.push(item);
+            }  
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              freshList.eye.mid.push(item);
+            }
+            else 
+            {
+              freshList.eye.high.push(item); 
+            }
+          }
+      
+          for (const item of sunscreen_cat)
+          {
+            if (item.product_price < 40)
+            {
+              freshList.sunscreen.low.push(item);
+            }  
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              freshList.sunscreen.mid.push(item);
+            }
+            else 
+            {
+              freshList.sunscreen.high.push(item); 
+            }
+          }
+      
+          for (const item of cleansingoil_cat)
+          {
+            if (item.product_price < 40)
+            {
+              freshList.oilcleanser.low.push(item);
+            }   
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              freshList.oilcleanser.mid.push(item);
+            }
+            else 
+            {
+              freshList.oilcleanser.high.push(item); 
+            }
+          }
+      
+          for (const item of micellarwater_cat)
+          {
+            if (item.product_price < 40)
+            {
+              freshList.micellarwater.low.push(item);
+            }
+            else if (item.product_price >= 40 && item.product_price <= 80)
+            {
+              freshList.micellarwater.mid.push(item);
+            }
+            else 
+            {
+              freshList.micellarwater.high.push(item); 
+            }
+          }
+        setProduct_list(freshList);
       }
     }
+    else 
+    {
+      console.log("Error: ", response.status);
+    }
+  }
 
   return (
     <div className="App">
-        <Navbar onPageChange={handlePage} resetStage={changeStage} handleLogout={handleLogout}/>
-        {page === "login" && <Login resetSite={handlePage}/>}
-        {page === "signup" && <Signup resetSite={handlePage}/>}
-        {page === "home" && stage === 0 && <Home buttonSubmit={changeStage} resetSite={handlePage} />}
-        {page === "profile" && <Profile imageArray={imageArray} skinProfile={skinProfile} product_list={product_list} handlePage={handlePage} profileName={profileName}/>}
-        {stage === 1 && (
+      <Navbar handleLogout={handleLogout} handlePage={handlePage}/>
+      
+      <Routes>
+        <Route path="/" element={<Navigate to ="/home"/>}/> 
+        <Route path="/login" element={<Login handlePage={handlePage} userData={userData} sendData={sendData}/>}/>
+        <Route path="/signup" element={<Signup handlePage={handlePage} userData={userData} sendData={sendData}/>}/>
+        <Route path="/home" element={<Home/>}/>
+        <Route path="/profile" element={<Profile imageArray={imageArray} skinProfile={skinProfile} product_list={product_list} handlePage={handlePage} profileName={profileName}/>}/>
+        
+        <Route path="/form/step-1" element = {
           <div className="labels_container">
             <h1 className="title"> My Skincare Routine Tracker</h1>
             <p> Track your skincare journey and get personalised recommendations!</p>
             <div className="content_container">
               <h2 className="question">What's your name?</h2>
               <input className="input_field" type="text" onChange={(field) => handleName(field.target.value)} value={userData.name} placeholder="Enter your name"/>
-              {!userData.name? <button className="button_next disabled" disabled>&#8594;</button>: <button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
+              {!userData.name? <button className="button_next disabled" disabled>&#8594;</button>: <button className="button_next" onClick ={() => navigate("/form/step-2")}>&#8594;</button>}
             </div>
           </div>
-        )}
-        {stage === 2 && (
+        }/>
+
+        <Route path="/form/step-2" element={
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question">How old are you?</h2>
               <input className="input_field" type="number" onChange={(field) => handleAge(field.target.value)} value={userData.age > 0 ? userData.age : ""} onBlur={validateAge}/>
               <div className="button_container">
-                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                {userData.age < 12 || userData.age > 100 || isNaN(userData.age)? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
+                <button className="button_previous" onClick={()=> navigate("/form/step-1")}> &#8592; </button>
+                {userData.age < 12 || userData.age > 100 || isNaN(userData.age)? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => navigate("/form/step-3")}>&#8594;</button>}
               </div>
             </div>
             {error && <p className="error">{error}</p>}
           </div>
-        )}
+        }/>
 
-        {stage === 3 && (
+        <Route path="/form/step-3" element={
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question">What is your skin type?</h2>
               <p className="note">Select the answer that fits you best <span className="popup_info" onClick={handlePopup}>ⓘ</span></p>
               {popup && 
-              <div className="popup_backdrop"> 
-                {skintypeInfo}
-              </div>}
+                <div className="popup_backdrop"> 
+                  {skintypeInfo}
+                </div>
+              }
               <label><input type="radio" name="skin_type" onChange={() => handleSkinType("oily")} checked={userData.skin_type === "oily"}/> Oily</label>
               <label><input type="radio" name="skin_type" onChange={() => handleSkinType("dry")} checked={userData.skin_type === "dry"}/> Dry</label>
               <label><input type="radio" name="skin_type" onChange={() => handleSkinType("balanced")} checked={userData.skin_type === "balanced"}/> Balanced</label>
               <label><input type="radio" name="skin_type" onChange={() => handleSkinType("combination")} checked={userData.skin_type === "combination"}/> Combination</label>
               <label><input type="radio" name="skin_type" onChange={() => handleSkinType("sensitive")} checked={userData.skin_type === "sensitive"}/> Sensitive</label>
               <div className="button_container">
-                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                {!userData.skin_type? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
+                <button className="button_previous" onClick={()=> navigate("/form/step-2")}> &#8592; </button>
+                {!userData.skin_type? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => navigate("/form/step-4")}>&#8594;</button>}
               </div>
             </div> 
           </div>
-        )}
-        
-        {stage === 4 && (
+        }/>
+
+        <Route path="/form/step-4" element={
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question"> Identify your top 4 concerns </h2>
@@ -867,14 +852,14 @@ function App() {
               <label><input type="checkbox" onChange={() => handleConcern("dullness")} checked={userData.skin_concern.includes("dullness")}/> Dullness</label>
               <label><input type="checkbox" onChange={() => handleConcern("texture")} checked={userData.skin_concern.includes("texture")}/> Uneven texture</label>
               <div className="button_container">
-                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                {userData.skin_concern.length < 1? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
+                <button className="button_previous" onClick={()=> navigate("/form/step-3")}> &#8592; </button>
+                {userData.skin_concern.length < 1? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => navigate("/form/step-5")}>&#8594;</button>}
               </div>
             </div>  
-        </div>
-        )}
+          </div>
+        }/>
 
-        {stage === 5 && (
+        <Route path="/form/step-5" element={
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question">Do you have any eye area concerns?</h2>
@@ -884,28 +869,28 @@ function App() {
               <label><input type="checkbox" onChange={()=> handleEyeConcern("puffiness")}  checked={userData.eye_concern.includes("puffiness")}/> Puffiness</label>
               <label><input type="checkbox" onChange={()=> handleEyeConcern("dryness")}  checked={userData.eye_concern.includes("dryness")}/> Dryness</label>
               <div className="button_container">
-                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                {userData.skin_concern.length < 1? <button className="button_next disabled" disabled>&#8594;</button>:<button className="button_next" onClick ={() => changeStage()}>&#8594;</button>}
+                <button className="button_previous" onClick={()=> navigate("/form/step-4")}> &#8592; </button>
+                {userData.skin_concern.length < 1? <button className="button_next disabled" disabled>&#8594;</button>:<button className="button_next" onClick ={() => navigate("/form/step-6")}>&#8594;</button>}
               </div>
             </div>
           </div>
-        )}
+        }/>
 
-        {stage === 6 && (
-            <div className="labels_container">
-              <div className="content_container">
-                <h2 className="question">Are you currently pregnant, breastfeeding, planning on getting pregnant or post-partum?</h2>
-                <label><input type="radio" name="pregnant" onChange={()=> handlePregnant("yes")} checked={userData.pregnant === true}/> Yes</label>
-                <label><input type="radio" name="pregnant" onChange={()=> handlePregnant("no")} checked={userData.pregnant === false} /> No</label>
-                <div className="button_container">
-                  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                  {userData.pregnant === null? <button className="button_next disabled" disabled>&#8594;</button>: <button className="button_next" onClick={() => changeStage()}>&#8594;</button>}
-                </div>
+        <Route path="/form/step-6" element={
+          <div className="labels_container">
+            <div className="content_container">
+              <h2 className="question">Are you currently pregnant, breastfeeding, planning on getting pregnant or post-partum?</h2>
+              <label><input type="radio" name="pregnant" onChange={()=> handlePregnant("yes")} checked={userData.pregnant === true}/> Yes</label>
+              <label><input type="radio" name="pregnant" onChange={()=> handlePregnant("no")} checked={userData.pregnant === false} /> No</label>
+              <div className="button_container">
+                <button className="button_previous" onClick={()=> navigate("/form/step-5")}> &#8592; </button>
+                {userData.pregnant === null? <button className="button_next disabled" disabled>&#8594;</button>: <button className="button_next" onClick={() => navigate("/form/step-7")}>&#8594;</button>}
               </div>
+            </div>
           </div>
-        )}
-                
-        {stage === 7 && (
+        }/>
+
+        <Route path="/form/step-7" element={
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question"> Which products are you currently using in your routine? </h2>
@@ -917,14 +902,15 @@ function App() {
                 <label><input type="checkbox" onChange={() => handleProductsType("moisturiser")} checked={userData.products_type.includes("moisturiser")}/> Moisturiser</label>
                 <label><input type="checkbox"  onChange={() => handleHavingRoutine("no_routine")} checked={userData.routine === "no_routine"} /> I don't have a skincare routine</label>
                 <div className="button_container">
-                  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                  <button className={`button_next ${userData.products_type.length < 1 && userData.routine === ""? "disabled": ""}`} disabled={userData.products_type.length < 1 && userData.routine === ""} onClick={() => userData.routine === "no_routine"? changeStage(11): changeStage()}>&#8594;</button>
+                  <button className="button_previous" onClick={()=> navigate("/form/step-6")}> &#8592; </button>
+                  <button className={`button_next ${userData.products_type.length < 1 && userData.routine === ""? "disabled": ""}`} disabled={userData.products_type.length < 1 && userData.routine === ""} onClick={() => userData.routine === "no_routine"? navigate("/form/step-11"): navigate("/form/step-8")}>&#8594;</button>
                 </div>
             </div>        
           </div>
-        )}
+        }/>
 
-        {stage === 8 && userData.products_type.length > 0 && (
+        <Route path="/form/step-8" element={
+          userData.products_type.length > 0? 
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question"> Are you using actives in your skincare routine? <span className="note popup_info" onClick={handlePopup}>ⓘ</span></h2>
@@ -934,14 +920,15 @@ function App() {
               <label><input type="radio" name="active" onChange={() => handleActive("yes")} checked={userData.active_use === true}/> Yes</label>
               <label><input type="radio" name="active" onChange={() => handleActive("no")} checked={userData.active_use === false}/> No</label>
               <div className="button_container">
-                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                <button className={`button_next ${userData.active_use === null? "disabled": ""}`} disabled={userData.active_use === null} onClick={() => userData.active_use === false? changeStage(11): changeStage()}>&#8594;</button>
+                <button className="button_previous" onClick={()=> navigate("/form/step-7")}> &#8592; </button>
+                <button className={`button_next ${userData.active_use === null? "disabled": ""}`} disabled={userData.active_use === null} onClick={() => userData.active_use === false? navigate("/form/step-11"): navigate("/form/step-9")}>&#8594;</button>
               </div>
             </div>
-          </div>
-        )}
+          </div>: null 
+        }/>
 
-        { stage === 9 && userData.active_use === true && (
+        <Route path="/form/step-9" element={
+          userData.active_use === true ? 
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question"> What actives are in your routine? </h2>
@@ -955,14 +942,14 @@ function App() {
               <label><input type="checkbox" onChange={() => handleActiveUsage("azelaicAcid")} checked={userData.activeIngre.includes("azelaicAcid")}/> Azelaic Acid</label>
               <label><input type="checkbox" onChange={() => handleActiveUsage("benzoylPeroxide")} checked={userData.activeIngre.includes("benzoylPeroxide")}/> Benzoyl Peroxide</label>
               <div className="button_container">
-                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                {userData.activeIngre.length < 1? <button className="button_next disabled">&#8594;</button> :<button className="button_next" onClick={() => changeStage()}>&#8594;</button>}
+                <button className="button_previous" onClick={()=> navigate("/form/step-8")}> &#8592; </button>
+                {userData.activeIngre.length < 1? <button className="button_next disabled">&#8594;</button> :<button className="button_next" onClick={() => navigate("/form/step-10")}>&#8594;</button>}
               </div>
             </div>
-          </div>
-        )}
+          </div>: null 
+        }/>
 
-        {stage === 10 && (
+        <Route path="/form/step-10" element={
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question"> Are you an experienced user of acids, retinoids and vitamin C?</h2>
@@ -970,14 +957,14 @@ function App() {
               <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("intermediate")} checked={userData.advanced_user === "intermediate"}/> Intermediate</label>
               <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("advanced")} checked={userData.advanced_user === "advanced"}/> Advanced </label>
               <div className="button_container">
-                <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>
-                {userData.advanced_user === ""? <button className="button_next disabled">&#8594;</button>: <button className="button_next" onClick={() => changeStage()}>&#8594;</button>}
+                <button className="button_previous" onClick={()=> navigate("/form/step-9")}> &#8592; </button>
+                {userData.advanced_user === ""? <button className="button_next disabled">&#8594;</button>: <button className="button_next" onClick={() => navigate("/form/step-11")}>&#8594;</button>}
               </div>
             </div>
           </div>
-        )}
+        }/>
 
-        {stage === 11 && (
+        <Route path="/form/step-11" element={
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question"> How many products do you prefer to have in your regimen?</h2>
@@ -987,39 +974,54 @@ function App() {
               <div className="button_container">
                 <button className="button_previous" onClick={() => {
                   if(userData.advanced_user !== "")
-                    changePreviousStage()
+                    navigate("/form/step-10")
                   else if (userData.routine === "no_routine")
-                    changePreviousStage(7)
+                    navigate("/form/step-7")
                   else if (userData.active_use === false)
-                    changePreviousStage(8)  
+                    navigate("/form/step-8") 
                 }}>&#8592;</button>
-                  
-
-                <button className={`button_next ${userData.no_products === 0? "disabled": ""}`} onClick={() => token? changeStage(): sendData()}>&#8594;</button>
+                <button className={`button_next ${userData.no_products === 0? "disabled": ""}`} onClick={() => {
+                                                                                                                  if(localStorage.getItem("access"))
+                                                                                                                    navigate("/form/step-12")
+                                                                                                                  else 
+                                                                                                                    sendData()}} >&#8594;</button>
               </div>
             </div>
           </div>
-        )} 
+        }/>
 
-        {stage === 12 && (
+        <Route path="/form/step-12" element={
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question">Upload photos of your skin <span className="opt">(optional)</span></h2>
               <p className="opt">Please upload file smaller than 5MB </p>
               <input className="upload_img" type="file" accept="image/*" onChange ={(img) => handleImage(img.target.files[0])}/>
               {image && <img className="preview_image" src={image} alt="preview"/>}
-              <button className="photo_button" onClick={() => {sendData(); changeStage()}}> Skip for now </button>
+              <button className="photo_button" onClick={() => {sendData()}}> Skip for now </button>
               <div className="button_container">
-                {userData.no_products !== 0 &&  <button className="button_previous" onClick={()=> changePreviousStage()}> &#8592; </button>}
+                {userData.no_products !== 0 &&  <button className="button_previous" onClick={()=> navigate("/form/step-11")}> &#8592; </button>}
                 <button className={`photo_button ${!image? "disabled": ""}`} onClick={() => {handleSendImage()}} disabled={!image}> Upload photo </button>
               </div>
             </div>
           </div>
-        )}  
+        }/>
 
-        {(skinProfile && stage === 13) && <Productrec product_list={product_list} skinProfile={skinProfile} handlePage={handlePage}/>}
+        <Route path="/productrec" element={
+          skinProfile ? <Productrec product_list={product_list} skinProfile={skinProfile} handlePage={handlePage}/>: null
+        }/> 
+      </Routes>
     </div>
-  )
+  );
 }
+
+function App() {
+
+  return (
+    <BrowserRouter>
+      <Routers/>
+    </BrowserRouter>
+  );
+}
+
 
 export default App;

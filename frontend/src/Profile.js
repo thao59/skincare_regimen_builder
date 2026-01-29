@@ -2,9 +2,11 @@ import "./Profile.css";
 import {useState} from "react";
 import Chatbox from "./Chatbox";
 import SendEmail from "./SendEmail"
+import {useNavigate} from "react-router-dom";
 
 function Profile({imageArray, product_list, skinProfile, handlePage, profileName})
 {
+    const navigate = useNavigate();
     const cap = (str) => str.charAt(0).toUpperCase() + str.slice(1);
     const URL = process.env.REACT_APP_API_URL;
     
@@ -38,7 +40,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                 <p className="title"> Welcome, {profileName}!</p>
                 <p>You don't have a profile yet. </p>
                 <p>Take our quick survey to get personalised skincare recommendations tailored just for you</p>
-                <button className="start_button" onClick={() => handlePage("home")}> Start Your Journey ✨ </button>
+                <button className="start_button" onClick={() => {handlePage("home"); navigate("/home")}}> Start Your Journey ✨ </button>
                 <Chatbox/>
             </>
         }
@@ -122,7 +124,7 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
                         <h2 className="result_title">Here are your regimen results.</h2>
                         <div className="sub_result_title">
                             <SendEmail/>
-                            <p className="return_button" onClick={() => handlePage("home")}>Retake survey &#8594;</p>
+                            <p className="return_button" onClick={() => {handlePage("home"); navigate("/home")}}>Retake survey &#8594;</p>
                         </div>
                     </div>
 
