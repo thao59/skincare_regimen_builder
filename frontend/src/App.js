@@ -1,12 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import {useState} from "react";
-import Navbar from "./Navbar";
-import Login from "./Login";
-import Signup from "./Signup";
-import Home from "./Home";
-import Profile from "./Profile";
-import Productrec from "./Product";
+import Navbar from "./components/Navbar";
+import Login from "./components/Login";
+import Signup from "./components/Signup";
+import Home from "./components/Home";
+import Profile from "./components/Profile";
+import Productrec from "./components/Product";
 import {BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation} from "react-router-dom";
 
 function Routers()
