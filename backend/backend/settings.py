@@ -154,6 +154,7 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://170.64.233.15",
+    "http://skincareregimen.shop", 
 ]
 
 #session setting 
