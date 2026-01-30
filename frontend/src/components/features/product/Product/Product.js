@@ -1,7 +1,7 @@
 import {useState} from "react";
 import "./Product.css"
-import Chatbox from "./Chatbox";
-import SendEmail from "./SendEmail"
+import Chatbox from "../../chat/Chatbox/Chatbox";
+import SendEmail from "../../email/SendEmail/SendEmail"
 import {useNavigate} from "react-router-dom";
 
 

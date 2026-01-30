@@ -1,7 +1,7 @@
 import "./Profile.css";
 import {useState} from "react";
-import Chatbox from "./Chatbox";
-import SendEmail from "./SendEmail"
+import Chatbox from "../../chat/Chatbox/Chatbox";
+import SendEmail from "../../email/SendEmail/SendEmail"
 import {useNavigate} from "react-router-dom";
 
 function Profile({imageArray, product_list, skinProfile, handlePage, profileName})

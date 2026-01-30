@@ -1,12 +1,12 @@
 import logo from './logo.svg';
 import './App.css';
 import {useState} from "react";
-import Navbar from "./components/Navbar";
-import Login from "./components/Login";
-import Signup from "./components/Signup";
-import Home from "./components/Home";
-import Profile from "./components/Profile";
-import Productrec from "./components/Product";
+import Navbar from "./components/layout/Navbar/Navbar";
+import Login from "./components/features/auth/Login/Login";
+import Signup from "./components/features/auth/Signup/Signup";
+import Home from "./components/features/home/Home/Home";
+import Profile from "./components/features/profile/Profile/Profile";
+import Productrec from "./components/features/product/Product/Product";
 import {BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation} from "react-router-dom";
 
 function Routers()
