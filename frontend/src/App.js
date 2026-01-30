@@ -943,7 +943,7 @@ function Routers()
               <label><input type="checkbox" onChange={() => handleActiveUsage("benzoylPeroxide")} checked={userData.activeIngre.includes("benzoylPeroxide")}/> Benzoyl Peroxide</label>
               <div className="button_container">
                 <button className="button_previous" onClick={()=> navigate("/form/step-8")}> &#8592; </button>
-                {userData.activeIngre.length < 1? <button className="button_next disabled">&#8594;</button> :<button className="button_next" onClick={() => navigate("/form/step-10")}>&#8594;</button>}
+                {userData.activeIngre.length < 1? <button className="button_next disabled" disabled={userData.activeIngre.length < 1}>&#8594;</button> :<button className="button_next" onClick={() => navigate("/form/step-10")}>&#8594;</button>}
               </div>
             </div>
           </div>: null 
@@ -958,7 +958,7 @@ function Routers()
               <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("advanced")} checked={userData.advanced_user === "advanced"}/> Advanced </label>
               <div className="button_container">
                 <button className="button_previous" onClick={()=> navigate("/form/step-9")}> &#8592; </button>
-                {userData.advanced_user === ""? <button className="button_next disabled">&#8594;</button>: <button className="button_next" onClick={() => navigate("/form/step-11")}>&#8594;</button>}
+                {userData.advanced_user === ""? <button className="button_next disabled" disabled={userData.advanced_user === ""}>&#8594;</button>: <button className="button_next" onClick={() => navigate("/form/step-11")}>&#8594;</button>}
               </div>
             </div>
           </div>
@@ -968,9 +968,9 @@ function Routers()
           <div className="labels_container">
             <div className="content_container">
               <h2 className="question"> How many products do you prefer to have in your regimen?</h2>
-              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(3)} checked={userData.no_products === 3}/> Simple (3 products) </label>
-              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(5)} checked={userData.no_products === 5}/> Essentials (4-5 products)</label>
-              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)} checked={userData.no_products === 6}/> Advanced (6+ products) </label>
+              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(3)} checked={userData.no_products === 3}/> Simple (3 products) disabled={userData.no_products === 0} </label>
+              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(5)} checked={userData.no_products === 5}/> Essentials (4-5 products) disabled={userData.no_products === 0}</label>
+              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)} checked={userData.no_products === 6}/> Advanced (6+ products) disabled={userData.no_products === 0}</label>
               <div className="button_container">
                 <button className="button_previous" onClick={() => {
                   if(userData.advanced_user !== "")
@@ -980,7 +980,7 @@ function Routers()
                   else if (userData.active_use === false)
                     navigate("/form/step-8") 
                 }}>&#8592;</button>
-                <button className={`button_next ${userData.no_products === 0? "disabled": ""}`} onClick={() => {
+                <button disabled={userData.no_products === 0} className={`button_next ${userData.no_products === 0? "disabled": ""}`} onClick={() => {
                                                                                                                   if(localStorage.getItem("access"))
                                                                                                                     navigate("/form/step-12")
                                                                                                                   else 

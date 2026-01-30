@@ -90,7 +90,7 @@ function Productrec({product_list, skinProfile, handlePage})
                 {/* recommend products based on user's preferred number of products */}
                 if (skinProfile.no_products && skinProfile.no_products === 3)
                 {
-                    if(key === "cleanser" || key === "moisturiser" || key === "sunscreen")
+                    if(key === "cleanser" || key === "moisturiser" || key === "sunscreen" || key === "oilcleanser" || key === "micellarwater")
                         return (
                             <div key={key} className="product_cat">
                                 {button === "all" && (value.low.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.mid.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 || value.high.filter(x => x.product_time === time || x.product_time === "am_pm").length > 0 ) && <h2 className="category">{key === "oilcleanser"? "Oil Cleanser": key === "micellarwater"? "Micellar Water": cap(key)}</h2>}
