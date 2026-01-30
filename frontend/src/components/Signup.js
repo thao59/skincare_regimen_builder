@@ -26,7 +26,7 @@ function Signup({handlePage, userData, sendData}){
            {
             localStorage.setItem("access", data.access);
             localStorage.setItem("refresh", data.refresh);
-            if (userData)
+            if ((userData.name && userData.age && userData.skin_type && userData.skin_concern.length>0) && (userData.products_type.length>0 ||userData.routine||userData.no_products))
             {
                 sendData();
             }
