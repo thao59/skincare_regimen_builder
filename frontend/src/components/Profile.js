@@ -33,6 +33,9 @@ function Profile({imageArray, product_list, skinProfile, handlePage, profileName
         setButton(string);
     }
 
+    console.log("profile name", profileName);
+    console.log("skin profile: ", skinProfile);
+
     if (!skinProfile) 
         if(profileName)
         {

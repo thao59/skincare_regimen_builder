@@ -235,18 +235,20 @@ function Routers()
     setUserData(prev => ({...prev, no_products: no})); 
   }
 
+  const[imageArray, setImageArray] = useState(null);
+  const[skinProfile, setSkinProfile] = useState(null);
+  const image_group ={};
+
   //delete all saved info, set page to 0, navigate back to home page after logging out
   const handleLogout = () => {
     localStorage.removeItem("refresh");
     localStorage.removeItem("access"); 
     handlePage("home");
     navigate("/home");
-    resetUserData();
+    setSkinProfile(null);
+    setImageArray(null); 
+    setProfileName(null);
   }
-
-  const[imageArray, setImageArray] = useState(null);
-  const[skinProfile, setSkinProfile] = useState(null);
-  const image_group ={};
 
   let cleanser_cat;
   let toner_cat;
