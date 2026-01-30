@@ -1,6 +1,5 @@
 from anthropic import Anthropic 
 from django.conf import settings 
-from ..models import Products, UserProduct
 
 class ClaudeService:
     def __init__ (self):
