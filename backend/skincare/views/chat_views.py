@@ -34,6 +34,13 @@ def chatbox (request):
         if not get_products_rec.exists():
             get_products_rec = None
 
+        product_string = "\n".join(
+            [
+                f"{p.product.product_name}\n {p.product.product_brand}\n {p.product.product_cat}\n {p.product.product_main_ingre}\n {p.product.product_target}\n {p.product.skintypes}\n {p.product.product_price}\n {p.product.product_des}\n {p.product.product_time}"
+            for p in get_products_rec
+            ])
+        print(product_string)
+
         if not get_profile and not get_products_rec:
             service = ClaudeService()
             response = service.get_response(get_message["message"])
@@ -41,7 +48,7 @@ def chatbox (request):
             return Response({"reply": response, "msgID": user_conver.id}, status = status.HTTP_200_OK)
         else: 
             service = ClaudeService()
-            response = service.get_personalised_response(get_message["message"], get_profile, get_products_rec)
+            response = service.get_personalised_response(get_message["message"], get_profile, product_string)
             Message.objects.create(conversation = user_conver, content= response, role= "assistant")
             return Response ({"reply": response, "msgID" : user_conver.id}, status = status.HTTP_200_OK)
         
@@ -58,6 +65,46 @@ def chatbox (request):
             user_profile = None
         
         products = request.session["product_rec"]
+
+        product_string = ""
+        product_string += "\n".join(
+            [
+                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
+            for p in products["off_cleanser"]
+            ])
+        product_string += "\n".join([
+                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
+            for p in products["off_toner"]
+        ])
+        product_string += "\n".join([
+                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
+            for p in products["off_serum"]
+        ])
+        product_string += "\n".join([
+                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
+            for p in products["off_moisturiser"]
+        ])
+        product_string += "\n".join([
+                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
+            for p in products["off_sunscreen"]
+        ])
+        product_string += "\n".join([
+                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
+            for p in products["off_eye"]
+        ])
+        if products["off_oil_cleanser"]: 
+            product_string += "\n".join([
+                    f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
+                for p in products["off_oil_cleanser"]
+        ])
+        
+        if products["off_micellar_water"]:
+            product_string += "\n".join([
+                    f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
+                for p in products["off_micellar_water"]
+            ])
+        
+        print(product_string)
         if not products: 
             products = None 
         
@@ -67,5 +114,5 @@ def chatbox (request):
             return Response({"reply": response, "msgID": consId}, status= status.HTTP_200_OK)
         else: 
             service = ClaudeService()
-            response = service.get_personalised_response(get_message["message"], user_profile, products)
+            response = service.get_personalised_response(get_message["message"], user_profile, product_string)
             return Response ({"reply": response, "msgID": consId}, status= status.HTTP_200_OK)
