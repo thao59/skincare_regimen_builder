@@ -385,6 +385,7 @@ class Recommendation:
                 "skintypes" : row.skintypes,
                 "product_des": row.product_des,
                 "product_time" : row.product_time,
+                "product_main_ingre": row.product_main_ingre,
                 }
 
             # rank and append products according to scores 
@@ -432,6 +433,7 @@ class Recommendation:
                 "skintypes" : row.skintypes,
                 "product_des": row.product_des,
                 "product_time" : row.product_time,
+                "product_main_ingre": row.product_main_ingre,
                 }
 
             # rank and append products according to scores 
@@ -476,6 +478,7 @@ class Recommendation:
                 "skintypes" : row.skintypes,
                 "product_des": row.product_des,
                 "product_time" : row.product_time,
+                "product_main_ingre": row.product_main_ingre,
                 }
 
             # rank and append products according to scores 
@@ -521,6 +524,7 @@ class Recommendation:
                 "skintypes" : row.skintypes,
                 "product_des": row.product_des,
                 "product_time" : row.product_time,
+                "product_main_ingre": row.product_main_ingre,
                 }
 
             # rank and append products according to scores 
@@ -567,6 +571,7 @@ class Recommendation:
                     "skintypes" : row.skintypes,
                     "product_des": row.product_des,
                     "product_time" : row.product_time,
+                    "product_main_ingre": row.product_main_ingre,
                     }
 
                 # rank and append products according to scores 
@@ -612,6 +617,7 @@ class Recommendation:
                     "skintypes" : row.skintypes,
                     "product_des": row.product_des,
                     "product_time" : row.product_time,
+                    "product_main_ingre": row.product_main_ingre,
                     }
 
                 # rank and append products according to scores 
@@ -659,6 +665,7 @@ class Recommendation:
                     "skintypes" : row.skintypes,
                     "product_des": row.product_des,
                     "product_time" : row.product_time,
+                    "product_main_ingre": row.product_main_ingre,
                     }
 
                 # rank and append products according to scores 
@@ -705,6 +712,7 @@ class Recommendation:
                     "skintypes" : row.skintypes,
                     "product_des": row.product_des,
                     "product_time" : row.product_time,
+                    "product_main_ingre": row.product_main_ingre,
                     }
 
                 # rank and append products according to scores 
@@ -750,6 +758,7 @@ class Recommendation:
                     "skintypes" : row.skintypes,
                     "product_des": row.product_des,
                     "product_time" : row.product_time,
+                    "product_main_ingre": row.product_main_ingre,
                     }
 
                 # rank and append products according to scores 

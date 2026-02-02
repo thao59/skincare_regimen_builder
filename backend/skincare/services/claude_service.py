@@ -50,6 +50,17 @@ class ClaudeService:
         {instruction}
         User's profile: {user_profile}
         User's product recommendation: {user_product_rec}
+        When answering about recommended products:
+        - Explain why recommended products suit their skin type and concerns.
+        - Highlight key ingredients and their benefits 
+        - Products' prices are in AUD.
+        NOTE: 
+        - Be specific when user asks why products are recommended to them. Format: "[product name] is recommend because [product ingredients] help with [concern] for [skintype] skin"
+        - Only mention ingredients that are explicitly listed in the product data
+        - Don't use your general knowledge about products/ingredients.
+        - If you don't know which specific product has an ingredient, don't mention it
+        - Don't use **bold**, *italics*, or other formatting symbols
+
         Only answer question when asked. Be short all the time
         When answering questions: 
         - Use Australian spelling 

@@ -184,9 +184,9 @@
     display: flex;
     justify-content: flex-end;
     width: auto;
-    max-width: 150px;
+    max-width: 170px;
     margin: 12px 10px;
-    margin-left: 120px;
+    margin-left: 100px;
     border-radius: 20px;
     border-bottom-right-radius: 0;
 }
@@ -207,9 +207,9 @@
     display: flex;
     justify-content: flex-start;
     width: auto;
-    max-width: 170px;
+    max-width: 190px;
     margin: 12px 10px;
-    margin-right: 90px;
+    margin-right: 50px;
     border-radius: 20px;
     border-bottom-left-radius: 0;
 }
