@@ -83,6 +83,10 @@ Uses Anthropic's Claude API to provide personalised skincare advice:
 - Product recommendations
 - Skincare routine guidance
 
+## Testing 
+- Backend: pytest for Django model validation and REST API endpoints
+- Frontend: [Planned: Jest/React Testing Library]
+
 ## Common Issues 
 Issue: API requests fail with CORS error **
 Solution: Ensure `django-cors-headers` is installed and configured in `settings.py`
@@ -93,3 +97,6 @@ Solution: Check that product data matches expected format (skin types, concerns)
 Issue: Session not persisting for non-authenticated users **
 Solution: Verify `SESSION_COOKIE_HTTPONLY` and CORS credentials settings
 
+## Future Improvements 
+- Refactor frontend components for better maintainability and readability 
+- Add test coverage for React components 
