@@ -6,7 +6,19 @@ import Signup from "./components/features/auth/Signup/Signup";
 import Home from "./components/features/home/Home/Home";
 import Profile from "./components/features/profile/Profile/Profile";
 import Productrec from "./components/features/product/Product/Product";
-import {BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation} from "react-router-dom";
+import {BrowserRouter, Routes, Route, Navigate, useNavigate} from "react-router-dom";
+import Step1Name from "./components/features/survey/steps/Step1Name";
+import Step2Age from "./components/features/survey/steps/Step2Age";
+import Step3Skintype from "./components/features/survey/steps/Step3Skintype";
+import Step4Skinconcern from "./components/features/survey/steps/Step4Skinconcern";
+import Step5Eyeconcern from "./components/features/survey/steps/Step5EyeConcern";
+import Step6Pregnancy from "./components/features/survey/steps/Step6Pregnancy";
+import Step7Products from "./components/features/survey/steps/Step7Products";
+import Step8Active from "./components/features/survey/steps/Step8Active";
+import Step9ActiveIngredient from "./components/features/survey/steps/Step9ActiveIngredients";
+import Step10ActiveExperience from "./components/features/survey/steps/Step10ActiveExperience";
+import Step11NumberProducts from "./components/features/survey/steps/Step11NumberProducts";
+import Step12UploadImage from "./components/features/survey/steps/Step12UploadImage";
 
 function Routers()
 {
@@ -29,24 +41,24 @@ function Routers()
   }
 
   const skintypeInfo = 
-      <div className="popup">
-        <button onClick={handlePopup} className="closing_button">&times;</button> 
-        <p><strong style={{fontSize: '1rem'}}>Not sure of your skin type?</strong></p>
-        <ul>
-          <li><strong>Oily</strong>: Shiny face throughout the day, enlarged pores.</li>
-          <li><strong>Dry</strong>: Tight feeling, flaky patches.</li>
-          <li><strong>Balanced</strong>: Comfortable, no major issues.</li>
-          <li><strong>Combination</strong>: Oily forehead/nose, dry cheeks.</li>
-          <li><strong>Sensitive</strong>: Reacts easily, redness, stinging</li>
-        </ul>
-      </div>
+    <div className="popup">
+      <button onClick={handlePopup} className="closing_button">&times;</button> 
+      <p><strong style={{fontSize: '1rem'}}>Not sure of your skin type?</strong></p>
+      <ul>
+        <li><strong>Oily</strong>: Shiny face throughout the day, enlarged pores.</li>
+        <li><strong>Dry</strong>: Tight feeling, flaky patches.</li>
+        <li><strong>Balanced</strong>: Comfortable, no major issues.</li>
+        <li><strong>Combination</strong>: Oily forehead/nose, dry cheeks.</li>
+        <li><strong>Sensitive</strong>: Reacts easily, redness, stinging</li>
+      </ul>
+    </div>
 
   const activeInfo = 
-  <div className="popup">
-    <button className="closing_button" onClick={handlePopup}>&times;</button>
-    <p ><strong style={{fontSize: '1rem'}}>What is active?</strong></p>
-    <p>Actives are powerful ingredients that target specific skin concerns like acne, wrinkles, or dark spots. Common examples include retinol, vitamin C, AHAs/BHAs, and niacinamide.</p>
-  </div>
+    <div className="popup">
+      <button className="closing_button" onClick={handlePopup}>&times;</button>
+      <p ><strong style={{fontSize: '1rem'}}>What is active?</strong></p>
+      <p>Actives are powerful ingredients that target specific skin concerns like acne, wrinkles, or dark spots. Common examples include retinol, vitamin C, AHAs/BHAs, and niacinamide.</p>
+    </div>
 
   const[image, setImage] = useState(null);
   const[userData, setUserData] = useState({name: "", age: 0, skin_type: "", skin_concern: [], eye_concern: [], pregnant: null, products_type: [], routine: "", active_use: null, activeIngre: [], advanced_user: "", no_products: 0});
@@ -271,7 +283,7 @@ function Routers()
       sunscreen: {high: [], mid: [], low: []}, 
       oilcleanser: {high: [], mid: [], low: []}, 
       micellarwater: {high: [], mid: [], low: []},
-  };
+    };
   
     if (userData.no_products !== 0)
     {
@@ -788,231 +800,25 @@ function Routers()
         <Route path="/home" element={<Home/>}/>
         <Route path="/profile" element={<Profile imageArray={imageArray} skinProfile={skinProfile} product_list={product_list} handlePage={handlePage} profileName={profileName}/>}/>
         
-        <Route path="/form/step-1" element = {
-          <div className="labels_container">
-            <h1 className="title"> My Skincare Routine Tracker</h1>
-            <p> Track your skincare journey and get personalised recommendations!</p>
-            <div className="content_container">
-              <h2 className="question">What's your name?</h2>
-              <input className="input_field" type="text" onChange={(field) => handleName(field.target.value)} value={userData.name} placeholder="Enter your name"/>
-              {!userData.name? <button className="button_next disabled" disabled>&#8594;</button>: <button className="button_next" onClick ={() => navigate("/form/step-2")}>&#8594;</button>}
-            </div>
-          </div>
-        }/>
-
-        <Route path="/form/step-2" element={
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question">How old are you?</h2>
-              <input className="input_field" type="number" onChange={(field) => handleAge(field.target.value)} value={userData.age > 0 ? userData.age : ""} onBlur={validateAge}/>
-              <div className="button_container">
-                <button className="button_previous" onClick={()=> navigate("/form/step-1")}> &#8592; </button>
-                {userData.age < 12 || userData.age > 100 || isNaN(userData.age)? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => navigate("/form/step-3")}>&#8594;</button>}
-              </div>
-            </div>
-            {error && <p className="error">{error}</p>}
-          </div>
-        }/>
-
-        <Route path="/form/step-3" element={
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question">What is your skin type?</h2>
-              <p className="note">Select the answer that fits you best <span className="popup_info" onClick={handlePopup}>ⓘ</span></p>
-              {popup && 
-                <div className="popup_backdrop"> 
-                  {skintypeInfo}
-                </div>
-              }
-              <label><input type="radio" name="skin_type" onChange={() => handleSkinType("oily")} checked={userData.skin_type === "oily"}/> Oily</label>
-              <label><input type="radio" name="skin_type" onChange={() => handleSkinType("dry")} checked={userData.skin_type === "dry"}/> Dry</label>
-              <label><input type="radio" name="skin_type" onChange={() => handleSkinType("balanced")} checked={userData.skin_type === "balanced"}/> Balanced</label>
-              <label><input type="radio" name="skin_type" onChange={() => handleSkinType("combination")} checked={userData.skin_type === "combination"}/> Combination</label>
-              <label><input type="radio" name="skin_type" onChange={() => handleSkinType("sensitive")} checked={userData.skin_type === "sensitive"}/> Sensitive</label>
-              <div className="button_container">
-                <button className="button_previous" onClick={()=> navigate("/form/step-2")}> &#8592; </button>
-                {!userData.skin_type? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => navigate("/form/step-4")}>&#8594;</button>}
-              </div>
-            </div> 
-          </div>
-        }/>
-
-        <Route path="/form/step-4" element={
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question"> Identify your top 4 concerns </h2>
-              <label><input type="checkbox" onChange={() => handleConcern("acne")} checked={userData.skin_concern.includes("acne")}/> Acne</label>
-              <label><input type="checkbox" onChange={() => handleConcern("congestion")} checked={userData.skin_concern.includes("congestion")}/> Congestion</label>
-              <label><input type="checkbox" onChange={() => handleConcern("aging")} checked={userData.skin_concern.includes("aging")}/> Aging</label>
-              <label><input type="checkbox" onChange={() => handleConcern("pigmentation")} checked={userData.skin_concern.includes("pigmentation")}/> Dark spots/Hyperpigmentation</label>
-              <label><input type="checkbox" onChange={() => handleConcern("dehydrated")} checked={userData.skin_concern.includes("dehydrated")}/> Dehydrated</label>
-              <label><input type="checkbox" onChange={() => handleConcern("dryness")} checked={userData.skin_concern.includes("dryness")}/> Dry</label>
-              <label><input type="checkbox" onChange={() => handleConcern("pores")} checked={userData.skin_concern.includes("pores")}/> Large pores </label> 
-              <label><input type="checkbox" onChange={() => handleConcern("sensitive")} checked={userData.skin_concern.includes("sensitive")}/> Sensitive</label>
-              <label><input type="checkbox" onChange={() => handleConcern("redness")} checked={userData.skin_concern.includes("redness")}/> Redness</label>
-              <label><input type="checkbox" onChange={() => handleConcern("dullness")} checked={userData.skin_concern.includes("dullness")}/> Dullness</label>
-              <label><input type="checkbox" onChange={() => handleConcern("texture")} checked={userData.skin_concern.includes("texture")}/> Uneven texture</label>
-              <div className="button_container">
-                <button className="button_previous" onClick={()=> navigate("/form/step-3")}> &#8592; </button>
-                {userData.skin_concern.length < 1? <button className="button_next disabled" disabled>&#8594;</button> : <button className="button_next" onClick ={() => navigate("/form/step-5")}>&#8594;</button>}
-              </div>
-            </div>  
-          </div>
-        }/>
-
-        <Route path="/form/step-5" element={
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question">Do you have any eye area concerns?</h2>
-              <p className="note">Select all that apply</p>
-              <label><input type="checkbox" onChange={()=> handleEyeConcern("wrinkles")} checked={userData.eye_concern.includes("wrinkles")}/> Fine Lines and Wrinkles</label>
-              <label><input type="checkbox" onChange={()=> handleEyeConcern("dark circles")}  checked={userData.eye_concern.includes("dark circles")}/> Dark Circles</label>
-              <label><input type="checkbox" onChange={()=> handleEyeConcern("puffiness")}  checked={userData.eye_concern.includes("puffiness")}/> Puffiness</label>
-              <label><input type="checkbox" onChange={()=> handleEyeConcern("dryness")}  checked={userData.eye_concern.includes("dryness")}/> Dryness</label>
-              <div className="button_container">
-                <button className="button_previous" onClick={()=> navigate("/form/step-4")}> &#8592; </button>
-                {userData.skin_concern.length < 1? <button className="button_next disabled" disabled>&#8594;</button>:<button className="button_next" onClick ={() => navigate("/form/step-6")}>&#8594;</button>}
-              </div>
-            </div>
-          </div>
-        }/>
-
-        <Route path="/form/step-6" element={
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question">Are you currently pregnant, breastfeeding, planning on getting pregnant or post-partum?</h2>
-              <label><input type="radio" name="pregnant" onChange={()=> handlePregnant("yes")} checked={userData.pregnant === true}/> Yes</label>
-              <label><input type="radio" name="pregnant" onChange={()=> handlePregnant("no")} checked={userData.pregnant === false} /> No</label>
-              <div className="button_container">
-                <button className="button_previous" onClick={()=> navigate("/form/step-5")}> &#8592; </button>
-                {userData.pregnant === null? <button className="button_next disabled" disabled>&#8594;</button>: <button className="button_next" onClick={() => navigate("/form/step-7")}>&#8594;</button>}
-              </div>
-            </div>
-          </div>
-        }/>
-
-        <Route path="/form/step-7" element={
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question"> Which products are you currently using in your routine? </h2>
-              <p className="note">Select all that apply.</p>
-                <label><input type="checkbox" onChange={() => handleProductsType("cleanser")} checked={userData.products_type.includes("cleanser")}/> Cleanser</label>
-                <label><input type="checkbox" onChange={() => handleProductsType("exfoliator")} checked={userData.products_type.includes("exfoliator")}/> Exfoliator</label>
-                <label><input type="checkbox" onChange={() => handleProductsType("toner")} checked={userData.products_type.includes("toner")}/> Toner</label>
-                <label><input type="checkbox" onChange={() => handleProductsType("serum")} checked={userData.products_type.includes("serum")}/> Serum</label>
-                <label><input type="checkbox" onChange={() => handleProductsType("moisturiser")} checked={userData.products_type.includes("moisturiser")}/> Moisturiser</label>
-                <label><input type="checkbox"  onChange={() => handleHavingRoutine("no_routine")} checked={userData.routine === "no_routine"} /> I don't have a skincare routine</label>
-                <div className="button_container">
-                  <button className="button_previous" onClick={()=> navigate("/form/step-6")}> &#8592; </button>
-                  <button className={`button_next ${userData.products_type.length < 1 && userData.routine === ""? "disabled": ""}`} disabled={userData.products_type.length < 1 && userData.routine === ""} onClick={() => userData.routine === "no_routine"? navigate("/form/step-11"): navigate("/form/step-8")}>&#8594;</button>
-                </div>
-            </div>        
-          </div>
-        }/>
-
-        <Route path="/form/step-8" element={
-          userData.products_type.length > 0? 
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question"> Are you using actives in your skincare routine? <span className="note popup_info" onClick={handlePopup}>ⓘ</span></h2>
-              {popup && <div className="popup_backdrop">
-                {activeInfo}
-              </div>}
-              <label><input type="radio" name="active" onChange={() => handleActive("yes")} checked={userData.active_use === true}/> Yes</label>
-              <label><input type="radio" name="active" onChange={() => handleActive("no")} checked={userData.active_use === false}/> No</label>
-              <div className="button_container">
-                <button className="button_previous" onClick={()=> navigate("/form/step-7")}> &#8592; </button>
-                <button className={`button_next ${userData.active_use === null? "disabled": ""}`} disabled={userData.active_use === null} onClick={() => userData.active_use === false? navigate("/form/step-11"): navigate("/form/step-9")}>&#8594;</button>
-              </div>
-            </div>
-          </div>: null 
-        }/>
-
-        <Route path="/form/step-9" element={
-          userData.active_use === true ? 
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question"> What actives are in your routine? </h2>
-              <label><input type="checkbox" onChange={() => handleActiveUsage("vitaminC")} checked={userData.activeIngre.includes("vitaminC")}/> Vitamin C</label>
-              <label><input type="checkbox" onChange={() => handleActiveUsage("niacinamide")} checked={userData.activeIngre.includes("niacinamide")}/> Niacinamide</label>
-              <label><input type="checkbox" onChange={() => handleActiveUsage("bha")} checked={userData.activeIngre.includes("bha")}/> BHA</label>
-              <label><input type="checkbox" onChange={() => handleActiveUsage("aha")} checked={userData.activeIngre.includes("aha")}/> AHA</label>
-              <label><input type="checkbox" onChange={() => handleActiveUsage("pha")} checked={userData.activeIngre.includes("pha")}/> PHA</label>
-              <label><input type="checkbox" onChange={() => handleActiveUsage("retinol")} checked={userData.activeIngre.includes("retinol")}/> Retinol</label>
-              <label><input type="checkbox" onChange={() => handleActiveUsage("tretinoin")} checked={userData.activeIngre.includes("tretinoin")}/> Tretinoin </label>
-              <label><input type="checkbox" onChange={() => handleActiveUsage("azelaicAcid")} checked={userData.activeIngre.includes("azelaicAcid")}/> Azelaic Acid</label>
-              <label><input type="checkbox" onChange={() => handleActiveUsage("benzoylPeroxide")} checked={userData.activeIngre.includes("benzoylPeroxide")}/> Benzoyl Peroxide</label>
-              <div className="button_container">
-                <button className="button_previous" onClick={()=> navigate("/form/step-8")}> &#8592; </button>
-                {userData.activeIngre.length < 1? <button className="button_next disabled" disabled={userData.activeIngre.length < 1}>&#8594;</button> :<button className="button_next" onClick={() => navigate("/form/step-10")}>&#8594;</button>}
-              </div>
-            </div>
-          </div>: null 
-        }/>
-
-        <Route path="/form/step-10" element={
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question"> Are you an experienced user of acids, retinoids and vitamin C?</h2>
-              <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("beginner")} checked={userData.advanced_user === "beginner"}/> Beginner </label>
-              <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("intermediate")} checked={userData.advanced_user === "intermediate"}/> Intermediate</label>
-              <label><input type="radio" name="advanced_user" onChange={() => handleAdvancedUser("advanced")} checked={userData.advanced_user === "advanced"}/> Advanced </label>
-              <div className="button_container">
-                <button className="button_previous" onClick={()=> navigate("/form/step-9")}> &#8592; </button>
-                {userData.advanced_user === ""? <button className="button_next disabled" disabled={userData.advanced_user === ""}>&#8594;</button>: <button className="button_next" onClick={() => navigate("/form/step-11")}>&#8594;</button>}
-              </div>
-            </div>
-          </div>
-        }/>
-
-        <Route path="/form/step-11" element={
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question"> How many products do you prefer to have in your regimen?</h2>
-              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(3)} checked={userData.no_products === 3}/> Simple (3 products)</label>
-              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(5)} checked={userData.no_products === 5}/> Essentials (4-5 products)</label>
-              <label><input type="radio" name="no_products" onChange={() => handleNoProducts(6)} checked={userData.no_products === 6}/> Advanced (6+ products)</label>
-              <div className="button_container">
-                <button className="button_previous" onClick={() => {
-                  if(userData.advanced_user !== "")
-                    navigate("/form/step-10")
-                  else if (userData.routine === "no_routine")
-                    navigate("/form/step-7")
-                  else if (userData.active_use === false)
-                    navigate("/form/step-8") 
-                }}>&#8592;</button>
-                <button disabled={userData.no_products === 0} className={`button_next ${userData.no_products === 0? "disabled": ""}`} onClick={() => {
-                                                                                                                  if(localStorage.getItem("access"))
-                                                                                                                    navigate("/form/step-12")
-                                                                                                                  else 
-                                                                                                                    sendData()}} >&#8594;</button>
-              </div>
-            </div>
-          </div>
-        }/>
-
-        <Route path="/form/step-12" element={
-          <div className="labels_container">
-            <div className="content_container">
-              <h2 className="question">Upload photos of your skin <span className="opt">(optional)</span></h2>
-              <p className="opt">Please upload file smaller than 5MB </p>
-              <input className="upload_img" type="file" accept="image/*" onChange ={(img) => handleImage(img.target.files[0])}/>
-              {image && <img className="preview_image" src={image} alt="preview"/>}
-              <button className="photo_button" onClick={() => {sendData()}}> Skip for now </button>
-              <div className="button_container">
-                {userData.no_products !== 0 &&  <button className="button_previous" onClick={()=> navigate("/form/step-11")}> &#8592; </button>}
-                <button className={`photo_button ${!image? "disabled": ""}`} onClick={() => {handleSendImage()}} disabled={!image}> Upload photo </button>
-              </div>
-            </div>
-          </div>
-        }/>
+        <Route path="/form/step-1" element = {<Step1Name userData={userData} handleName={handleName} />}/>
+        <Route path="/form/step-2" element={<Step2Age userData={userData} handleAge={handleAge} validateAge={validateAge} error={error}/>}/>
+        <Route path="/form/step-3" element={<Step3Skintype handlePopup={handlePopup} popup={popup} skintypeInfo={skintypeInfo} handleSkinType={handleSkinType} userData={userData}/>}/>
+        <Route path="/form/step-4" element={<Step4Skinconcern handleConcern={handleConcern} userData={userData}/>}/>
+        <Route path="/form/step-5" element={<Step5Eyeconcern handleEyeConcern={handleEyeConcern} userData={userData}/>}/>
+        <Route path="/form/step-6" element={<Step6Pregnancy userData={userData} handlePregnant={handlePregnant}/>}/>
+        <Route path="/form/step-7" element={<Step7Products userData={userData} handleProductsType={handleProductsType} handleHavingRoutine={handleHavingRoutine}/>}/>
+        <Route path="/form/step-8" element={userData.products_type.length > 0? <Step8Active handleActive={handleActive} userData={userData} handlePopup={handlePopup} popup={popup} activeInfo={activeInfo}/>: null}/>
+        <Route path="/form/step-9" element={userData.active_use === true ? <Step9ActiveIngredient handleActiveUsage={handleActiveUsage} userData={userData}/>: null}/>
+        <Route path="/form/step-10" element={<Step10ActiveExperience userData={userData} handleAdvancedUser={handleAdvancedUser}/>}/>
+        <Route path="/form/step-11" element={<Step11NumberProducts userData={userData} handleNoProducts={handleNoProducts} sendData={sendData}/>}/>
+        <Route path="/form/step-12" element={<Step12UploadImage handleImage={handleImage} image={image} sendData={sendData} userData={userData} handleSendImage={handleSendImage}/>}/>
 
         <Route path="/productrec" element={
           skinProfile ? <Productrec product_list={product_list} skinProfile={skinProfile} handlePage={handlePage}/>: null
         }/> 
       </Routes>
     </div>
-  );
+  )
 }
 
 function App() {
