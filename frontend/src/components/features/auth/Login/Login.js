@@ -28,12 +28,10 @@ function Login({handlePage, userData, sendData})
             localStorage.setItem("refresh", data.refresh);
             if ((userData.name && userData.age && userData.skin_type && userData.skin_concern.length>0) && (userData.products_type.length>0 ||userData.routine||userData.no_products))
             {
-                console.log(userData);
                 await sendData();
             }
             else 
             {
-                console.log("no user data");
                 handlePage("home");
                 navigate("/home");
             }
