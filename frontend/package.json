@@ -10,9 +10,14 @@
     "bootstrap": "^5.3.8",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
-    "react-router-dom": "^7.13.0",
+    "react-router-dom": "^6.30.3",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
+  },
+  "jest": {
+    "transformIgnorePatterns": [
+      "node_modules/(?!(react-router|react-router-dom)/)"
+    ]
   },
   "scripts": {
     "start": "react-scripts start",
