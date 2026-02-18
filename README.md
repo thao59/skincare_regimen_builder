@@ -4,6 +4,11 @@ A full-stack app that recommends skincare products based on your skin profile.
 ## Live Demo
 http://skincareregimen.shop
 
+## Setup 
+1. git clone https://github.com/thao59/skincare_regimen_builder.git
+2. cd skincare_regimen_builder
+3. docker-compose up
+
 ## Core Functionality
 13-Stage Interactive Survey: Comprehensive questionnaire to understand user's skin needs.
 Personalised Recommendations based on:
@@ -30,11 +35,13 @@ Web Scraping: Automated product data collection using BeautifulSoup
 Conditional Survey Flow: Dynamic question branching based on user responses
 
 ## Tech Stack
-Frontend: React, CSS
-Backend: Django + Django REST Framework
-Database: PostgreSQL (production), SQLite (local)
-Auth: JWT tokens (djangorestframework-simplejwt)
-Deployment: DigitalOcean
+- Frontend: React, CSS
+- Backend: Django + Django REST Framework
+- Database: PostgreSQL (production), SQLite (local)
+- Auth: JWT tokens (djangorestframework-simplejwt)
+- AI: Anthropic Claude API
+- Containerization: Docker, Docker Compose 
+- Deployment: DigitalOcean
 
 ## Database Models
 
@@ -88,15 +95,11 @@ Uses Anthropic's Claude API to provide personalised skincare advice:
 - Frontend: [Planned: Jest/React Testing Library]
 
 ## Common Issues 
-Issue: API requests fail with CORS error **
-Solution: Ensure `django-cors-headers` is installed and configured in `settings.py`
+**Issue:** API requests fail with CORS error **
+**Solution:** Ensure `django-cors-headers` is installed and configured in `settings.py`
 
-Issue: Products not appearing in recommendations **
-Solution: Check that product data matches expected format (skin types, concerns)
+**Issue:** Products not appearing in recommendations **
+**Solution:** Check that product data matches expected format (skin types, concerns)
 
-Issue: Session not persisting for non-authenticated users **
-Solution: Verify `SESSION_COOKIE_HTTPONLY` and CORS credentials settings
-
-## Future Improvements 
-- Refactor frontend components for better maintainability and readability 
-- Add test coverage for React components 
+**Issue:** Session not persisting for non-authenticated users **
+**Solution:** Verify `SESSION_COOKIE_HTTPONLY` and CORS credentials settings
