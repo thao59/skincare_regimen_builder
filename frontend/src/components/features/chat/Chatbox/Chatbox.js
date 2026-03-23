@@ -8,6 +8,8 @@ function Chatbox () {
     const[content, setContent] = useState(""); 
     const[msgId, setMsgId] = useState(null);
     const[loading, setLoading] = useState(false);
+    const[error, setError] = useState(""); 
+    const[similarProduct, setSimilarProduct] = useState(false);
     let send_content;
     const[newSession, setNewSession] = useState(false);
 
@@ -46,10 +48,16 @@ function Chatbox () {
         setNewSession(false);
     }
 
+    const handleSimilarProducts = () => {
+        setSimilarProduct(true);
+    }
+
     const token = localStorage.getItem("access"); 
-    const sendMsg = async() => {
+    const sendMsg = async(msg = null) => {
         setLoading(true);
-        send_content = {role: "user", message: content};
+        setError("");
+        const contentToSend = msg || content;
+        send_content = {role: "user", message: contentToSend};
         setUserMessage(prev => ([...prev, send_content])); 
         
         //clear chat input and reset time
@@ -78,7 +86,12 @@ function Chatbox () {
             setUserMessage(prev => ([...prev, {role: "assistant", message: data.reply}]))
         }
         else 
-        console.log(response.status, data.error);
+        {
+            setLoading(false);
+            console.log(response.status, data.error);
+            setError("Sorry, something went wrong. Please try again.");
+        }
+        
     }
 
     return(
@@ -102,19 +115,23 @@ function Chatbox () {
                                 <p className="prompt_thinkbox">💬</p>
                                 <p>Hi! I'm your skincare assistant. </p>
                                 <p>Ask me anything about your routine!</p>
-                            
+                                <div className="suggestion_container">
+                                    <button className="suggestion_button" onClick={() =>  sendMsg("How do I incorporate these products into my routine?")}>How do I incorporate these products into my routine?</button>
+                                    <button className="suggestion_button" onClick={() => handleSimilarProducts()}>Show me similar products</button>
+                                </div>
+                                {similarProduct === true && <p className="ai_msg">What product do you want to look up? Please ensure to include product name.</p>}
                             </div>}
-                        {userMessage.map(x => {
+                        {userMessage.map((x, index) => {
                             if (x.role === "user")
                             {return (
-                                <div className="user_msg_container">
+                                <div key={index} className="user_msg_container">
                                     <p className="user_msg">{x.message}</p>
                                 </div>
                             )}
 
                             else 
                             {return (
-                                <div className="ai_msg_container">
+                                <div key={index} className="ai_msg_container">
                                     <p className="ai_msg">{x.message}</p>
                                 </div>
 
@@ -122,6 +139,7 @@ function Chatbox () {
                         }
                         )}
                         {loading === true && <p className="ai_msg_loading">Thinking...</p>}
+                        {error && <p className="ai_msg_loading">{error}</p>}
                     </div>
                     <div className="input_container">
                         <textarea disabled={newSession===true} onChange={(field) => handleContent(field.target.value)} onKeyDown={(e) => {if(e.key === "Enter" && !e.shiftKey) {e.preventDefault(); sendMsg();}}} className="chat" placeholder="How can I help you today?" value={content}></textarea>

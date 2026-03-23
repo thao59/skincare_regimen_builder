@@ -1,13 +1,13 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response 
 from rest_framework import status 
-from ..models import UserProfile, UserProduct, Conversation, Message
+from ..models import UserProfile, UserProduct, Conversation, Message, Products 
 from ..services import ClaudeService
 
 
 @api_view(["POST", "GET"])
 def chatbox (request): 
-    get_message = request.data["message"]
+    get_message = request.data.get("message")
     if not get_message:
         return Response({"error": "no message sent"}, status=status.HTTP_400_BAD_REQUEST)
     
@@ -27,19 +27,20 @@ def chatbox (request):
         try:
             get_profile = UserProfile.objects.get(user = user)
         except Exception as e:
-            print(f"erro: {e}")
+            print(f"error: {e}")
             get_profile = None
 
         get_products_rec = UserProduct.objects.filter(user = user)
         if not get_products_rec.exists():
             get_products_rec = None
 
-        product_string = "\n".join(
-            [
-                f"{p.product.product_name}\n {p.product.product_brand}\n {p.product.product_cat}\n {p.product.product_main_ingre}\n {p.product.product_target}\n {p.product.skintypes}\n {p.product.product_price}\n {p.product.product_des}\n {p.product.product_time}"
-            for p in get_products_rec
-            ])
-        print(product_string)
+        product_string = ""
+        if get_products_rec:
+            product_string = "\n".join(
+                [
+                    f"{p.product.product_name}\n {p.product.product_brand}\n {p.product.product_cat}\n {p.product.product_main_ingre}\n {p.product.product_target}\n {p.product.skintypes}\n {p.product.product_price}\n {p.product.product_des}\n {p.product.product_time}"
+                for p in get_products_rec
+                ])
 
         if not get_profile and not get_products_rec:
             service = ClaudeService()
@@ -64,49 +65,25 @@ def chatbox (request):
         if not user_profile:
             user_profile = None
         
-        products = request.session["product_rec"]
+        products = request.session.get("product_rec")
 
         product_string = ""
-        product_string += "\n".join(
-            [
-                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
-            for p in products["off_cleanser"]
-            ])
-        product_string += "\n".join([
-                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
-            for p in products["off_toner"]
-        ])
-        product_string += "\n".join([
-                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
-            for p in products["off_serum"]
-        ])
-        product_string += "\n".join([
-                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
-            for p in products["off_moisturiser"]
-        ])
-        product_string += "\n".join([
-                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
-            for p in products["off_sunscreen"]
-        ])
-        product_string += "\n".join([
-                f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
-            for p in products["off_eye"]
-        ])
-        if products["off_oil_cleanser"]: 
-            product_string += "\n".join([
+        if products:
+            for key in ["off_cleanser", "off_toner", "off_serum", "off_moisturiser", "off_sunscreen", "off_eye"]:
+                product_string += "\n".join([
                     f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
-                for p in products["off_oil_cleanser"]
-        ])
-        
-        if products["off_micellar_water"]:
-            product_string += "\n".join([
+                    for p in products[key]
+                ])
+            if products.get("off_oil_cleanser"):
+                product_string += "\n".join([
                     f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
-                for p in products["off_micellar_water"]
-            ])
-        
-        print(product_string)
-        if not products: 
-            products = None 
+                    for p in products["off_oil_cleanser"]
+                ])
+            if products.get("off_micellar_water"):
+                product_string += "\n".join([
+                    f'{p["product_name"]}\n {p["product_brand"]}\n {p["product_main_ingre"]}\n {p["product_target"]}\n {p["skintypes"]}\n {p["product_price"]}\n {p["product_des"]}\n {p["product_time"]}'
+                    for p in products["off_micellar_water"]
+                ])
         
         if not user_profile and not products: 
             service = ClaudeService()

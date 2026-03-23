@@ -1,10 +1,39 @@
-from anthropic import Anthropic 
-from django.conf import settings 
+import json
+from anthropic import Anthropic
+from django.conf import settings
+from ..models import Products
 
 class ClaudeService:
     def __init__ (self):
         self.client = Anthropic(api_key = settings.ANTHROPIC_API_KEY)
         self.model = "claude-sonnet-4-20250514"
+        self.tools = [
+            {
+                "name": "find_similar_products",         
+                "description": "Find products with similar ingredients and concerns", 
+                "input_schema": {
+                    "type": "object",
+                    "properties": {
+                        "ingredients": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "List of ingredients to match"
+                        },
+                        "category": {
+                            "type": "string", 
+                            "description": "Product category: e.g. cleanser, toner, serum, moisturiser, sunscreen", 
+                        },
+                        "concerns": {
+                            "type": "array",
+                            "items": {"type": "string"},
+                            "description": "Skin concerns to match e.g. acne, dryness"
+                        }
+                    },
+                    "required": ["ingredients", "concerns", "category"]   
+                }
+            }
+        ]
+        
 
     def get_response(self, user_message):
         prompt = f"""You are a skincare expert. Be concise, short, and informative when answering user's question regarding skincare needs"""
@@ -71,6 +100,48 @@ class ClaudeService:
             model = self.model, 
             max_tokens = 1000, 
             system = prompt, 
+            tools = self.tools,
             messages = [{"role": "user", "content": user_message}]
         )
-        return response.content[0].text
+        similar_products = []
+        if response.stop_reason == "tool_use": 
+            tool_block = None 
+            for item in response.content: 
+                if item.type == "tool_use":  
+                    tool_block = item
+                    category = tool_block.input.get("category", None)
+                    if not category: 
+                        similar_products = []
+                    else: 
+                        db = Products.objects.filter(product_cat = category)
+
+                        for row in db:  
+                            sum_ingre = sum(1 for i in tool_block.input.get("ingredients", [])if i in row.product_main_ingre)
+                            sum_target = sum(1 for i in tool_block.input.get("concerns", [])if i in row.product_target)
+                            temp = {"product_name": row.product_name, "product_brand": row.product_brand, "product_link": row.product_link} 
+                            if len(row.product_main_ingre) >= 2:
+                                if sum_ingre >= 2 and sum_target >= 2:
+                                    similar_products.append(temp)
+                            elif len(row.product_main_ingre) < 2: 
+                                if sum_ingre == 1 and sum_target == 1:
+                                    similar_products.append(temp) 
+            messages = [
+                {"role": "user", "content": user_message}, 
+                {"role": "assistant", "content": response.content}, 
+                {"role": "user", "content": [
+                    {"type": "tool_result", 
+                    "tool_use_id": tool_block.id, 
+                    "content": json.dumps(similar_products)}
+                ]}
+            ]
+            final_response = self.client.messages.create(
+                model = self.model, 
+                max_tokens = 1000, 
+                system = prompt, 
+                tools = self.tools,
+                messages = messages,
+            )
+            return final_response.content[0].text
+        elif response.stop_reason == "end_turn":
+            return response.content[0].text
+        

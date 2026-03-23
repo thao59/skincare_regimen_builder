@@ -231,11 +231,32 @@
     justify-content: flex-start;
 }
 
+.suggestion_container
+{
+    display: flex;
+    overflow-x: auto;
+    margin-top: auto;
+}
+
+.suggestion_button
+{
+    max-width: 200px;
+    padding: 0 0.3rem;
+    margin: 10px;
+    border-radius: 20px;
+    border: 1px solid rgb(208, 114, 114);;
+    background-color: rgb(245, 213, 219);
+    font-size: 0.7rem;
+    color: rgb(130, 55, 55);
+    flex-shrink: 0
+}
+
 .prompt
 {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    align-items: center;
     height: 100%;
 }
 
