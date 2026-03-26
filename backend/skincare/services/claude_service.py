@@ -47,7 +47,7 @@ class ClaudeService:
         )
         return response.content[0].text
     
-    def get_personalised_response(self, user_message, user_profile, user_product_rec):
+    def get_personalised_response(self, user_message, user_profile, user_product_rec, convo_history):
         if isinstance(user_profile, dict): 
             if user_profile["no_products"] == 3:
                 instruction = "Only recommend cleanser, moisturiser and sunscreen"
@@ -101,38 +101,35 @@ class ClaudeService:
             max_tokens = 1000, 
             system = prompt, 
             tools = self.tools,
-            messages = [{"role": "user", "content": user_message}]
+            messages = convo_history + [{"role": "user", "content": user_message}]
         )
-        similar_products = []
-        if response.stop_reason == "tool_use": 
-            tool_block = None 
-            for item in response.content: 
-                if item.type == "tool_use":  
-                    tool_block = item
-                    category = tool_block.input.get("category", None)
-                    if not category: 
-                        similar_products = []
-                    else: 
+        if response.stop_reason == "tool_use":
+            tool_results = []
+            for item in response.content:
+                if item.type == "tool_use":
+                    similar_products = []
+                    category = item.input.get("category", None)
+                    if category:
                         db = Products.objects.filter(product_cat = category)
-
-                        for row in db:  
-                            sum_ingre = sum(1 for i in tool_block.input.get("ingredients", [])if i in row.product_main_ingre)
-                            sum_target = sum(1 for i in tool_block.input.get("concerns", [])if i in row.product_target)
-                            temp = {"product_name": row.product_name, "product_brand": row.product_brand, "product_link": row.product_link} 
+                        for row in db:
+                            sum_ingre = sum(1 for i in item.input.get("ingredients", []) if i in row.product_main_ingre)
+                            sum_target = sum(1 for i in item.input.get("concerns", []) if i in row.product_target)
+                            temp = {"product_name": row.product_name, "product_brand": row.product_brand, "product_link": row.product_link}
                             if len(row.product_main_ingre) >= 2:
                                 if sum_ingre >= 2 and sum_target >= 2:
                                     similar_products.append(temp)
-                            elif len(row.product_main_ingre) < 2: 
+                            elif len(row.product_main_ingre) < 2:
                                 if sum_ingre == 1 and sum_target == 1:
-                                    similar_products.append(temp) 
-            messages = [
-                {"role": "user", "content": user_message}, 
-                {"role": "assistant", "content": response.content}, 
-                {"role": "user", "content": [
-                    {"type": "tool_result", 
-                    "tool_use_id": tool_block.id, 
-                    "content": json.dumps(similar_products)}
-                ]}
+                                    similar_products.append(temp)
+                    tool_results.append({
+                        "type": "tool_result",
+                        "tool_use_id": item.id,
+                        "content": json.dumps(similar_products)
+                    })
+            messages = convo_history + [
+                {"role": "user", "content": user_message},
+                {"role": "assistant", "content": response.content},
+                {"role": "user", "content": tool_results}
             ]
             final_response = self.client.messages.create(
                 model = self.model, 

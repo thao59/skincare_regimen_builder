@@ -9,9 +9,9 @@ function Chatbox () {
     const[msgId, setMsgId] = useState(null);
     const[loading, setLoading] = useState(false);
     const[error, setError] = useState(""); 
-    const[similarProduct, setSimilarProduct] = useState(false);
     let send_content;
     const[newSession, setNewSession] = useState(false);
+    const[suggestionButton, setSuggestionButton] = useState(true);
 
     const openMsg = () => {
         if (time)
@@ -49,7 +49,7 @@ function Chatbox () {
     }
 
     const handleSimilarProducts = () => {
-        setSimilarProduct(true);
+        setSuggestionButton(false);
     }
 
     const token = localStorage.getItem("access"); 
@@ -116,10 +116,9 @@ function Chatbox () {
                                 <p>Hi! I'm your skincare assistant. </p>
                                 <p>Ask me anything about your routine!</p>
                                 <div className="suggestion_container">
-                                    <button className="suggestion_button" onClick={() =>  sendMsg("How do I incorporate these products into my routine?")}>How do I incorporate these products into my routine?</button>
-                                    <button className="suggestion_button" onClick={() => handleSimilarProducts()}>Show me similar products</button>
+                                    {suggestionButton === true && <button className="suggestion_button" onClick={() =>  sendMsg("How do I incorporate these products into my routine?")}>How do I incorporate these products into my routine?</button>}
+                                    {suggestionButton === true && <button className="suggestion_button" onClick={() => {handleSimilarProducts(); sendMsg("Show me similar products");}}>Show me similar products</button>}
                                 </div>
-                                {similarProduct === true && <p className="ai_msg">What product do you want to look up? Please ensure to include product name.</p>}
                             </div>}
                         {userMessage.map((x, index) => {
                             if (x.role === "user")

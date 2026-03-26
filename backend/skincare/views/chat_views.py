@@ -7,6 +7,7 @@ from ..services import ClaudeService
 
 @api_view(["POST", "GET"])
 def chatbox (request): 
+    #create an array to save msg history of none authenticated users
     get_message = request.data.get("message")
     if not get_message:
         return Response({"error": "no message sent"}, status=status.HTTP_400_BAD_REQUEST)
@@ -21,7 +22,12 @@ def chatbox (request):
             user_conver = Conversation.objects.create(user= user)
         else: 
             user_conver = Conversation.objects.get(id = consId, user =user)
-            user_conver.save()
+
+        #query past convo for context 
+        msgs = user_conver.messages.all()
+        #convert python obj to dict before passing to claude
+        all_msg = [{"role": row.role, "content": row.content} for row in msgs]
+
         Message.objects.create(conversation = user_conver, content = get_message["message"], role = get_message["role"])
         
         try:
@@ -49,17 +55,23 @@ def chatbox (request):
             return Response({"reply": response, "msgID": user_conver.id}, status = status.HTTP_200_OK)
         else: 
             service = ClaudeService()
-            response = service.get_personalised_response(get_message["message"], get_profile, product_string)
+            response = service.get_personalised_response(get_message["message"], get_profile, product_string, all_msg)
             Message.objects.create(conversation = user_conver, content= response, role= "assistant")
             return Response ({"reply": response, "msgID" : user_conver.id}, status = status.HTTP_200_OK)
         
     else: 
+        #if it's a new convo 
         if not consId: 
+            #if no session key has been generated 
             if not request.session.session_key:
                 request.session.create()
                 consId = request.session.session_key
             else:
                 consId = request.session.session_key
+        
+        #get chat history from session if exists 
+        convo_history = request.session.get("chat_history", [])
+        request.session["chat_history"] = convo_history
 
         user_profile = request.session.get("skinprofile")
         if not user_profile:
@@ -88,8 +100,16 @@ def chatbox (request):
         if not user_profile and not products: 
             service = ClaudeService()
             response = service.get_response(get_message["message"])
+            convo_history.append({"role": "user", "content": get_message["message"]})
+            convo_history.append({"role": "assistant", "content": response})
+            request.session["chat_history"] = convo_history
             return Response({"reply": response, "msgID": consId}, status= status.HTTP_200_OK)
         else: 
             service = ClaudeService()
-            response = service.get_personalised_response(get_message["message"], user_profile, product_string)
+            #get chat history
+            all_msg = request.session.get("chat_history")
+            response = service.get_personalised_response(get_message["message"], user_profile, product_string, all_msg)
+            convo_history.append({"role": "user", "content": get_message["message"]})
+            convo_history.append({"role": "assistant", "content": response})
+            request.session["chat_history"] = convo_history
             return Response ({"reply": response, "msgID": consId}, status= status.HTTP_200_OK)
