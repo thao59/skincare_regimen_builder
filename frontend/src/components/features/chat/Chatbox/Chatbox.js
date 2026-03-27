@@ -1,4 +1,4 @@
-import {useState} from "react"; 
+import {useState, useRef, useEffect} from "react"; 
 import "./Chatbox.css";
 
 function Chatbox () {
@@ -12,6 +12,7 @@ function Chatbox () {
     let send_content;
     const[newSession, setNewSession] = useState(false);
     const[suggestionButton, setSuggestionButton] = useState(true);
+    const bottomRef = useRef(null);
 
     const openMsg = () => {
         if (time)
@@ -91,8 +92,15 @@ function Chatbox () {
             console.log(response.status, data.error);
             setError("Sorry, something went wrong. Please try again.");
         }
-        
     }
+
+    //automatically scroll to the newest message 
+    useEffect(() => {
+        if (bottomRef.current)
+        {
+            bottomRef.current.scrollIntoView({behavior: "smooth"});
+        }
+    }, [userMessage])
 
     return(
         <div className="question_bar_container">
@@ -139,6 +147,7 @@ function Chatbox () {
                         )}
                         {loading === true && <p className="ai_msg_loading">Thinking...</p>}
                         {error && <p className="ai_msg_loading">{error}</p>}
+                        <div ref={bottomRef}></div>
                     </div>
                     <div className="input_container">
                         <textarea disabled={newSession===true} onChange={(field) => handleContent(field.target.value)} onKeyDown={(e) => {if(e.key === "Enter" && !e.shiftKey) {e.preventDefault(); sendMsg();}}} className="chat" placeholder="How can I help you today?" value={content}></textarea>
