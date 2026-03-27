@@ -6,7 +6,7 @@ from ..models import Products
 class ClaudeService:
     def __init__ (self):
         self.client = Anthropic(api_key = settings.ANTHROPIC_API_KEY)
-        self.model = "claude-sonnet-4-20250514"
+        self.model = "claude-sonnet-4-6"
         self.tools = [
             {
                 "name": "find_similar_products",         
@@ -84,7 +84,7 @@ class ClaudeService:
         - Highlight key ingredients and their benefits 
         - Products' prices are in AUD.
         NOTE: 
-        - Be specific when user asks why products are recommended to them. Format: "[product name] is recommend because [product ingredients] help with [concern] for [skintype] skin"
+        - Be specific when user asks why products are recommended to them. Format: "[product name] is recommended because [product ingredients] help with [concern] for [skintype] skin"
         - Only mention ingredients that are explicitly listed in the product data
         - Don't use your general knowledge about products/ingredients.
         - If you don't know which specific product has an ingredient, don't mention it
@@ -141,4 +141,9 @@ class ClaudeService:
             return final_response.content[0].text
         elif response.stop_reason == "end_turn":
             return response.content[0].text
+        else: 
+            if response.content:
+                return response.content[0].text
+            else:
+                return f"Response stopped unexpectedly {response.stop_reason}"
         
