@@ -10,12 +10,13 @@ class ClaudeService:
         self.tools = [
             {
                 "name": "find_similar_products",         
-                "description": """Search the full database to find similar or alternative products
+                "description": """Search the full database to find similar or alternative products.
                                   Use this when:
                                     - User asks for products similar to one they have
                                     - User wants alternatives to their current recommendations
                                     - User asks to find products by category or skin concern
-                                    - User wants to explore products outside their current recommendation""", 
+                                    - User wants to explore products outside their current recommendation
+                                  If the product category is unknown, ask the user what type of product it is before calling this tool.""",
                 "input_schema": {
                     "type": "object",
                     "properties": {
