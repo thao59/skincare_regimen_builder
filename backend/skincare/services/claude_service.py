@@ -10,7 +10,12 @@ class ClaudeService:
         self.tools = [
             {
                 "name": "find_similar_products",         
-                "description": "Find products with similar ingredients and concerns", 
+                "description": """Search the full database to find similar or alternative products
+                                  Use this when:
+                                    - User asks for products similar to one they have
+                                    - User wants alternatives to their current recommendations
+                                    - User asks to find products by category or skin concern
+                                    - User wants to explore products outside their current recommendation""", 
                 "input_schema": {
                     "type": "object",
                     "properties": {
@@ -29,7 +34,7 @@ class ClaudeService:
                             "description": "Skin concerns to match e.g. acne, dryness"
                         }
                     },
-                    "required": ["ingredients", "concerns", "category"]   
+                    "required": ["concerns", "category"]   
                 }
             }
         ]
@@ -112,15 +117,10 @@ class ClaudeService:
                     if category:
                         db = Products.objects.filter(product_cat = category)
                         for row in db:
-                            sum_ingre = sum(1 for i in item.input.get("ingredients", []) if i in row.product_main_ingre)
                             sum_target = sum(1 for i in item.input.get("concerns", []) if i in row.product_target)
                             temp = {"product_name": row.product_name, "product_brand": row.product_brand, "product_link": row.product_link}
-                            if len(row.product_main_ingre) >= 2:
-                                if sum_ingre >= 2 and sum_target >= 2:
-                                    similar_products.append(temp)
-                            elif len(row.product_main_ingre) < 2:
-                                if sum_ingre == 1 and sum_target == 1:
-                                    similar_products.append(temp)
+                            if sum_target >= 1:
+                                similar_products.append(temp)
                     tool_results.append({
                         "type": "tool_result",
                         "tool_use_id": item.id,

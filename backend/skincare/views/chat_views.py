@@ -71,7 +71,6 @@ def chatbox (request):
         
         #get chat history from session if exists 
         convo_history = request.session.get("chat_history", [])
-        request.session["chat_history"] = convo_history
 
         user_profile = request.session.get("skinprofile")
         if not user_profile:
