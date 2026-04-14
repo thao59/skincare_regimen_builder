@@ -107,7 +107,7 @@ class ClaudeService:
             max_tokens = 1000, 
             system = prompt, 
             tools = self.tools,
-            messages = convo_history + [{"role": "user", "content": user_message}]
+            messages = (convo_history if convo_history is not None else []) + [{"role": "user", "content": user_message}]
         )
         if response.stop_reason == "tool_use":
             tool_results = []
@@ -127,7 +127,7 @@ class ClaudeService:
                         "tool_use_id": item.id,
                         "content": json.dumps(similar_products)
                     })
-            messages = convo_history + [
+            messages = (convo_history if convo_history is not None else []) + [
                 {"role": "user", "content": user_message},
                 {"role": "assistant", "content": response.content},
                 {"role": "user", "content": tool_results}
