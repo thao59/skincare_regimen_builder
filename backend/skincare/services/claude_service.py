@@ -92,7 +92,8 @@ class ClaudeService:
         NOTE: 
         - Be specific when user asks why products are recommended to them. Format: "[product name] is recommended because [product ingredients] help with [concern] for [skintype] skin"
         - Only mention ingredients that are explicitly listed in the product data
-        - Don't use your general knowledge about products/ingredients.
+        - Do not use general knowledge about ingredients for recommended products. However, you may use general knowledge when searching for similar products 
+        that are not in the user's recommendations.
         - If you don't know which specific product has an ingredient, don't mention it
         - Don't use **bold**, *italics*, or other formatting symbols
 
